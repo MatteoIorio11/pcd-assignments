@@ -75,7 +75,7 @@ Il metodo ``agent.step(dt)`` non è altro che l'esecuzione di un insieme di oper
 		}
 	}
 ```
-Come descritto all'interno della consegna, le fasi di **sense** e **decide** sono solamente operazioni di semplice lettura. La modifica dell'ambiente avviene solamente all'interno della fase di *act*, ovvero quando si decide di far eseguire ad ogni singolo agente il suo comportamento. Bisogna comunque tenere conto che le operazioni dovranno essere sempre eseguite nello stesso ordine. 
+Come descritto all'interno della consegna, le fasi di **sense** e **decide** sono solamente operazioni di semplice lettura. La modifica dell'ambiente avviene solamente all'interno della fase di *act*, ovvero quando si decide di far eseguire ad ogni singolo agente il suo comportamento. Bisogna comunque tenere conto che le operazioni dovranno essere sempre eseguite nello stesso ordine. Da considerarsi molto importante il fatto che nel momento in cui si decide di fare la fase di *decide* è possibile eseguirla senza che vi sia alcun controllo sull'accesso, ovvero può essere totalmente parallelo.
 
 ### Sense
 La fase di *sense* di ogni singolo agent, richiede di accedere all'environment in modo da poter scegliere e decidere il comportamento che deve assumere. Più in particolare in questa fase l'agente
@@ -83,6 +83,8 @@ La fase di *sense* di ogni singolo agent, richiede di accedere all'environment i
 AbstractEnvironment env = this.getEnv();		
 currentPercept = (CarPercept) env.getCurrentPercepts(getId());			
 ```
+In questo caso quindi è fondamentale fornire un accesso **sincrono** all'environment, dal momento in cui se venisse modificato tutti gli agenti successivi ad essi potranno vedere la nuova situazione dell'ambiente. Nel caso in cui però qualcuno **stia modificando l'ambiente** sarà estremamente importante il fatto di non poter dare l'accesso a nessun thread di ottenere il ``this.getEnv()`` fino a quando la modifica all'ambiente non è stata portata a termine. 
+
 
 ---
 ## Design
