@@ -77,6 +77,13 @@ Il metodo ``agent.step(dt)`` non è altro che l'esecuzione di un insieme di oper
 ```
 Come descritto all'interno della consegna, le fasi di **sense** e **decide** sono solamente operazioni di semplice lettura. La modifica dell'ambiente avviene solamente all'interno della fase di *act*, ovvero quando si decide di far eseguire ad ogni singolo agente il suo comportamento. Bisogna comunque tenere conto che le operazioni dovranno essere sempre eseguite nello stesso ordine. 
 
+### Sense
+La fase di *sense* di ogni singolo agent, richiede di accedere all'environment in modo da poter scegliere e decidere il comportamento che deve assumere. Più in particolare in questa fase l'agente
+```java
+AbstractEnvironment env = this.getEnv();		
+currentPercept = (CarPercept) env.getCurrentPercepts(getId());			
+```
+
 ---
 ## Design
 Una possibile implementazione è quella di creare una nuova implementazione dell'agente, o utilizzare il pattern strategy che prende in input il comportamento dell'agente e lo esegue, comunque poter realizzare il metodo ``agent.step`` in maniera del tutto autonoma, senza dover doverlo far fare al ``simulatore``, egli dovrà solo lanciare tutti gli agentie poi aspettari che essi abbiano finito prima di poter rieseguire un nuovo step, dal momento in cui ogni agente può dipendere dagli agenti che gli stanno intorno. 
