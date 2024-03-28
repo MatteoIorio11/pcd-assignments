@@ -1,6 +1,7 @@
 package pcd.ass01.simtrafficbase;
 
 import java.util.Optional;
+import java.util.concurrent.BrokenBarrierException;
 
 import pcd.ass01.simengineseq.*;
 
@@ -16,22 +17,26 @@ public abstract class CarAgent extends AbstractAgent {
 	protected double currentSpeed;  
 	protected double acceleration;
 	protected double deceleration;
+	private int deltaTime;
 
 	/* percept and action retrieved and submitted at each step */
 	protected CarPercept currentPercept;
 	protected Optional<Action> selectedAction;
+	protected AgentSynchronizer agentSynchronizer;
 	
 	
 	public CarAgent(String id, RoadsEnv env, Road road, 
 			double initialPos, 
 			double acc, 
 			double dec,
-			double vmax) {
+			double vmax, final AgentSynchronizer agentSynchronizer) {
 		super(id);
+		this.deltaTime = 0;
 		this.acceleration = acc;
 		this.deceleration = dec;
 		this.maxSpeed = vmax;
 		env.registerNewCar(this, road, initialPos);
+		this.agentSynchronizer = agentSynchronizer;
 	}
 
 	/**
@@ -40,28 +45,35 @@ public abstract class CarAgent extends AbstractAgent {
 	 * 
 	 */
 	public void step(int dt) {
+		this.deltaTime = dt;
+	}
 
-		/* sense */
-		// access the environment one at the time, if a thread is in process to modify the environment the thread must stop here and wait
-		AbstractEnvironment env = this.getEnv();		
-		currentPercept = (CarPercept) env.getCurrentPercepts(getId());			
+	@Override
+	public void run() {
+		AbstractEnvironment env = this.getEnv();
+		currentPercept = (CarPercept) env.getCurrentPercepts(this.getId());
 
 		/* decide */
 		selectedAction = Optional.empty();
 
 		// implement the Runnable interface and start the thread for the decision process, it can be done
 		// without any lock
-		decide(dt);
+		decide(this.deltaTime);
 
-		// add barrier
-		/* act */
-		if (selectedAction.isPresent()) {
-			// take the lock in order to modify the environment
-			env.doAction(getId(), selectedAction.get());
-			// release the lock
+		// add barrier <-
+		try {
+			/* act */
+            // take the lock in order to modify the environment
+			if (this.selectedAction.isPresent()) {
+				this.agentSynchronizer.awaitBarrier();
+				this.agentSynchronizer.executeCriticalSection((action) -> env.doAction(this.getId(), action), selectedAction.get());
+			}
+		} catch (BrokenBarrierException | InterruptedException e) {
+			e.printStackTrace();
 		}
+
 	}
-	
+
 	/**
 	 * 
 	 * Base method to define the behaviour strategy of the car
