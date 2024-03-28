@@ -1,5 +1,6 @@
 package pcd.ass01.simtrafficexamples;
 
+import pcd.ass01.simengineseq.AgentSynchronizer;
 import pcd.ass01.simtrafficbase.RoadsEnv;
 import pcd.ass01.simengineseq.AbstractSimulation;
 import pcd.ass01.simtrafficbase.CarAgent;
@@ -37,7 +38,7 @@ public class TrafficSimulationSingleRoadMassiveNumberOfCars extends AbstractSimu
 									initialPos, 
 									carAcceleration, 
 									carDeceleration,
-									carMaxSpeed);
+									carMaxSpeed, AgentSynchronizer.getInstance(this.numCars));
 			this.addAgent(car);
 			
 			/* no sync with wall-time */
