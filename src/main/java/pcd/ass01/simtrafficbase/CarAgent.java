@@ -52,7 +52,8 @@ public abstract class CarAgent extends AbstractAgent {
 		// implement the Runnable interface and start the thread for the decision process, it can be done
 		// without any lock
 		decide(dt);
-		
+
+		// add barrier
 		/* act */
 		if (selectedAction.isPresent()) {
 			// take the lock in order to modify the environment
