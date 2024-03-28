@@ -1,7 +1,10 @@
 package pcd.ass01.simengineseq;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Base class for defining concrete simulations
@@ -17,6 +20,7 @@ public abstract class AbstractSimulation {
 	
 	/* simulation listeners */
 	private List<SimulationListener> listeners;
+	private Map<String, Thread> map = new HashMap<>();
 
 	/* logical time step */
 	private int dt;
@@ -54,7 +58,7 @@ public abstract class AbstractSimulation {
 	 * 
 	 * @param numSteps
 	 */
-	public void run(int numSteps) {		
+	public void run(int numSteps) {
 
 		startWallTime = System.currentTimeMillis();
 
@@ -78,9 +82,23 @@ public abstract class AbstractSimulation {
 			/* make a step */
 			
 			env.step(dt);
-			for (var agent: agents) {
-				agent.step(dt);
-			}
+			final List<Thread> agentsThread = this.agents.stream()
+					.peek(agent -> agent.step(dt))
+					.map(Thread::new)
+					.toList();
+
+			agentsThread.forEach(Thread::start);
+
+			agentsThread.forEach(th -> {
+				try{
+					th.join();
+				}catch (InterruptedException e) {
+					e.printStackTrace();
+                }
+            });
+
+
+
 			t += dt;
 			
 			notifyNewStep(t, agents, env);
@@ -139,6 +157,7 @@ public abstract class AbstractSimulation {
 	}
 
 	private void notifyNewStep(int t, List<AbstractAgent> agents, AbstractEnvironment env) {
+		//env.notifyAll();
 		for (var l: listeners) {
 			l.notifyStepDone(t, agents, env);
 		}
