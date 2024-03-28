@@ -1,5 +1,7 @@
 package pcd.ass01.simtrafficbase;
 
+import pcd.ass01.simengineseq.AgentSynchronizer;
+
 import java.util.Optional;
 
 /**
@@ -26,12 +28,12 @@ public class CarAgentBasic extends CarAgent {
 
 	private int waitingTime;
 	
-	public CarAgentBasic(String id, RoadsEnv env, Road road, 
-					double initialPos, 
-					double acc, 
-					double dec,
-					double vmax) {
-		super(id, env, road, initialPos, acc, dec, vmax);
+	public CarAgentBasic(String id, RoadsEnv env, Road road,
+						 double initialPos,
+						 double acc,
+						 double dec,
+						 double vmax, final AgentSynchronizer agentSynchronizer) {
+		super(id, env, road, initialPos, acc, dec, vmax, agentSynchronizer);
 		state = CarAgentState.STOPPED;
 	}
 	
