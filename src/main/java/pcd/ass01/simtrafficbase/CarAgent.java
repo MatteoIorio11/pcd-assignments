@@ -10,7 +10,7 @@ import pcd.ass01.simengineseq.*;
  * 
  */
 public abstract class CarAgent extends AbstractAgent {
-	
+
 	/* car model */
 	protected double maxSpeed;		
 	protected double currentSpeed;  
@@ -42,20 +42,22 @@ public abstract class CarAgent extends AbstractAgent {
 	public void step(int dt) {
 
 		/* sense */
-
+		// access the environment one at the time, if a thread is in process to modify the environment the thread must stop here and wait
 		AbstractEnvironment env = this.getEnv();		
 		currentPercept = (CarPercept) env.getCurrentPercepts(getId());			
 
 		/* decide */
-		
 		selectedAction = Optional.empty();
-		
+
+		// implement the Runnable interface and start the thread for the decision process, it can be done
+		// without any lock
 		decide(dt);
 		
 		/* act */
-		
 		if (selectedAction.isPresent()) {
+			// take the lock in order to modify the environment
 			env.doAction(getId(), selectedAction.get());
+			// release the lock
 		}
 	}
 	
