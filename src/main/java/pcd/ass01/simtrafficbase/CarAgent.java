@@ -64,8 +64,8 @@ public abstract class CarAgent extends AbstractAgent {
 		try {
 			/* act */
             // take the lock in order to modify the environment
+			this.agentSynchronizer.awaitBarrier();
 			if (this.selectedAction.isPresent()) {
-				this.agentSynchronizer.awaitBarrier();
 				this.agentSynchronizer.executeCriticalSection((action) -> env.doAction(this.getId(), action), selectedAction.get());
 			}
 		} catch (BrokenBarrierException | InterruptedException e) {
