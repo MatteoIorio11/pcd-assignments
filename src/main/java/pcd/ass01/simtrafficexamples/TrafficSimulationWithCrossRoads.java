@@ -13,6 +13,8 @@ import pcd.ass01.simtrafficbase.Road;
 
 public class TrafficSimulationWithCrossRoads extends AbstractSimulation {
 
+	public static final int N_WORKERS = 4;
+
 	public TrafficSimulationWithCrossRoads() {
 		super();
 	}
@@ -20,6 +22,7 @@ public class TrafficSimulationWithCrossRoads extends AbstractSimulation {
 	public void setup() {
 
 		Random  gen = new Random(1);
+		final AgentSynchronizer agentSynchronizer = AgentSynchronizer.getInstance(N_WORKERS);
 
 		this.setupTimings(0, 1);
 		
@@ -31,9 +34,9 @@ public class TrafficSimulationWithCrossRoads extends AbstractSimulation {
 		Road r1 = env.createRoad(new P2d(0,300), new P2d(1500,300));
 		r1.addTrafficLight(tl1, 740);
 		
-		CarAgent car1 = new CarAgentExtended("car-1", env, r1, 0, 0.1, 0.3, 6, AgentSynchronizer.getInstance(4));
+		CarAgent car1 = new CarAgentExtended("car-1", env, r1, 0, 0.1, 0.3, 6, agentSynchronizer);
 		this.addAgent(car1);		
-		CarAgent car2 = new CarAgentExtended("car-2", env, r1, 100, 0.1, 0.3, 5,  AgentSynchronizer.getInstance(4));
+		CarAgent car2 = new CarAgentExtended("car-2", env, r1, 100, 0.1, 0.3, 5,  agentSynchronizer);
 		this.addAgent(car2);		
 		
 		TrafficLight tl2 = env.createTrafficLight(new P2d(750,290),  TrafficLight.TrafficLightState.RED, 75, 25, 100);
@@ -41,9 +44,9 @@ public class TrafficSimulationWithCrossRoads extends AbstractSimulation {
 		Road r2 = env.createRoad(new P2d(750,0), new P2d(750,600));
 		r2.addTrafficLight(tl2, 290);
 
-		CarAgent car3 = new CarAgentExtended("car-3", env, r2, 0, 0.1, 0.2, 5,  AgentSynchronizer.getInstance(4));
+		CarAgent car3 = new CarAgentExtended("car-3", env, r2, 0, 0.1, 0.2, 5,  agentSynchronizer);
 		this.addAgent(car3);		
-		CarAgent car4 = new CarAgentExtended("car-4", env, r2, 100, 0.1, 0.1, 4, AgentSynchronizer.getInstance(4));
+		CarAgent car4 = new CarAgentExtended("car-4", env, r2, 100, 0.1, 0.1, 4, agentSynchronizer);
 		this.addAgent(car4);
 		
 		

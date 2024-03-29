@@ -16,6 +16,8 @@ import pcd.ass01.simtrafficbase.Road;
  */
 public class TrafficSimulationSingleRoadWithTrafficLightTwoCars extends AbstractSimulation {
 
+	public static final int N_WORKERS = 2;
+
 	public TrafficSimulationSingleRoadWithTrafficLightTwoCars() {
 		super();
 	}
@@ -25,6 +27,7 @@ public class TrafficSimulationSingleRoadWithTrafficLightTwoCars extends Abstract
 		this.setupTimings(0, 1);
 		
 		RoadsEnv env = new RoadsEnv();
+		final AgentSynchronizer agentSynchronizer = AgentSynchronizer.getInstance(N_WORKERS);
 		this.setupEnvironment(env);
 				
 		Road r = env.createRoad(new P2d(0,300), new P2d(1500,300));
@@ -32,9 +35,9 @@ public class TrafficSimulationSingleRoadWithTrafficLightTwoCars extends Abstract
 		TrafficLight tl = env.createTrafficLight(new P2d(740,300), TrafficLight.TrafficLightState.GREEN, 75, 25, 100);
 		r.addTrafficLight(tl, 740);
 		
-		CarAgent car1 = new CarAgentExtended("car-1", env, r, 0, 0.1, 0.3, 6, AgentSynchronizer.getInstance(2));
+		CarAgent car1 = new CarAgentExtended("car-1", env, r, 0, 0.1, 0.3, 6, agentSynchronizer);
 		this.addAgent(car1);		
-		CarAgent car2 = new CarAgentExtended("car-2", env, r, 100, 0.1, 0.3, 5, AgentSynchronizer.getInstance(2));
+		CarAgent car2 = new CarAgentExtended("car-2", env, r, 100, 0.1, 0.3, 5, agentSynchronizer);
 		this.addAgent(car2);
 
 		this.syncWithTime(25);

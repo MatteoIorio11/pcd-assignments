@@ -30,6 +30,7 @@ public class TrafficSimulationSingleRoadSeveralCars extends AbstractSimulation {
 		Road road = env.createRoad(new P2d(0,300), new P2d(1500,300));
 
 		int nCars = 30;
+		final AgentSynchronizer agentSynchronizer = AgentSynchronizer.getInstance(nCars);
 
 		for (int i = 0; i < nCars; i++) {
 			
@@ -46,7 +47,7 @@ public class TrafficSimulationSingleRoadSeveralCars extends AbstractSimulation {
 									initialPos, 
 									carAcceleration, 
 									carDeceleration,
-									carMaxSpeed, AgentSynchronizer.getInstance(nCars));
+									carMaxSpeed, agentSynchronizer);
 			this.addAgent(car);
 		}
 		
