@@ -59,6 +59,8 @@ public abstract class AbstractSimulation {
 	public void run(int numSteps) {
 
 		startWallTime = System.currentTimeMillis();
+		final List<Thread> threadAgents = new ArrayList<>();
+
 		/* initialize the env and the agents inside */
 		int t = t0;
 
@@ -77,19 +79,16 @@ public abstract class AbstractSimulation {
 			currentWallTime = System.currentTimeMillis();
 		
 			/* make a step */
-			System.err.println("Execution started: " + nSteps);
+			env.step(dt);
 
-			for(final var agent : this.agents){
-				agent.step(dt);
-			}
-
-			AgentExecutor.executeAgents(this.agents);
+			AgentExecutor.executeAgents(this.agents.stream()
+					.peek(agent -> agent.step(dt))
+					.collect(Collectors.toList()));
 
 			AgentExecutor.executeFilteredAgents(this.agents.stream()
 					.filter(AbstractAgent::hasToWork)
 					.collect(Collectors.toList()),
 					AbstractAgent::act);
-			System.err.println("Execution done: " + nSteps);
 
 			t += dt;
 			
@@ -106,6 +105,16 @@ public abstract class AbstractSimulation {
 		endWallTime = System.currentTimeMillis();
 		this.averageTimePerStep = timePerStep / numSteps;
 		
+	}
+
+	private void joinPool(final List<Thread> l){
+		l.forEach(th -> {
+			try{
+				th.join();
+			}catch (InterruptedException e) {
+				System.err.println("[Process Pool] -> Error during the join: " + e.getMessage());
+			}
+		});
 	}
 
 	public long getSimulationDuration() {

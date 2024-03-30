@@ -1,5 +1,6 @@
 package pcd.ass01.simtrafficbase;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.BrokenBarrierException;
 
@@ -45,20 +46,17 @@ public abstract class CarAgent extends AbstractAgent {
 	 * Basic behaviour of a car agent structured into a sense/decide/act structure 
 	 * 
 	 */
-	public void step(int dt) {
+	public void step(final int dt) {
 		this.deltaTime = dt;
 	}
 
 	@Override
 	public void run() {
-		AbstractEnvironment env = this.getEnv();
-		currentPercept = (CarPercept) env.getCurrentPercepts(this.getId());
+		final AbstractEnvironment env = this.getEnv();
+		this.currentPercept = (CarPercept) env.getCurrentPercepts(this.getId());
 
 		/* decide */
-		selectedAction = Optional.empty();
-
-		// implement the Runnable interface and start the thread for the decision process, it can be done
-		// without any lock
+		this.selectedAction = Optional.empty();
 		decide(this.deltaTime);
 	}
 
@@ -70,7 +68,7 @@ public abstract class CarAgent extends AbstractAgent {
 
 	@Override
 	public void act(){
-		if (this.selectedAction.isPresent()) {
+		if (Objects.nonNull(this.selectedAction) && this.selectedAction.isPresent()) {
 			this.agentSynchronizer.executeCriticalSection((action) -> this.getEnv().doAction(this.getId(), action), selectedAction.get());
 		}
 	}

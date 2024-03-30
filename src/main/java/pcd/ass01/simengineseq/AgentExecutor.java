@@ -7,21 +7,19 @@ import java.util.function.Predicate;
 
 public class AgentExecutor {
     private static final List<Thread> threadAgents = new ArrayList<>();
+    private static int batchSize = Runtime.getRuntime().availableProcessors();
+
     private AgentExecutor(){
 
     }
 
-    private static int batchSize = Runtime.getRuntime().availableProcessors();
 
     public static void executeAgents(final List<AbstractAgent> agents){
         batchSize = Math.min(agents.size(), batchSize);
         agents.forEach(agent -> {
             threadAgents.add(new Thread(agent));
-            threadAgents.getLast().start();
-            if((threadAgents.size()  ^ batchSize) == 0){
-                System.out.println("Pool created");
-                //AgentExecutor.processPool(threadAgents);
-                AgentExecutor.joinPool();
+            if((threadAgents.size() ^ batchSize) == 0){
+                AgentExecutor.processPool();
                 threadAgents.clear();
             }
         });
@@ -29,11 +27,8 @@ public class AgentExecutor {
 
     public static void executeFilteredAgents(final List<AbstractAgent> agents,
                                              Consumer<AbstractAgent> consumer){
-        batchSize = Math.min(agents.size(), batchSize);
-        System.err.println(agents.size());
-        System.exit(1);
         agents.forEach(agent -> {
-            threadAgents.add(new Thread(agent::act));
+            threadAgents.add(new Thread(() -> consumer.accept(agent)));
             if((threadAgents.size() ^ batchSize) == 0){
                 AgentExecutor.processPool();
                 threadAgents.clear();
@@ -48,7 +43,6 @@ public class AgentExecutor {
                 System.err.println("[Process Pool] -> Error during the join: " + e.getMessage());
             }
         });
-        System.out.println("Pool joined");
     }
 
     private static void processPool(){
