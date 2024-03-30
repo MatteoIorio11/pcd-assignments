@@ -27,21 +27,21 @@ public class TrafficLight {
 
 	public void step(int dt) {
 		switch (state) {
-		case TrafficLightState.GREEN: 
+		case GREEN:
 			currentTimeInState += dt;
 			if (currentTimeInState >= greenDuration) {
 				state = TrafficLightState.YELLOW; 
 				currentTimeInState = 0;
 			}
 			break;
-		case TrafficLightState.RED: 
+		case RED:
 			currentTimeInState += dt;
 			if (currentTimeInState >= redDuration) {
 				state = TrafficLightState.GREEN; 
 				currentTimeInState = 0;
 			}
 			break;
-		case TrafficLightState.YELLOW: 
+		case YELLOW:
 			currentTimeInState += dt;
 			if (currentTimeInState >= yellowDuration) {
 				state = TrafficLightState.RED; 
