@@ -5,7 +5,7 @@ package pcd.ass01.simengineseq;
  * Base  class for defining types of agents taking part to the simulation
  * 
  */
-public abstract class AbstractAgent implements Runnable{
+public abstract class AbstractAgent {
 	
 	protected String myId;
 	private AbstractEnvironment env;
@@ -19,7 +19,7 @@ public abstract class AbstractAgent implements Runnable{
 	protected AbstractAgent(String id) {
 		this.myId = id;
 	}
-	
+
 	/**
 	 * This method is called at the beginning of the simulation
 	 * 
@@ -34,7 +34,11 @@ public abstract class AbstractAgent implements Runnable{
 	 * 
 	 * @param dt - logical time step
 	 */
-	abstract public void step(int dt);
+//	abstract public void step(int dt);
+
+	abstract public void senseStep();
+	abstract public void decideStep(int dt);
+	abstract public void actStep();
 
 	protected AbstractEnvironment getEnv() {
 		return this.env;

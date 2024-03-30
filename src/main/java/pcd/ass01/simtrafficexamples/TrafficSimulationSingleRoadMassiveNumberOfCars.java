@@ -38,7 +38,7 @@ public class TrafficSimulationSingleRoadMassiveNumberOfCars extends AbstractSimu
 									initialPos, 
 									carAcceleration, 
 									carDeceleration,
-									carMaxSpeed, AgentSynchronizer.getInstance(this.numCars));
+									carMaxSpeed);
 			this.addAgent(car);
 			
 			/* no sync with wall-time */

@@ -23,15 +23,10 @@ public class TrafficSimulationSingleRoadSeveralCars extends AbstractSimulation {
 	public void setup() {
 
 		this.setupTimings(0, 1);
-
 		RoadsEnv env = new RoadsEnv();
 		this.setupEnvironment(env);
-		
 		Road road = env.createRoad(new P2d(0,300), new P2d(1500,300));
-
 		int nCars = 30;
-		final AgentSynchronizer agentSynchronizer = AgentSynchronizer.getInstance(nCars);
-
 		for (int i = 0; i < nCars; i++) {
 			
 			String carId = "car-" + i;
@@ -47,7 +42,7 @@ public class TrafficSimulationSingleRoadSeveralCars extends AbstractSimulation {
 									initialPos, 
 									carAcceleration, 
 									carDeceleration,
-									carMaxSpeed, agentSynchronizer);
+									carMaxSpeed);
 			this.addAgent(car);
 		}
 		

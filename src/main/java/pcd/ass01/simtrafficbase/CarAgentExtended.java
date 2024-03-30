@@ -33,9 +33,9 @@ public class CarAgentExtended extends CarAgent {
 							double initialPos,
 							double acc,
 							double dec,
-							double vmax,
-							final AgentSynchronizer agentSynchronizer) {
-		super(id, env, road, initialPos, acc, dec, vmax, agentSynchronizer);
+							double vmax
+	) {
+		super(id, env, road, initialPos, acc, dec, vmax);
 		state = CarAgentState.STOPPED;
 	}
 	

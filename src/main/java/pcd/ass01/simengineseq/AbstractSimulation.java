@@ -1,10 +1,11 @@
 package pcd.ass01.simengineseq;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import pcd.ass01.simtrafficbase.AgentPoolWorker;
+
+import java.util.*;
+import java.util.concurrent.CyclicBarrier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Base class for defining concrete simulations
@@ -74,30 +75,23 @@ public abstract class AbstractSimulation {
 		
 		long timePerStep = 0;
 		int nSteps = 0;
-		
+
+		final List<AgentPoolWorker> workers = this.getWorkers();
+
 		while (nSteps < numSteps) {
-
 			currentWallTime = System.currentTimeMillis();
-		
 			/* make a step */
-			
 			env.step(dt);
-			final List<Thread> agentsThread = this.agents.stream()
-					.peek(agent -> agent.step(dt))
-					.map(Thread::new)
-					.toList();
 
-			agentsThread.forEach(Thread::start);
-
-			agentsThread.forEach(th -> {
-				try{
-					th.join();
-				}catch (InterruptedException e) {
+			final List<Thread> runningWorkers = workers.stream().peek(w -> w.setDt(dt)).map(Thread::new).toList();
+			runningWorkers.forEach(Thread::start);
+			runningWorkers.forEach(w -> {
+				try {
+					w.join();
+				} catch (final InterruptedException e) {
 					e.printStackTrace();
-                }
-            });
-
-
+				}
+			});
 
 			t += dt;
 			
@@ -114,6 +108,37 @@ public abstract class AbstractSimulation {
 		endWallTime = System.currentTimeMillis();
 		this.averageTimePerStep = timePerStep / numSteps;
 		
+	}
+
+	private List<AgentPoolWorker> getWorkers() {
+		final int numProcessors = Runtime.getRuntime().availableProcessors();
+		final int nWorkers = Math.min(this.agents.size(), numProcessors);
+		final List<AgentPoolWorker> workers = new ArrayList<>(nWorkers);
+		final Map<Integer, List<AbstractAgent>> map = new HashMap<>();
+
+		for (int i = 0; i < nWorkers; i++) {
+			final int agentsPerWorker = this.agents.size() / nWorkers;
+			final int startIndex = i * agentsPerWorker;
+			final int endIndex = Math.min((i + 1) * agentsPerWorker, this.agents.size());
+			final List<AbstractAgent> agentsSubList = new ArrayList<>(this.agents.subList(startIndex, endIndex));
+			map.put(i, agentsSubList);
+		}
+
+		// Handle possible leftovers.
+		if (this.agents.size() % nWorkers != 0) {
+			for (int i = 0; i < this.agents.size() % nWorkers; i++) {
+				for (int j = 0; j < nWorkers; j++) {
+					map.get(j).add(this.agents.get(this.agents.size() - i - 1));
+					i++;
+				}
+			}
+		}
+
+		final AgentSynchronizer syncronizer = AgentSynchronizer.getInstance(nWorkers);
+		workers.addAll(
+				map.values().stream().map(agents -> new AgentPoolWorker(agents, syncronizer)).toList()
+		);
+		return workers;
 	}
 	
 	public long getSimulationDuration() {

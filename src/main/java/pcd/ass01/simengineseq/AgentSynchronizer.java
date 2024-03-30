@@ -31,9 +31,13 @@ public class AgentSynchronizer {
         this.agentBarrier.await();
     }
 
-    public void executeCriticalSection(final Consumer<Action> actionConsumer, final Action action) {
+    public int waitingInBarrier() {
+        return this.agentBarrier.getNumberWaiting();
+    }
+
+    public void executeCriticalSection(final Runnable action) {
         this.lock.lock();
-        actionConsumer.accept(action);
+        action.run();
         this.lock.unlock();
     }
 }
