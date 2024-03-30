@@ -47,4 +47,9 @@ public abstract class AbstractAgent {
 	public String getId(){
 		return this.myId;
 	}
+
+	public abstract void act();
+
+
+	public abstract boolean hasToWork();
 }
