@@ -37,6 +37,7 @@ public abstract class CarAgent extends AbstractAgent {
 		this.maxSpeed = vmax;
 		env.registerNewCar(this, road, initialPos);
 		this.agentSynchronizer = agentSynchronizer;
+		this.selectedAction = Optional.empty();
 	}
 
 	/**
@@ -59,19 +60,19 @@ public abstract class CarAgent extends AbstractAgent {
 		// implement the Runnable interface and start the thread for the decision process, it can be done
 		// without any lock
 		decide(this.deltaTime);
+	}
 
-		// add barrier <-
-		try {
-			/* act */
-            // take the lock in order to modify the environment
-			this.agentSynchronizer.awaitBarrier();
-			if (this.selectedAction.isPresent()) {
-				this.agentSynchronizer.executeCriticalSection((action) -> env.doAction(this.getId(), action), selectedAction.get());
-			}
-		} catch (BrokenBarrierException | InterruptedException e) {
-			e.printStackTrace();
+
+	@Override
+	public boolean hasToWork(){
+		return this.selectedAction.isPresent();
+	}
+
+	@Override
+	public void act(){
+		if (this.selectedAction.isPresent()) {
+			this.agentSynchronizer.executeCriticalSection((action) -> this.getEnv().doAction(this.getId(), action), selectedAction.get());
 		}
-
 	}
 
 	/**

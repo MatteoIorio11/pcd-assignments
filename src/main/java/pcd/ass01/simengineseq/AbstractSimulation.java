@@ -1,10 +1,8 @@
 package pcd.ass01.simengineseq;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Base class for defining concrete simulations
@@ -61,7 +59,6 @@ public abstract class AbstractSimulation {
 	public void run(int numSteps) {
 
 		startWallTime = System.currentTimeMillis();
-
 		/* initialize the env and the agents inside */
 		int t = t0;
 
@@ -80,24 +77,19 @@ public abstract class AbstractSimulation {
 			currentWallTime = System.currentTimeMillis();
 		
 			/* make a step */
-			
-			env.step(dt);
-			final List<Thread> agentsThread = this.agents.stream()
-					.peek(agent -> agent.step(dt))
-					.map(Thread::new)
-					.toList();
+			System.err.println("Execution started: " + nSteps);
 
-			agentsThread.forEach(Thread::start);
+			for(final var agent : this.agents){
+				agent.step(dt);
+			}
 
-			agentsThread.forEach(th -> {
-				try{
-					th.join();
-				}catch (InterruptedException e) {
-					e.printStackTrace();
-                }
-            });
+			AgentExecutor.executeAgents(this.agents);
 
-
+			AgentExecutor.executeFilteredAgents(this.agents.stream()
+					.filter(AbstractAgent::hasToWork)
+					.collect(Collectors.toList()),
+					AbstractAgent::act);
+			System.err.println("Execution done: " + nSteps);
 
 			t += dt;
 			
@@ -115,7 +107,7 @@ public abstract class AbstractSimulation {
 		this.averageTimePerStep = timePerStep / numSteps;
 		
 	}
-	
+
 	public long getSimulationDuration() {
 		return endWallTime - startWallTime;
 	}
