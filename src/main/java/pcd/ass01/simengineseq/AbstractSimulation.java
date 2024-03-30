@@ -2,7 +2,6 @@ package pcd.ass01.simengineseq;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Base class for defining concrete simulations
@@ -35,12 +34,14 @@ public abstract class AbstractSimulation {
 	private long startWallTime;
 	private long endWallTime;
 	private long averageTimePerStep;
+	private volatile int numSteps;
 
 
 	protected AbstractSimulation() {
 		agents = new ArrayList<AbstractAgent>();
 		listeners = new ArrayList<SimulationListener>();
 		toBeInSyncWithWallTime = false;
+		this.numSteps = 0;
 	}
 	
 	/**
@@ -48,7 +49,7 @@ public abstract class AbstractSimulation {
 	 * Method used to configure the simulation, specifying env and agents
 	 * 
 	 */
-	protected abstract void setup();
+	public abstract void setup();
 	
 	/**
 	 * Method running the simulation for a number of steps,
@@ -57,8 +58,9 @@ public abstract class AbstractSimulation {
 	 * @param numSteps
 	 */
 	public void run(int numSteps) {
-
+		this.numSteps = numSteps;
 		startWallTime = System.currentTimeMillis();
+
 		final List<Thread> threadAgents = new ArrayList<>();
 
 		/* initialize the env and the agents inside */
@@ -74,7 +76,7 @@ public abstract class AbstractSimulation {
 		long timePerStep = 0;
 		int nSteps = 0;
 		
-		while (nSteps < numSteps) {
+		while (nSteps < this.numSteps) {
 
 			currentWallTime = System.currentTimeMillis();
 		
@@ -115,6 +117,10 @@ public abstract class AbstractSimulation {
 				System.err.println("[Process Pool] -> Error during the join: " + e.getMessage());
 			}
 		});
+	}
+
+	public void stopSimulation(){
+		this.numSteps = 0;
 	}
 
 	public long getSimulationDuration() {
