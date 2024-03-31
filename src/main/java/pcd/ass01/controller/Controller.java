@@ -38,20 +38,24 @@ public class Controller {
         final AbstractSimulation sim = this.simulationMap.get(simulation);
         Optional<RoadSimView> simView = Optional.empty();
         sim.setup();
-        if(!(sim instanceof TrafficSimulationSingleRoadMassiveNumberOfCars)){
-            final RoadSimStatistics stat = new RoadSimStatistics();
-            final RoadSimView view = new RoadSimView();
-            view.display();
-            simView = Optional.of(view);
-            sim.addSimulationListener(stat);
-            sim.addSimulationListener(view);
-        }
-        final Thread simulationThread = new Thread(() -> {
-            sim.run(steps);
-        });
+        if(steps > 0){
+            if(!(sim instanceof TrafficSimulationSingleRoadMassiveNumberOfCars)){
+                final RoadSimStatistics stat = new RoadSimStatistics();
+                final RoadSimView view = new RoadSimView();
+                view.display();
+                simView = Optional.of(view);
+                sim.addSimulationListener(stat);
+                sim.addSimulationListener(view);
+            }
+            final Thread simulationThread = new Thread(() -> {
+                sim.run(steps);
+            });
 
-        this.runningSimulation = Optional.of(new Pair(sim, simView));
-        simulationThread.start();
+            this.runningSimulation = Optional.of(new Pair(sim, simView));
+            simulationThread.start();
+        }else {
+            throw new IllegalArgumentException("The step number must be greater than zero.");
+        }
     }
 
     public void stopSimulation(){
