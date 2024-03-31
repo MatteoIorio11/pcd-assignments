@@ -39,8 +39,8 @@ public class Controller {
         Optional<RoadSimView> simView = Optional.empty();
         sim.setup();
         if(!(sim instanceof TrafficSimulationSingleRoadMassiveNumberOfCars)){
-            RoadSimStatistics stat = new RoadSimStatistics();
-            RoadSimView view = new RoadSimView();
+            final RoadSimStatistics stat = new RoadSimStatistics();
+            final RoadSimView view = new RoadSimView();
             view.display();
             simView = Optional.of(view);
             sim.addSimulationListener(stat);
