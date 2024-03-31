@@ -17,20 +17,20 @@ public class MainGUI extends JFrame {
 
     public MainGUI() {
         this.controller = new Controller();
-        setTitle("Simple GUI");
-        setSize(700, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new FlowLayout());
+        this.setTitle("Assignment 01 GUI");
+        this.setSize(700, 300);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLayout(new FlowLayout());
 
         this.startButton = new JButton("Start");
         this.stopButton = new JButton("Stop");
         this.inputField = new JTextField(20);
         this.comboBox = new JComboBox<>(controller.getSimulations().toArray(new String[0]));
 
-        add(this.startButton);
-        add(this.stopButton);
-        add(this.inputField);
-        add(this.comboBox);
+        this.add(this.startButton);
+        this.add(this.stopButton);
+        this.add(this.inputField);
+        this.add(this.comboBox);
 
         this.stopButton.setEnabled(false);
 
