@@ -14,10 +14,10 @@ public abstract class AbstractSimulation {
 	private AbstractEnvironment env;
 	
 	/* list of the agents */
-	private List<AbstractAgent> agents;
+	private final List<AbstractAgent> agents;
 	
 	/* simulation listeners */
-	private List<SimulationListener> listeners;
+	private final List<SimulationListener> listeners;
 	private Map<String, Thread> map = new HashMap<>();
 
 	/* logical time step */
