@@ -1,6 +1,6 @@
-package pcd.ass01.simengineseq;
+package pcd.ass01.model.simengineseq;
 
-import pcd.ass01.simtrafficbase.AgentPoolWorker;
+import pcd.ass01.model.simtrafficbase.AgentPoolWorker;
 
 import java.util.*;
 

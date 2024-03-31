@@ -1,4 +1,4 @@
-package pcd.ass01.simengineseq;
+package pcd.ass01.model.simengineseq;
 
 import java.util.List;
 

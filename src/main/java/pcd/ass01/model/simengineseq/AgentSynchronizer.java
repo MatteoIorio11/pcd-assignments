@@ -1,4 +1,4 @@
-package pcd.ass01.simengineseq;
+package pcd.ass01.model.simengineseq;
 
 import java.util.Objects;
 import java.util.concurrent.BrokenBarrierException;
@@ -6,7 +6,6 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Consumer;
 
 public class AgentSynchronizer {
     private final Lock lock;
