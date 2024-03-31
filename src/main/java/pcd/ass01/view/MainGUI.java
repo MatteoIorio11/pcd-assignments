@@ -35,13 +35,16 @@ public class MainGUI extends JFrame {
         this.stopButton.setEnabled(false);
 
         this.startButton.addActionListener(e -> {
-            System.out.println("Start pressed");
             final String text = this.inputField.getText();
             if(!text.isEmpty()) {
-                final int inputValue = Integer.parseInt(text);
-                this.startButton.setEnabled(false);
-                this.stopButton.setEnabled(true);
-                this.controller.run((String) this.comboBox.getSelectedItem(), inputValue);
+                try {
+                    final int inputValue = Integer.parseInt(text);
+                    this.startButton.setEnabled(false);
+                    this.stopButton.setEnabled(true);
+                    this.controller.run((String) this.comboBox.getSelectedItem(), inputValue);
+                }catch (IllegalArgumentException exception){
+                    JOptionPane.showMessageDialog(this, exception.getMessage());
+                }
             }
         });
 
@@ -49,7 +52,6 @@ public class MainGUI extends JFrame {
             this.startButton.setEnabled(true);
             this.controller.stopSimulation();
             this.stopButton.setEnabled(false);
-            System.out.println("Stop pressed");
         });
     }
 
