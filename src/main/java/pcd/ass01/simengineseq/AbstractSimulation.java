@@ -124,9 +124,10 @@ public abstract class AbstractSimulation {
 
 		// Handle possible leftovers.
 		if (this.agents.size() % nWorkers != 0) {
-			for (int i = 0; i < this.agents.size() % nWorkers; i++) {
+			final int agentsSize = this.agents.size();
+			for (int i = 0; i < agentsSize % nWorkers; i++) {
 				for (int j = 0; j < nWorkers; j++) {
-					map.get(j).add(this.agents.get(this.agents.size() - i - 1));
+					map.get(j).add(this.agents.get(agentsSize - i - 1));
 					i++;
 				}
 			}
