@@ -1,11 +1,10 @@
-package pcd.ass01.simtrafficbase;
+package pcd.ass01.model.simtrafficbase;
 
-import pcd.ass01.simengineseq.AbstractAgent;
-import pcd.ass01.simengineseq.AgentSynchronizer;
+import pcd.ass01.model.simengineseq.AbstractAgent;
+import pcd.ass01.model.simengineseq.AgentSynchronizer;
 
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
 
 public class AgentPoolWorker implements Runnable {
     private final int nAgents;

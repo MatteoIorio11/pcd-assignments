@@ -1,6 +1,4 @@
-package pcd.ass01.simtrafficbase;
-
-import pcd.ass01.simengineseq.AgentSynchronizer;
+package pcd.ass01.model.simtrafficbase;
 
 import java.util.Optional;
 

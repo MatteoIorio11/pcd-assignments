@@ -1,13 +1,13 @@
-package pcd.ass01.simtrafficbase;
+package pcd.ass01.model.simtrafficbase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import pcd.ass01.simengineseq.AbstractEnvironment;
-import pcd.ass01.simengineseq.Action;
-import pcd.ass01.simengineseq.Percept;
+import pcd.ass01.model.simengineseq.AbstractEnvironment;
+import pcd.ass01.model.simengineseq.Action;
+import pcd.ass01.model.simengineseq.Percept;
 
 public class RoadsEnv extends AbstractEnvironment {
 		

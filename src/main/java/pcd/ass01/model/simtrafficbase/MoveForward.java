@@ -1,6 +1,6 @@
-package pcd.ass01.simtrafficbase;
+package pcd.ass01.model.simtrafficbase;
 
-import pcd.ass01.simengineseq.Action;
+import pcd.ass01.model.simengineseq.Action;
 
 /**
  * Car agent move forward action

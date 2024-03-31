@@ -1,10 +1,8 @@
-package pcd.ass01.simtrafficbase;
+package pcd.ass01.model.simtrafficbase;
 
-import java.util.Objects;
 import java.util.Optional;
-import java.util.random.RandomGenerator;
 
-import pcd.ass01.simengineseq.*;
+import pcd.ass01.model.simengineseq.*;
 
 /**
  *
