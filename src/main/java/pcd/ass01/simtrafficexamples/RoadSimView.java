@@ -6,14 +6,14 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import pcd.ass01.simengineseq.AbstractEnvironment;
-import pcd.ass01.simtrafficbase.RoadsEnv;
-import pcd.ass01.simtrafficbase.TrafficLight;
-import pcd.ass01.simengineseq.AbstractAgent;
-import pcd.ass01.simengineseq.SimulationListener;
-import pcd.ass01.simtrafficbase.CarAgentInfo;
-import pcd.ass01.simtrafficbase.Road;
-import pcd.ass01.simtrafficbase.V2d;
+import pcd.ass01.model.simengineseq.AbstractEnvironment;
+import pcd.ass01.model.simtrafficbase.RoadsEnv;
+import pcd.ass01.model.simtrafficbase.TrafficLight;
+import pcd.ass01.model.simengineseq.AbstractAgent;
+import pcd.ass01.model.simengineseq.SimulationListener;
+import pcd.ass01.model.simtrafficbase.CarAgentInfo;
+import pcd.ass01.model.simtrafficbase.Road;
+import pcd.ass01.model.simtrafficbase.V2d;
 
 import java.awt.*;
 import javax.swing.*;

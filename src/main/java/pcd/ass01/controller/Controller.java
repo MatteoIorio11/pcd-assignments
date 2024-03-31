@@ -1,12 +1,9 @@
 package pcd.ass01.controller;
 
-import pcd.ass01.simengineseq.AbstractSimulation;
+import pcd.ass01.model.simengineseq.AbstractSimulation;
 import pcd.ass01.simtrafficexamples.*;
 
-import javax.swing.*;
 import java.awt.*;
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
