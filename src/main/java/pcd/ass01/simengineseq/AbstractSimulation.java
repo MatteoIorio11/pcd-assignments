@@ -36,6 +36,7 @@ public abstract class AbstractSimulation {
 	private long endWallTime;
 	private long averageTimePerStep;
 	private volatile int numSteps;
+	private final int numProcessors = Runtime.getRuntime().availableProcessors();
 
 	protected AbstractSimulation() {
 		agents = new ArrayList<AbstractAgent>();
@@ -109,7 +110,6 @@ public abstract class AbstractSimulation {
 	}
 
 	private List<AgentPoolWorker> getWorkers() {
-		final int numProcessors = Runtime.getRuntime().availableProcessors();
 		final int nWorkers = Math.min(this.agents.size(), numProcessors);
 		final List<AgentPoolWorker> workers = new ArrayList<>(nWorkers);
 		final Map<Integer, List<AbstractAgent>> map = new HashMap<>();
@@ -132,9 +132,9 @@ public abstract class AbstractSimulation {
 			}
 		}
 
-		final AgentSynchronizer syncronizer = AgentSynchronizer.getInstance(nWorkers);
+		final AgentSynchronizer synchronize = AgentSynchronizer.getInstance(nWorkers);
 		workers.addAll(
-				map.values().stream().map(agents -> new AgentPoolWorker(agents, syncronizer)).toList()
+				map.values().stream().map(agents -> new AgentPoolWorker(agents, synchronize)).toList()
 		);
 		return workers;
 	}
