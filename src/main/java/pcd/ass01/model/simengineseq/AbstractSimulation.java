@@ -18,7 +18,7 @@ public abstract class AbstractSimulation {
 	
 	/* simulation listeners */
 	private final List<SimulationListener> listeners;
-	private Map<String, Thread> map = new HashMap<>();
+	private final Map<String, Thread> map = new HashMap<>();
 
 	/* logical time step */
 	private int dt;
@@ -125,7 +125,8 @@ public abstract class AbstractSimulation {
 		// Handle possible leftovers.
 		if (this.agents.size() % nWorkers != 0) {
 			final int agentsSize = this.agents.size();
-			for (int i = 0; i < agentsSize % nWorkers; i++) {
+			final int leftovers = agentsSize % nWorkers;
+			for (int i = 0; i < leftovers; i++) {
 				for (int j = 0; j < nWorkers; j++) {
 					map.get(j).add(this.agents.get(agentsSize - i - 1));
 					i++;
