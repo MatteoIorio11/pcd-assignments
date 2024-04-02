@@ -25,8 +25,8 @@ public class Controller {
                 new TrafficSimulationSingleRoadMassiveNumberOfCars(N_CARS_MASSIVE))
                 .collect(Collectors.toMap(cl -> cl.getClass().getName(),
                         cl -> cl));
-
     }
+
     public List<String> getSimulations(){
         return this.simulationMap.keySet().stream().toList();
     }
