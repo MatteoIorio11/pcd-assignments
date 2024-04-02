@@ -36,11 +36,10 @@ public abstract class AbstractSimulation {
 	private long endWallTime;
 	private long averageTimePerStep;
 	private volatile int numSteps;
-	private final int numProcessors = Runtime.getRuntime().availableProcessors();
 
 	protected AbstractSimulation() {
-		agents = new ArrayList<AbstractAgent>();
-		listeners = new ArrayList<SimulationListener>();
+		agents = new ArrayList<>();
+		listeners = new ArrayList<>();
 		toBeInSyncWithWallTime = false;
 		this.numSteps = 0;
 	}
@@ -110,6 +109,12 @@ public abstract class AbstractSimulation {
 	}
 
 	private List<AgentPoolWorker> getWorkers() {
+		final String maxProcessors = System.getenv("MAX_NUM_THREADS");
+		final int numProcessors = Objects.isNull(maxProcessors)
+				? Runtime.getRuntime().availableProcessors()
+				: Integer.parseInt(maxProcessors);
+		System.out.println("[INFO]: using " + numProcessors + " threads.");
+
 		final int nWorkers = Math.min(this.agents.size(), numProcessors);
 		final List<AgentPoolWorker> workers = new ArrayList<>(nWorkers);
 		final Map<Integer, List<AbstractAgent>> map = new HashMap<>();
