@@ -18,7 +18,6 @@ public abstract class AbstractSimulation {
 	
 	/* simulation listeners */
 	private final List<SimulationListener> listeners;
-	private final Map<String, Thread> map = new HashMap<>();
 
 	/* logical time step */
 	private int dt;
