@@ -45,6 +45,8 @@ public class MainGUI extends JFrame {
                 }catch (IllegalArgumentException exception){
                     JOptionPane.showMessageDialog(this, exception.getMessage());
                 }
+            }else{
+                JOptionPane.showMessageDialog(this, "The input field is empty.");
             }
         });
 
