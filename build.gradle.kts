@@ -1,5 +1,10 @@
 plugins {
     id("java")
+    application
+}
+
+application {
+    mainClass.set("pcd.ass01.simtrafficexamples.RunTrafficSimulationMassiveTest")
 }
 
 group = "org.example"
