@@ -9,13 +9,11 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class AgentSynchronizer {
     private final Lock lock;
-    private final Condition condition;
     private final CyclicBarrier agentBarrier;
     private static AgentSynchronizer agentSynchronizer;
 
     private AgentSynchronizer(final int nWorkers){
         this.lock = new ReentrantLock();
-        this.condition = this.lock.newCondition();
         this.agentBarrier = new CyclicBarrier(nWorkers);
     }
 
@@ -28,10 +26,6 @@ public class AgentSynchronizer {
 
     public void awaitBarrier() throws BrokenBarrierException, InterruptedException {
         this.agentBarrier.await();
-    }
-
-    public int waitingInBarrier() {
-        return this.agentBarrier.getNumberWaiting();
     }
 
     public void executeCriticalSection(final Runnable action) {

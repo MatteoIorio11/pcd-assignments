@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
 
 public class AgentPoolWorker implements Runnable {
-    private final int nAgents;
     private final List<AbstractAgent> agents;
     private final AgentSynchronizer synchronizer;
     private int dt = 0;
@@ -17,7 +16,6 @@ public class AgentPoolWorker implements Runnable {
             final AgentSynchronizer synchronizer
             ) {
         this.agents = agents;
-        this.nAgents = this.agents.size();
         this.synchronizer = synchronizer;
     }
 
