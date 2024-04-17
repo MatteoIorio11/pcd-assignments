@@ -78,6 +78,7 @@ public abstract class AbstractSimulation {
 		int nSteps = 0;
 
 		final var service = ForkJoinPool.commonPool();
+		final AgentSynchronizer agentSynchronizer = AgentSynchronizer.getInstance();
 
 		while (nSteps < this.numSteps) {
 
@@ -86,7 +87,15 @@ public abstract class AbstractSimulation {
 			env.step(dt);
 
 			// Launch and Wait for completion of all tasks
-			service.invokeAll(agents.stream().map(a -> new AgentTask(a, dt)).collect(Collectors.toList()));
+			//service.invokeAll(agents.stream().map(a -> new AgentTask(a, dt)).collect(Collectors.toList()));
+
+			PoolExecutor.executePool(this.agents, (agent) -> {
+				agent.senseStep();
+				agent.decideStep(dt);
+			});
+			PoolExecutor.executePool(this.agents, (agent) -> {
+				agentSynchronizer.executeCriticalSection(agent::actStep);
+			});
 
 			t += dt;
 			
