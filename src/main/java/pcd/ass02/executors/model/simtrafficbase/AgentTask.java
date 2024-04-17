@@ -5,7 +5,7 @@ import pcd.ass02.executors.model.simengineseq.AgentSynchronizer;
 
 import java.util.concurrent.Callable;
 
-public class AgentTask implements Callable<Boolean> {
+public class AgentTask {
     private final int dt;
     private final AbstractAgent agent;
     private final AgentSynchronizer synchronizer = AgentSynchronizer.getInstance();
@@ -15,11 +15,18 @@ public class AgentTask implements Callable<Boolean> {
         this.dt = dt;
     }
 
-    @Override
-    public Boolean call() {
-        this.agent.senseStep();
-        this.agent.decideStep(this.dt);
-        this.synchronizer.executeCriticalSection(this.agent::actStep);
-        return true;
+    public Callable<Boolean> performSenseAndDecideSteps() {
+        return () -> {
+            this.agent.senseStep();
+            this.agent.decideStep(this.dt);
+            return true;
+        };
+    }
+
+    public Callable<Boolean> performActStep() {
+        return () -> {
+            this.synchronizer.executeCriticalSection(this.agent::actStep);
+            return true;
+        };
     }
 }

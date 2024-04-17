@@ -85,8 +85,10 @@ public abstract class AbstractSimulation {
 			/* make a step */
 			env.step(dt);
 
-			// Launch and Wait for completion of all tasks
-			service.invokeAll(agents.stream().map(a -> new AgentTask(a, dt)).collect(Collectors.toList()));
+			final var agentTasks = agents.stream().map(a -> new AgentTask(a, dt)).collect(Collectors.toList());
+
+			service.invokeAll(agentTasks.stream().map(AgentTask::performSenseAndDecideSteps).collect(Collectors.toList()));
+			service.invokeAll(agentTasks.stream().map(AgentTask::performActStep).collect(Collectors.toList()));
 
 			t += dt;
 			
