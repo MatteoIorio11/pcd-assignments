@@ -2,6 +2,7 @@ package pcd.ass02.server.model;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
+import pcd.ass02.server.model.http.HttpServerX;
 
 public class main {
 
