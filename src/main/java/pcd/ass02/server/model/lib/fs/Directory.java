@@ -14,7 +14,7 @@ public record Directory(List<Document> files, List<Directory> subDirectories) {
     }
 
     public static Directory from(final File file){
-        final var files = Arrays.stream(file.listFiles()).peek(Objects::requireNonNull).toList();
+        final var files = Arrays.stream(Objects.requireNonNull(file.listFiles())).peek(Objects::requireNonNull).toList();
         return new Directory(
             files.stream().filter(f -> !f.isDirectory()).map(Document::from).collect(Collectors.toList()),
             files.stream().filter(File::isDirectory).map(Directory::from).collect(Collectors.toList())
