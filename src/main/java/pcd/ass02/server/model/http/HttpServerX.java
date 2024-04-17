@@ -4,6 +4,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import pcd.ass02.server.model.lib.WordCounter;
 
 public class HttpServerX extends AbstractVerticle {
     private final int port;
@@ -38,7 +39,7 @@ public class HttpServerX extends AbstractVerticle {
                     final String modality = context.pathParam(HttpServerX.PATH_MODE);
                     final String depth = context.pathParam(HttpServerX.PATH_DEPTH);
                     this.log("Request received, name : " + name + " with the following modality: " + modality + " with the following depth: " + depth);
-
+                    WordCounter.start();
                     return context
                             .response()
                             .putHeader("Content-Type", "application/json")
