@@ -20,6 +20,8 @@ public class Response {
     }
 
     public JsonObject toJson(){
-
+        final JsonObject response = new JsonObject();
+        this.results.forEach(response::put);
+        return response;
     }
 }
