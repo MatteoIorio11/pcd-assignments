@@ -22,7 +22,7 @@ public class TrafficSimulationWithCrossRoads extends AbstractSimulation {
 	public void setup() {
 
 		Random  gen = new Random(1);
-		final AgentSynchronizer agentSynchronizer = AgentSynchronizer.getInstance(N_WORKERS);
+		final AgentSynchronizer agentSynchronizer = AgentSynchronizer.getInstance();
 
 		this.setupTimings(0, 1);
 		

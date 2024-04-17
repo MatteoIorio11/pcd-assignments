@@ -8,23 +8,17 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class AgentSynchronizer {
     private final Lock lock;
-    private final CyclicBarrier agentBarrier;
     private static AgentSynchronizer agentSynchronizer;
 
-    private AgentSynchronizer(final int nWorkers){
+    private AgentSynchronizer(){
         this.lock = new ReentrantLock();
-        this.agentBarrier = new CyclicBarrier(nWorkers);
     }
 
-    public static AgentSynchronizer getInstance(final int nWorkers){
+    public static AgentSynchronizer getInstance(){
         if(Objects.isNull(agentSynchronizer)){
-            agentSynchronizer = new AgentSynchronizer(nWorkers);
+            agentSynchronizer = new AgentSynchronizer();
         }
         return agentSynchronizer;
-    }
-
-    public void awaitBarrier() throws BrokenBarrierException, InterruptedException {
-        this.agentBarrier.await();
     }
 
     public void executeCriticalSection(final Runnable action) {

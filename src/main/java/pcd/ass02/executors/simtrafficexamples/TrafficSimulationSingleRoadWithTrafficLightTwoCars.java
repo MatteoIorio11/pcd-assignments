@@ -27,7 +27,7 @@ public class TrafficSimulationSingleRoadWithTrafficLightTwoCars extends Abstract
 		this.setupTimings(0, 1);
 		
 		RoadsEnv env = new RoadsEnv();
-		final AgentSynchronizer agentSynchronizer = AgentSynchronizer.getInstance(N_WORKERS);
+		final AgentSynchronizer agentSynchronizer = AgentSynchronizer.getInstance();
 		this.setupEnvironment(env);
 				
 		Road r = env.createRoad(new P2d(0,300), new P2d(1500,300));
