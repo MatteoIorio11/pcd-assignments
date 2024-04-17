@@ -3,7 +3,9 @@ package pcd.ass02.executors.model.simtrafficbase;
 import pcd.ass02.executors.model.simengineseq.AbstractAgent;
 import pcd.ass02.executors.model.simengineseq.AgentSynchronizer;
 
-public class AgentTask implements Runnable {
+import java.util.concurrent.Callable;
+
+public class AgentTask implements Callable<Boolean> {
     private final int dt;
     private final AbstractAgent agent;
     private final AgentSynchronizer synchronizer = AgentSynchronizer.getInstance();
@@ -14,10 +16,10 @@ public class AgentTask implements Runnable {
     }
 
     @Override
-    public void run() {
+    public Boolean call() {
         this.agent.senseStep();
         this.agent.decideStep(this.dt);
         this.synchronizer.executeCriticalSection(this.agent::actStep);
-//        System.out.println("[" + Thread.currentThread() + " || " + this.agent.getId() + "]: " + "Finished");
+        return true;
     }
 }

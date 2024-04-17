@@ -4,7 +4,9 @@ import pcd.ass02.executors.model.simtrafficbase.AgentTask;
 
 import java.util.*;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 /**
  * Base class for defining concrete simulations
@@ -75,7 +77,7 @@ public abstract class AbstractSimulation {
 		long timePerStep = 0;
 		int nSteps = 0;
 
-		final var service = Executors.newCachedThreadPool();
+		final var service = ForkJoinPool.commonPool();
 
 		while (nSteps < this.numSteps) {
 
@@ -83,8 +85,9 @@ public abstract class AbstractSimulation {
 			/* make a step */
 			env.step(dt);
 
-			// sense and decide steps
-			agents.forEach(agent -> service.submit(new AgentTask(agent, dt)));
+			// Launch and Wait for completion of all tasks
+			service.invokeAll(agents.stream().map(a -> new AgentTask(a, dt)).collect(Collectors.toList()));
+
 			t += dt;
 			
 			notifyNewStep(t, agents, env);
