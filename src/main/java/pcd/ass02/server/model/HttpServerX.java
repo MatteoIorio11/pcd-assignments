@@ -38,6 +38,7 @@ public class HttpServerX extends AbstractVerticle {
                     final String modality = context.pathParam(HttpServerX.PATH_MODE);
                     final String depth = context.pathParam(HttpServerX.PATH_DEPTH);
                     this.log("Request received, name : " + name + " with the following modality: " + modality + " with the following depth: " + depth);
+                    
                     return context
                             .response()
                             .putHeader("Content-Type", "application/json")
