@@ -9,6 +9,9 @@ public class HttpServerX extends AbstractVerticle {
     private final int port;
     private final static String PATH_DIRECTORY = "directory";
     private final static String PATH_MODE = "mode";
+    private final static String PATH_EXPLORE = "explore";
+    private final static String PATH_DIVIDER = "/";
+    private final static String PATH_PARAMETER = "/:";
     public HttpServerX(final int port){
         this.port = port;
     }
@@ -25,7 +28,7 @@ public class HttpServerX extends AbstractVerticle {
         final Router router = Router.router(vertx);
         router.route().handler(BodyHandler.create());
         router
-                .get("/explore/:" + HttpServerX.PATH_DIRECTORY + "/:" + HttpServerX.PATH_MODE)
+                .get(HttpServerX.PATH_DIVIDER + HttpServerX.PATH_EXPLORE + HttpServerX.PATH_PARAMETER + HttpServerX.PATH_DIRECTORY + HttpServerX.PATH_PARAMETER + HttpServerX.PATH_MODE)
                 .respond(context -> {
                     final String directoryName = context.pathParam(HttpServerX.PATH_DIRECTORY);
                     final String modality = context.pathParam(HttpServerX.PATH_MODE);
