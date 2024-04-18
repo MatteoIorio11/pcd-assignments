@@ -30,13 +30,9 @@ public class EventLoopCounter extends AbstractVerticle implements WordOccurrence
         if(Objects.nonNull(this.path) && Objects.nonNull(this.word) && this.depth >= 0){
             final Promise<Response> promise = Promise.promise();
             this.getVertx().runOnContext(handler -> {
-                try {
-                    final Response response = new Response();
-                    this.explorePaths(Directory.from(this.path), this.depth, response);
-                    promise.complete(response);
-                } catch (IOException exception) {
-                    promise.fail(exception);
-                }
+                final Response response = new Response();
+                this.explorePaths(Directory.from(this.path), this.depth, response);
+                promise.complete(response);
             });
             return promise.future();
         }
@@ -44,17 +40,17 @@ public class EventLoopCounter extends AbstractVerticle implements WordOccurrence
     }
 
     private void explorePaths(final Directory currDirectory, final int depth, final Response response){
-        if(depth == 0){
+        if (depth == 0) {
             return;
-        }else{
-            currDirectory.subDirectories()
-                    .forEach(directory -> this.explorePaths(directory, depth - 1, response));
-            currDirectory.files().forEach(document -> {
-                response.addFile(document.toString(), document.lines().stream()
-                        .filter(word -> word.contains(this.word))
-                        .toList());
-            });
         }
-    }
 
+        currDirectory.subDirectories()
+                .forEach(directory -> this.explorePaths(directory, depth - 1, response));
+
+        currDirectory.files().forEach(document -> {
+            response.addFile(document.toString(), document.lines().stream()
+                .filter(word -> word.contains(this.word))
+                .toList());
+        });
+    }
 }
