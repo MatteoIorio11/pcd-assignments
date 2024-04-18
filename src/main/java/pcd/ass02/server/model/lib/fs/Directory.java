@@ -1,7 +1,6 @@
 package pcd.ass02.server.model.lib.fs;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -9,7 +8,7 @@ import java.util.stream.Collectors;
 
 public record Directory(String name, List<Document> files, List<Directory> subDirectories) {
 
-    public static Directory from(final String dirname) throws IOException {
+    public static Directory from(final String dirname) {
         return Directory.from(new File(dirname));
     }
 
