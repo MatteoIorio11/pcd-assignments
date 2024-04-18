@@ -5,7 +5,6 @@ import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.fs.Directory;
-import pcd.ass02.server.model.lib.fs.Document;
 import pcd.ass02.server.model.lib.response.Response;
 
 import java.io.IOException;
@@ -48,7 +47,8 @@ public class EventLoopCounter extends AbstractVerticle implements WordOccurrence
         if(depth == 0){
             return;
         }else{
-            currDirectory.subDirectories().forEach(directory -> this.explorePaths(directory, depth - 1, response));
+            currDirectory.subDirectories()
+                    .forEach(directory -> this.explorePaths(directory, depth - 1, response));
             currDirectory.files().forEach(document -> {
                 response.addFile(document.toString(), document.lines().stream()
                         .filter(word -> word.contains(this.word))
