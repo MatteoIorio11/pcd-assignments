@@ -6,6 +6,7 @@ import pcd.ass02.server.model.lib.response.Response;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 public class VirtualCounter implements WordOccurrence<Response> {
     private String path;
@@ -25,16 +26,28 @@ public class VirtualCounter implements WordOccurrence<Response> {
         if(depth == 0){
             return;
         }
-        var virtualThreads = directory.files().stream().map(f -> Thread.ofVirtual().start(() -> {
-            response.addFile(f.name(), f.lines().stream().filter(l -> l.contains(this.word)).toList());
-        })).toList();
+        this.joinThreads(directory.files().stream()
+                .map(f -> Thread.ofVirtual().start(() -> {
+                    response.addFile(f.name(), f.lines().stream()
+                            .filter(l -> l.contains(this.word))
+                            .toList());
+        })).toList());
 
-        this.joinThreads(virtualThreads);
-        virtualThreads = directory.subDirectories().stream().map(d -> Thread.ofVirtual().start(() -> {
-            this.explorePath(depth-1, d, response);
-        })).toList();
-        this.joinThreads(virtualThreads);
+
+        this.joinThreads(directory.subDirectories().stream()
+                .map(d -> Thread.ofVirtual().start(() -> {
+                    this.explorePath(depth-1, d, response);
+        })).toList());
+
+        this.createTask(directory.subDirectories(),
+                (a) -> Thread.ofVirtual().start(() -> {
+                    this.explorePath(depth-1, a, response);}));
     }
+
+    private void createTask(final List<Directory> directories, final Function<Directory, Thread> mapper){
+        this.joinThreads(directories.stream().map(mapper).toList());
+    }
+
 
     private void joinThreads(final List<Thread> list){
         list.forEach(thread -> {
