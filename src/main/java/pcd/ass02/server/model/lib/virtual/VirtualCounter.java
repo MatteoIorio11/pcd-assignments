@@ -17,7 +17,7 @@ public class VirtualCounter implements WordOccurrence<Response> {
         this.path = Objects.requireNonNull(path);
         this.word = Objects.requireNonNull(word);
         this.depth = depth;
-        final var response = new Response();
+        final var response = new Response(this.word);
         this.explorePath(depth, Directory.from(path), response);
         return response;
     }
