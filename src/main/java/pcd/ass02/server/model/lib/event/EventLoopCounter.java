@@ -30,7 +30,7 @@ public class EventLoopCounter extends AbstractVerticle implements WordOccurrence
         if(Objects.nonNull(this.path) && Objects.nonNull(this.word) && this.depth >= 0){
             final Promise<Response> promise = Promise.promise();
             this.getVertx().runOnContext(handler -> {
-                final Response response = new Response();
+                final Response response = new Response(this.word);
                 this.explorePaths(Directory.from(this.path), this.depth, response);
                 promise.complete(response);
             });
