@@ -48,12 +48,10 @@ public class EventLoopCounter extends AbstractVerticle implements WordOccurrence
         if(depth == 0){
             return;
         }else{
-            for(final Directory dir : currDirectory.subDirectories()){
-                this.explorePaths(dir, depth - 1, response);
-            }
-            for(final Document document : currDirectory.files()){
+            currDirectory.subDirectories().forEach(directory -> this.explorePaths(directory, depth - 1, response));
+            currDirectory.files().forEach(document -> {
                 response.addFile(document.toString(), (int) document.lines().stream().filter(word -> word.equals(this.word)).count());
-            }
+            });
         }
     }
 
