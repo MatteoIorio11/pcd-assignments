@@ -4,6 +4,7 @@ import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.fs.Directory;
 import pcd.ass02.server.model.lib.response.Response;
 
+import java.util.List;
 import java.util.Objects;
 
 public class VirtualCounter implements WordOccurrence<Response> {
@@ -28,20 +29,17 @@ public class VirtualCounter implements WordOccurrence<Response> {
             response.addFile(f.name(), f.lines().stream().filter(l -> l.contains(this.word)).toList());
         })).toList();
 
-        virtualThreads.forEach(t -> {
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        this.joinThreads(virtualThreads);
         virtualThreads = directory.subDirectories().stream().map(d -> Thread.ofVirtual().start(() -> {
             this.explorePath(depth-1, d, response);
         })).toList();
+        this.joinThreads(virtualThreads);
+    }
 
-        virtualThreads.forEach(t -> {
+    private void joinThreads(final List<Thread> list){
+        list.forEach(thread -> {
             try {
-                t.join();
+                thread.join();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
