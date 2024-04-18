@@ -2,21 +2,27 @@ package pcd.ass02.server.model.lib.response;
 
 import io.vertx.core.json.JsonObject;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Response {
-    private final Map<String, Integer> results;
+    private final Map<String, List<String>> results;
 
     public Response(){
         this.results = new ConcurrentHashMap<>();
     }
 
-    public void addFile(final String fileName, final int counter){
-        this.results.put(Objects.requireNonNull(fileName),
-                counter);
+    public void addFile(final String fileName, final String line){
+        if(this.results.containsKey(Objects.requireNonNull(fileName))){
+            this.results.get(fileName).add(Objects.requireNonNull(line));
+        }else{
+            this.results.put(Objects.requireNonNull(fileName),
+                    new LinkedList<String>(Collections.singleton(Objects.requireNonNull(line))));
+        }
+    }
+
+    public void addFile(final String fileName, final List<String> lines){
+        lines.forEach(line -> this.addFile(fileName, line));
     }
 
     public JsonObject toJson(){
