@@ -8,6 +8,7 @@ import pcd.ass02.server.model.http.HttpServerX;
 import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.event.EventLoopCounter;
 import pcd.ass02.server.model.lib.response.Response;
+import pcd.ass02.server.model.lib.virtual.VirtualCounter;
 
 public class main {
 
@@ -21,12 +22,9 @@ public class main {
         //r.addFile("zoo", 1);
         //r.addFile("oo", 2);
         //System.out.println(r.toJson());
-        Vertx vertx = Vertx.vertx();
-        final var l = new EventLoopCounter();
-        vertx.deployVerticle(l);
-        final Future<Response> z = l.getWordOccurrences("./", "java", 10);
-        z.onSuccess(a ->
-                System.out.println(a.toJson().encodePrettily()));
-        vertx.close();
+
+        final var c = new VirtualCounter();
+        final Response b = c.getWordOccurrences("./", "java", 10);
+        System.out.println(b.toJson().encodePrettily());
     }
 }
