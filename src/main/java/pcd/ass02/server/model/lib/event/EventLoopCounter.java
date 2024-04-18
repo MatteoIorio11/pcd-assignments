@@ -50,7 +50,7 @@ public class EventLoopCounter extends AbstractVerticle implements WordOccurrence
         }else{
             currDirectory.subDirectories().forEach(directory -> this.explorePaths(directory, depth - 1, response));
             currDirectory.files().forEach(document -> {
-                response.addFile(document.toString(), (int) document.lines().stream().filter(word -> word.equals(this.word)).count());
+                response.addFile(document.toString(), (int) document.lines().stream().filter(word -> word.contains(this.word)).count());
             });
         }
     }
