@@ -13,12 +13,12 @@ public class VirtualCounter implements WordOccurrence<Response> {
     private String word;
     private int depth;
     @Override
-    public Response getWordOccurrences(String path, String word, int depth) {
-        this.path = Objects.requireNonNull(path);
+    public Response getWordOccurrences(String url, String word, int depth) {
+        this.path = Objects.requireNonNull(url);
         this.word = Objects.requireNonNull(word);
         this.depth = depth;
         final var response = new Response(this.word);
-        this.explorePath(depth, Directory.from(path), response);
+        this.explorePath(depth, Directory.from(url), response);
         return response;
     }
 
