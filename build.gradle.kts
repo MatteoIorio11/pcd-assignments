@@ -26,6 +26,10 @@ dependencies {
     implementation("io.vertx:vertx-core:4.5.7")
     implementation("io.vertx:vertx-web:4.5.7")
     implementation("io.vertx:vertx-web-client:4.5.7")
+
+    //jsoup for HTML parsing
+    // https://mvnrepository.com/artifact/org.jsoup/jsoup
+    implementation("org.jsoup:jsoup:1.7.2")
 }
 
 tasks.test {
