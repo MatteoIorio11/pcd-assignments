@@ -9,21 +9,27 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public record Page(String url, Document document) {
     private final static String PARAGRAPH_TAG = "p";
     private final static String LINK_TAG = "a";
     private final static String HREF_ATTRIBUTE = "href";
-    public static Page from(final String url) {
+
+    /**
+     * @param url: input url of the page
+     * @return a new Page from the url, this value CAN be NULL if the Page does not exist.
+     */
+    public static Optional<Page> from(final String url) {
         try {
             final Document document = Jsoup.connect(Objects.requireNonNull(url)).get();
-            return new Page(url, document);
+            return Optional.of(new Page(url, document));
         } catch (HttpStatusException httpStatusException){
             System.err.println("[PAGE] The input url: " + url + " does not exists");
-            return null;
+            return Optional.empty();
         } catch (IOException e) {
             e.printStackTrace(System.err);
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -48,7 +54,8 @@ public record Page(String url, Document document) {
                 .map(link ->link.attr(Page.HREF_ATTRIBUTE))
                 .map(href -> this.url + href)
                 .map(Page::from)
-                .filter(Objects::nonNull)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .toList();
     }
 
