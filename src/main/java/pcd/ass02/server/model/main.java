@@ -1,14 +1,10 @@
 package pcd.ass02.server.model;
 
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Future;
-import io.vertx.core.Promise;
-import io.vertx.core.Vertx;
-import pcd.ass02.server.model.http.HttpServerX;
-import pcd.ass02.server.model.lib.WordOccurrence;
-import pcd.ass02.server.model.lib.event.EventLoopCounter;
+import pcd.ass02.server.model.lib.html.Page;
 import pcd.ass02.server.model.lib.response.Response;
 import pcd.ass02.server.model.lib.virtual.VirtualCounter;
+
+import java.util.Optional;
 
 public class main {
 
@@ -23,8 +19,14 @@ public class main {
         //r.addFile("oo", 2);
         //System.out.println(r.toJson());
 
-        final var c = new VirtualCounter();
-        final Response b = c.getWordOccurrences("./", "java", 10);
-        System.out.println(b.toJson().encodePrettily());
+        //final var c = new VirtualCounter();
+        //final Response b = c.getWordOccurrences("./", "java", 2);
+        //System.out.println(b.count());
+        //System.out.println(b.toJson().encodePrettily());
+        final Optional<Page> p = Page.from("https://en.wikipedia.org/");
+        p.ifPresent(page ->
+            page.getLinks().stream()
+                .map(Page::getParagraphs)
+                .forEach(System.out::println));
     }
 }
