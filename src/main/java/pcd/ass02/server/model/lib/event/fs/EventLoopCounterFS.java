@@ -1,4 +1,4 @@
-package pcd.ass02.server.model.lib.event;
+package pcd.ass02.server.model.lib.event.fs;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
@@ -7,10 +7,9 @@ import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.fs.Directory;
 import pcd.ass02.server.model.lib.response.Response;
 
-import java.io.IOException;
 import java.util.Objects;
 
-public class EventLoopCounter extends AbstractVerticle implements WordOccurrence<Future<Response>> {
+public class EventLoopCounterFS extends AbstractVerticle implements WordOccurrence<Future<Response>> {
 
     private String path;
     private String word;
