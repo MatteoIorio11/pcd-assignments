@@ -27,6 +27,10 @@ public record Page(String url, Document document) {
         }
     }
 
+    /**
+     * From this page we return the text of all the "p" tags.
+     * @return By getting all the paragraphs inside the current page, we get each single text for each paragraph, we return it as a List.
+     */
     public List<String> getParagraphs(){
         final Elements paragraphs = this.document.getElementsByTag(Page.PARAGRAPH_TAG);
         return paragraphs.stream().map(Element::text)
@@ -34,6 +38,10 @@ public record Page(String url, Document document) {
                 .toList();
     }
 
+    /**
+     * From this page we get a new list of all the linked Pages.
+     * @return By getting all the "a" links inside this page, we return a new List of all the linked Pages.
+     */
     public List<Page> getLinks(){
         final Elements links = this.document.getElementsByTag(Page.LINK_TAG);
         return links.stream()
