@@ -19,8 +19,8 @@ public class EventLoopCounter extends AbstractVerticle implements WordOccurrence
 
     }
     @Override
-    public Future<Response> getWordOccurrences(String path, String word, int depth) {
-        this.path = Objects.requireNonNull(path);
+    public Future<Response> getWordOccurrences(String url, String word, int depth) {
+        this.path = Objects.requireNonNull(url);
         this.word = Objects.requireNonNull(word);
         this.depth = depth;
         return this.explore();
