@@ -16,6 +16,7 @@ public record Page(String url, Document document) {
     private final static String LINK_TAG = "a";
     private final static String HREF_ATTRIBUTE = "href";
     private final static String HTTPS_WEBSITE = "https://";
+    private final static long LINKS_LIMIT = 100;
 
     /**
      * @param url: input url of the page
@@ -53,7 +54,7 @@ public record Page(String url, Document document) {
     public List<Page> getLinks(){
         final Elements links = this.document.getElementsByTag(Page.LINK_TAG);
         return links.stream()
-                .limit(100)
+                .limit(Page.LINKS_LIMIT)
                 .parallel()
                 .map(link ->link.attr(Page.HREF_ATTRIBUTE))
                 .map(this::createUrl)
