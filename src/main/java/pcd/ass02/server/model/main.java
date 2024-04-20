@@ -1,5 +1,6 @@
 package pcd.ass02.server.model;
 
+import pcd.ass02.server.model.lib.factory.WordCounterFactory;
 import pcd.ass02.server.model.lib.html.Page;
 import pcd.ass02.server.model.lib.virtual.html.VirtualCounter;
 
@@ -22,8 +23,10 @@ public class main {
         //final Response b = c.getWordOccurrences("./", "java", 2);
         //System.out.println(b.count());
         //System.out.println(b.toJson().encodePrettily());
-        final var vc = new VirtualCounter();
+        final var vc = WordCounterFactory.fromVirtual();
 
-        System.out.println(vc.getWordOccurrences("https://it.wikipedia.org/wiki/Pagina_principale", "di", 1).count());
+        System.out.println(vc
+                .getWordOccurrences("https://en.wikipedia.org/wiki/Main_Page", "the", 1)
+                .count());
     }
 }
