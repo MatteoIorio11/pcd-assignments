@@ -50,7 +50,7 @@ public record Page(String url, Document document) {
      */
     public List<Page> getLinks(){
         final Elements links = this.document.getElementsByTag(Page.LINK_TAG);
-        return links.stream()
+        return links.parallelStream()
                 .map(link ->link.attr(Page.HREF_ATTRIBUTE))
                 .map(href -> this.url + href)
                 .map(Page::from)
