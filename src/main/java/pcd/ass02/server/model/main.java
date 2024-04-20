@@ -23,6 +23,6 @@ public class main {
         //System.out.println(b.count());
         //System.out.println(b.toJson().encodePrettily());
         final var vc = new VirtualCounter();
-        System.out.println(vc.getWordOccurrences("https://www.unibo.it/it", "università", 1).toJson());
+        System.out.println(vc.getWordOccurrences("https://it.wikipedia.org/wiki/Pagina_principale", "di", 1).count());
     }
 }
