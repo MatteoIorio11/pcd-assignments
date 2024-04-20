@@ -15,7 +15,7 @@ public class Response {
         this.word = Objects.requireNonNull(word).toLowerCase();
     }
 
-    public void addParagraph(final String fileName, final String line){
+    public synchronized void addParagraph(final String fileName, final String line){
         if(this.results.containsKey(Objects.requireNonNull(fileName))){
             this.results.get(fileName).add(Objects.requireNonNull(line));
         }else{
@@ -42,11 +42,11 @@ public class Response {
 
     private long countWords(final String fileName){
         final Optional<Long> result = this.results.get(Objects.requireNonNull(fileName))
-                .parallelStream()
+                .stream()
                 .filter(lines -> lines.toLowerCase().contains(this.word))
                 .distinct()
+                .parallel()
                 .map(lines -> Arrays.stream(lines.split(" "))
-                        .parallel()
                         .map(String::toLowerCase)
                         .filter(word -> word.equals(this.word))
                         .count())
