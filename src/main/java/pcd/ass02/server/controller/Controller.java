@@ -10,4 +10,8 @@ public class Controller {
     public List<CounterModality> getAlgorithms(){
         return Arrays.stream(CounterModality.values()).toList();
     }
+
+    public void startSearch(final String url, final int depth, final String word){
+
+    }
 }
