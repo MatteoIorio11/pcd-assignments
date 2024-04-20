@@ -25,10 +25,10 @@ public record Page(String url, Document document) {
             final Document document = Jsoup.connect(Objects.requireNonNull(url)).get();
             return Optional.of(new Page(url, document));
         } catch (HttpStatusException httpStatusException){
-            System.err.println("[PAGE] The input url: " + url + " does not exists");
+            System.err.println("[PAGE] The input url: " + url + " does not exists.");
             return Optional.empty();
         } catch (IOException e) {
-            e.printStackTrace(System.err);
+            System.err.println("[PAGE] An error occurred lol.");
             return Optional.empty();
         }
     }
