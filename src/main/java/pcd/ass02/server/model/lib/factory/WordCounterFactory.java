@@ -15,6 +15,10 @@ public class WordCounterFactory {
         return new EventLoopCounterFS();
     }
 
+    public static AbstractVerticle fromLoopCounter(){
+        return null;
+    }
+
     public static WordOccurrence<Response> fromVirtual() {
         return new VirtualCounter();
     }
