@@ -63,6 +63,7 @@ public record Page(String url, Document document) {
     }
 
     private String createUrl(final String inputUrl){
+
         return inputUrl.startsWith("https://") ? inputUrl :this.url;
     }
 

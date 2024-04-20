@@ -43,11 +43,12 @@ public class Response {
     private long countWords(final String fileName){
         final Optional<Long> result = this.results.get(Objects.requireNonNull(fileName))
                 .parallelStream()
-                .filter(lines -> lines.contains(this.word))
+                .filter(lines -> lines.toLowerCase().contains(this.word))
                 .distinct()
                 .map(lines -> Arrays.stream(lines.split(" "))
                         .parallel()
                         .map(String::toLowerCase)
+                        .filter(word -> word.equals(this.word))
                         .count())
                 .reduce(Long::sum);
         if (result.isPresent()){
