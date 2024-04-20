@@ -54,11 +54,15 @@ public record Page(String url, Document document) {
         return links.parallelStream()
                 .limit(100)
                 .map(link ->link.attr(Page.HREF_ATTRIBUTE))
-                .map(href -> this.url + href)
+                .map(this::createUrl)
                 .map(Page::from)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .toList();
+    }
+
+    private String createUrl(final String inputUrl){
+        return inputUrl.startsWith("https://") ? inputUrl :this.url;
     }
 
 }
