@@ -1,16 +1,20 @@
 package pcd.ass02.server.view;
 
+import pcd.ass02.server.controller.Controller;
+import pcd.ass02.server.model.lib.CounterModality;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
+import java.util.List;
 public class View extends JFrame {
-    private JTextField addressField, wordField, depthField;
+    private JTextField urlField, wordField, depthField;
     private JTextArea outputArea;
     private JButton stopButton;
-    private JComboBox<String> comboBox;
+    private JButton startButton;
+    private JComboBox comboBox;
+    private final Controller controller;
     public View(){
+        this.controller = new Controller();
         this.createGUI();
     }
 
@@ -29,10 +33,10 @@ public class View extends JFrame {
         gbc.anchor = GridBagConstraints.LINE_START;
 
         panelTop.add(new JLabel("Url:"), gbc);
-        addressField = new JTextField(10);
+        urlField = new JTextField(10);
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.weightx = 0.9;
-        panelTop.add(addressField, gbc);
+        panelTop.add(urlField, gbc);
 
         gbc.gridwidth = GridBagConstraints.RELATIVE;
         gbc.weightx = 0.1;
@@ -51,8 +55,8 @@ public class View extends JFrame {
         panelTop.add(depthField, gbc);
 
         // ComboBox
-        String[] options = {"Opzione 1", "Opzione 2", "Opzione 3"};
-        comboBox = new JComboBox<>(options);
+        final List<CounterModality> options = this.controller.getAlgorithms();
+        comboBox = new JComboBox<>(options.toArray());
         gbc.gridwidth = GridBagConstraints.RELATIVE;
         gbc.weightx = 0.1;
         panelTop.add(new JLabel("Algorithm:"), gbc);
@@ -67,10 +71,23 @@ public class View extends JFrame {
         JScrollPane scrollPane = new JScrollPane(outputArea);
         add(scrollPane, BorderLayout.CENTER);
 
+        final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        startButton = new JButton("Start");
+        startButton.addActionListener(e ->  {
+           final String depth = this.depthField.getText();
+           final String url = this.urlField.getText();
+           final String word= this.wordField.getText();
+           final CounterModality algorithm = options.get(this.comboBox.getSelectedIndex());
+
+        });
+        buttonPanel.add(startButton);
+
         stopButton = new JButton("Stop");
         stopButton.addActionListener(e -> {
-            outputArea.append("Stop!\n");
+                outputArea.append("\n");
         });
-        add(stopButton, BorderLayout.SOUTH);
+        buttonPanel.add(stopButton);
+
+        add(buttonPanel, BorderLayout.SOUTH);
     }
 }
