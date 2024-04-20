@@ -1,5 +1,6 @@
 package pcd.ass02.server.model;
 
+import io.vertx.core.Vertx;
 import pcd.ass02.server.model.lib.factory.WordCounterFactory;
 import pcd.ass02.server.model.lib.html.Page;
 import pcd.ass02.server.model.lib.virtual.html.VirtualCounter;
@@ -23,10 +24,22 @@ public class main {
         //final Response b = c.getWordOccurrences("./", "java", 2);
         //System.out.println(b.count());
         //System.out.println(b.toJson().encodePrettily());
-        final var vc = WordCounterFactory.fromVirtual();
 
-        System.out.println(vc
-                .getWordOccurrences("https://en.wikipedia.org/wiki/Main_Page", "the", 1)
-                .count());
+        // Virtual Thread Test
+//        final var vc = WordCounterFactory.fromVirtual();
+//        System.out.println(vc
+//                .getWordOccurrences("https://en.wikipedia.org/wiki/Main_Page", "the", 2)
+//                .count()
+//        );
+
+        // EventLoop Test
+        final var elvc = WordCounterFactory.fromLoopCounter();
+        final Vertx vertx = Vertx.vertx();
+        vertx.deployVerticle(elvc);
+        elvc.getWordOccurrences("https://en.wikipedia.org/wiki/Main_Page", "the", 2)
+                .onSuccess(res -> {
+                    System.out.println(res.count());
+                    vertx.close();
+                });
     }
 }
