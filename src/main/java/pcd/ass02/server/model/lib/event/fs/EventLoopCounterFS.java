@@ -47,7 +47,7 @@ public class EventLoopCounterFS extends AbstractVerticle implements WordOccurren
                 .forEach(directory -> this.explorePaths(directory, depth - 1, response));
 
         currDirectory.files().forEach(document -> {
-            response.addFile(document.toString(), document.lines().stream()
+            response.addParagraph(document.toString(), document.lines().stream()
                 .filter(word -> word.contains(this.word))
                 .toList());
         });
