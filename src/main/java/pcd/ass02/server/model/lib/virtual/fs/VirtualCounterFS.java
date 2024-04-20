@@ -1,4 +1,4 @@
-package pcd.ass02.server.model.lib.virtual;
+package pcd.ass02.server.model.lib.virtual.fs;
 
 import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.fs.Directory;
@@ -8,15 +8,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-public class VirtualCounter implements WordOccurrence<Response> {
-    private String path;
+public class VirtualCounterFS implements WordOccurrence<Response> {
     private String word;
-    private int depth;
     @Override
     public Response getWordOccurrences(String url, String word, int depth) {
-        this.path = Objects.requireNonNull(url);
         this.word = Objects.requireNonNull(word);
-        this.depth = depth;
         final var response = new Response(this.word);
         this.explorePath(depth, Directory.from(url), response);
         return response;

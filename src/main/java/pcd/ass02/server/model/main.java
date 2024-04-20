@@ -1,8 +1,7 @@
 package pcd.ass02.server.model;
 
 import pcd.ass02.server.model.lib.html.Page;
-import pcd.ass02.server.model.lib.response.Response;
-import pcd.ass02.server.model.lib.virtual.VirtualCounter;
+import pcd.ass02.server.model.lib.virtual.html.VirtualCounter;
 
 import java.util.Optional;
 
@@ -23,10 +22,7 @@ public class main {
         //final Response b = c.getWordOccurrences("./", "java", 2);
         //System.out.println(b.count());
         //System.out.println(b.toJson().encodePrettily());
-        final Optional<Page> p = Page.from("https://en.wikipedia.org/");
-        p.ifPresent(page ->
-            page.getLinks().stream()
-                .map(Page::getParagraphs)
-                .forEach(System.out::println));
+        final var vc = new VirtualCounter();
+        System.out.println(vc.getWordOccurrences("https://www.unibo.it/it", "università", 1).toJson());
     }
 }

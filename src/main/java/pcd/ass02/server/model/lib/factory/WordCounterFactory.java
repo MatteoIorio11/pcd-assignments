@@ -4,7 +4,7 @@ import io.vertx.core.AbstractVerticle;
 import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.event.fs.EventLoopCounterFS;
 import pcd.ass02.server.model.lib.response.Response;
-import pcd.ass02.server.model.lib.virtual.VirtualCounter;
+import pcd.ass02.server.model.lib.virtual.fs.VirtualCounterFS;
 
 public class WordCounterFactory {
 
@@ -15,6 +15,6 @@ public class WordCounterFactory {
     }
 
     public WordOccurrence<Response> fromVirtualThreadFS(){
-        return new VirtualCounter();
+        return new VirtualCounterFS();
     }
 }
