@@ -24,7 +24,7 @@ public class VirtualCounterFS implements WordOccurrence<Response> {
         }
         this.joinThreads(directory.files().stream()
                 .map(f -> Thread.ofVirtual().start(() -> {
-                    response.addFile(f.name(), f.lines().stream()
+                    response.addParagraph(f.name(), f.lines().stream()
                             .filter(l -> l.contains(this.word))
                             .toList());
         })).toList());
