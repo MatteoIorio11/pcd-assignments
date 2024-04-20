@@ -13,7 +13,7 @@ public class VirtualCounter implements WordOccurrence<Response> {
     public Response getWordOccurrences(String url, String word, int depth) {
         this.word = Objects.requireNonNull(word);
         final var response = new Response(this.word);
-        this.explorePath(depth, Page.from(url).orElseThrow(), response);
+        Page.from(url).ifPresent(page -> this.explorePath(depth, page, response));
         return response;
     }
 
