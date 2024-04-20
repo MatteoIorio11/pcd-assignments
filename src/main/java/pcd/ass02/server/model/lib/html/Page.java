@@ -65,7 +65,6 @@ public record Page(String url, Document document) {
     }
 
     private String createUrl(final String inputUrl){
-
         return inputUrl.startsWith(Page.HTTPS_WEBSITE) ? inputUrl :this.url;
     }
 
