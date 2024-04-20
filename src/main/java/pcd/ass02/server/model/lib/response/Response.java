@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class Response {
-    private final Map<String, Set<String>> results;
+    private final Map<String, List<String>> results;
     private final String word;
 
     public Response(final String word){
@@ -20,7 +20,7 @@ public class Response {
             this.results.get(fileName).add(Objects.requireNonNull(line));
         }else{
             this.results.put(Objects.requireNonNull(fileName),
-                    new HashSet<>(Collections.singleton(Objects.requireNonNull(line))));
+                    new LinkedList<>(Collections.singleton(Objects.requireNonNull(line))));
         }
     }
 
@@ -30,7 +30,7 @@ public class Response {
 
     public JsonObject toJson(){
         final JsonObject response = new JsonObject();
-        this.results.forEach(response::put);
+        this.results.forEach((key, value) -> response.put(key, value.stream().toList()));
         return response;
     }
 
@@ -44,6 +44,7 @@ public class Response {
         final Optional<Long> result = this.results.get(Objects.requireNonNull(fileName))
                 .parallelStream()
                 .filter(lines -> lines.contains(this.word))
+                .distinct()
                 .map(lines -> Arrays.stream(lines.split(" "))
                         .parallel()
                         .map(String::toLowerCase)
