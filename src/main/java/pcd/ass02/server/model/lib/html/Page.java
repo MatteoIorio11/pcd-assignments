@@ -16,7 +16,7 @@ public record Page(String url, Document document) {
     private final static String LINK_TAG = "a";
     private final static String HREF_ATTRIBUTE = "href";
     private final static String HTTPS_WEBSITE = "https://";
-    private final static long LINKS_LIMIT = 100;
+    private final static long LINKS_LIMIT = 20;
 
     /**
      * @param url: input url of the page
@@ -41,7 +41,7 @@ public record Page(String url, Document document) {
      */
     public List<String> getParagraphs(){
         final Elements paragraphs = this.document.getElementsByTag(Page.PARAGRAPH_TAG);
-        return paragraphs.parallelStream()
+        return paragraphs.stream()
                 .map(Element::text)
                 .filter(text -> !text.isEmpty() && !text.isBlank())
                 .toList();
@@ -55,7 +55,6 @@ public record Page(String url, Document document) {
         final Elements links = this.document.getElementsByTag(Page.LINK_TAG);
         return links.stream()
                 .limit(Page.LINKS_LIMIT)
-                .parallel()
                 .map(link ->link.attr(Page.HREF_ATTRIBUTE))
                 .map(this::createUrl)
                 .map(Page::from)

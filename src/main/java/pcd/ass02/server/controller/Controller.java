@@ -47,6 +47,8 @@ public class Controller {
             });
 
         }else{
+            System.out.println(this.optFutureAlgorithm);
+            System.out.println(this.optResponseAlgorithm);
             throw new IllegalArgumentException("One of the input argument is not correct");
         }
     }
@@ -74,5 +76,7 @@ public class Controller {
     public void stop(){
         this.optResponseAlgorithm.ifPresent(CurrentAlgorithm::stop);
         this.optFutureAlgorithm.ifPresent(CurrentAlgorithm::stop);
+        this.optFutureAlgorithm = Optional.empty();
+        this.optResponseAlgorithm = Optional.empty();
     }
 }

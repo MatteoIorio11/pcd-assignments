@@ -25,8 +25,15 @@ public class Response {
     }
 
     public void addParagraph(final String fileName, final List<String> lines){
-        lines.forEach(line -> this.addParagraph(fileName, line));
+        if(this.results.containsKey(Objects.requireNonNull(fileName))){
+            this.results.get(fileName).addAll(Objects.requireNonNull(lines));
+        }else{
+            this.results.put(Objects.requireNonNull(fileName),
+                    new LinkedList<>(Objects.requireNonNull(lines)));
+        }
     }
+
+
 
     public JsonObject toJson(){
         final JsonObject response = new JsonObject();
@@ -35,7 +42,7 @@ public class Response {
     }
 
     public Map<String, Long> count(){
-        return this.results.keySet().stream()
+        return Map.copyOf(this.results).keySet().stream().parallel()
             .map(fileName -> Map.entry(fileName, this.countWords(fileName)))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }

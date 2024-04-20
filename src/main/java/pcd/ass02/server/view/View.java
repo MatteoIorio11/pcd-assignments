@@ -94,7 +94,7 @@ public class View extends JFrame {
                            try {
                                response.get().onSuccess(r -> {
                                    this.outputArea.setText("");
-                                   this.outputArea.setText(r.count().toString());
+                                   r.count().forEach((key, value) -> this.outputArea.append("Page: " + key + " Occurrences: " + value +"\n"));
                                    this.inProgress = false;
                                });
                            } catch (InterruptedException | ExecutionException ex) {
@@ -115,7 +115,8 @@ public class View extends JFrame {
 
         stopButton = new JButton("Stop");
         stopButton.addActionListener(e -> {
-                outputArea.append("\n");
+            this.outputArea.setText("");
+            this.controller.stop();
         });
         buttonPanel.add(stopButton);
 
