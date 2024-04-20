@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class Response {
-    private final Map<String, List<String>> results;
+    private final Map<String, Set<String>> results;
     private final String word;
 
     public Response(final String word){
@@ -15,17 +15,17 @@ public class Response {
         this.word = Objects.requireNonNull(word).toLowerCase();
     }
 
-    public void addFile(final String fileName, final String line){
+    public void addParagraph(final String fileName, final String line){
         if(this.results.containsKey(Objects.requireNonNull(fileName))){
             this.results.get(fileName).add(Objects.requireNonNull(line));
         }else{
             this.results.put(Objects.requireNonNull(fileName),
-                    new LinkedList<String>(Collections.singleton(Objects.requireNonNull(line))));
+                    new HashSet<>(Collections.singleton(Objects.requireNonNull(line))));
         }
     }
 
-    public void addFile(final String fileName, final List<String> lines){
-        lines.forEach(line -> this.addFile(fileName, line));
+    public void addParagraph(final String fileName, final List<String> lines){
+        lines.forEach(line -> this.addParagraph(fileName, line));
     }
 
     public JsonObject toJson(){
@@ -41,11 +41,12 @@ public class Response {
     }
 
     private long countWords(final String fileName){
-        final Optional<Long> result = this.results.get(Objects.requireNonNull(fileName)).parallelStream()
+        final Optional<Long> result = this.results.get(Objects.requireNonNull(fileName))
+                .parallelStream()
                 .filter(lines -> lines.contains(this.word))
                 .map(lines -> Arrays.stream(lines.split(" "))
+                        .parallel()
                         .map(String::toLowerCase)
-                        .filter(word -> word.contains(this.word))
                         .count())
                 .reduce(Long::sum);
         if (result.isPresent()){
