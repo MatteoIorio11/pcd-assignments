@@ -15,6 +15,7 @@ public record Page(String url, Document document) {
     private final static String PARAGRAPH_TAG = "p";
     private final static String LINK_TAG = "a";
     private final static String HREF_ATTRIBUTE = "href";
+    private final static String HTTPS_WEBSITE = "https://";
 
     /**
      * @param url: input url of the page
@@ -64,7 +65,7 @@ public record Page(String url, Document document) {
 
     private String createUrl(final String inputUrl){
 
-        return inputUrl.startsWith("https://") ? inputUrl :this.url;
+        return inputUrl.startsWith(Page.HTTPS_WEBSITE) ? inputUrl :this.url;
     }
 
 }
