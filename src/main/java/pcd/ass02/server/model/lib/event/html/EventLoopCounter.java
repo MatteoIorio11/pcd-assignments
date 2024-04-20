@@ -1,10 +1,10 @@
 package pcd.ass02.server.model.lib.event.html;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Future;
 import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.response.Response;
 
-import java.util.concurrent.Future;
 
 public class EventLoopCounter extends AbstractVerticle implements WordOccurrence<Future<Response>> {
     @Override
