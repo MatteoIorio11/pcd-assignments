@@ -39,7 +39,8 @@ public record Page(String url, Document document) {
      */
     public List<String> getParagraphs(){
         final Elements paragraphs = this.document.getElementsByTag(Page.PARAGRAPH_TAG);
-        return paragraphs.stream().map(Element::text)
+        return paragraphs.parallelStream()
+                .map(Element::text)
                 .filter(text -> !text.isEmpty() && !text.isBlank())
                 .toList();
     }
@@ -51,6 +52,7 @@ public record Page(String url, Document document) {
     public List<Page> getLinks(){
         final Elements links = this.document.getElementsByTag(Page.LINK_TAG);
         return links.parallelStream()
+                .limit(100)
                 .map(link ->link.attr(Page.HREF_ATTRIBUTE))
                 .map(href -> this.url + href)
                 .map(Page::from)
