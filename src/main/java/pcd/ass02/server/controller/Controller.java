@@ -1,6 +1,7 @@
 package pcd.ass02.server.controller;
 
 import pcd.ass02.server.model.lib.CounterModality;
+import pcd.ass02.server.model.lib.factory.WordCounterFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,6 +37,6 @@ public class Controller {
     }
 
     private void startEventLoop(){
-
+        final var algorithm = WordCounterFactory.fromLoopCounter();
     }
 }
