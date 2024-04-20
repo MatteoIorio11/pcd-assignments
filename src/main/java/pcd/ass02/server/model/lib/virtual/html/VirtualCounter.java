@@ -8,11 +8,10 @@ import java.util.List;
 import java.util.Objects;
 
 public class VirtualCounter implements WordOccurrence<Response> {
-    private String word;
     @Override
     public Response getWordOccurrences(String url, String word, int depth) {
-        this.word = Objects.requireNonNull(word);
-        final var response = new Response(this.word);
+        String inputWord = Objects.requireNonNull(word);
+        final var response = new Response(inputWord);
         Page.from(url).ifPresent(page -> this.explorePath(depth, page, response));
         return response;
     }
@@ -42,5 +41,10 @@ public class VirtualCounter implements WordOccurrence<Response> {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    @Override
+    public void stopProcess(){
+
     }
 }

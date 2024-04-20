@@ -18,6 +18,11 @@ public class VirtualCounterFS implements WordOccurrence<Response> {
         return response;
     }
 
+    @Override
+    public void stopProcess() {
+
+    }
+
     private void explorePath(final int depth, final Directory directory, final Response response){
         if(depth == 0){
             return;

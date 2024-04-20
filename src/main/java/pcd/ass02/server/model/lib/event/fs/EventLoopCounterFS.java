@@ -25,6 +25,11 @@ public class EventLoopCounterFS extends AbstractVerticle implements WordOccurren
         return this.explore();
     }
 
+    @Override
+    public void stopProcess() {
+
+    }
+
     private Future<Response> explore(){
         if(Objects.nonNull(this.path) && Objects.nonNull(this.word) && this.depth >= 0){
             final Promise<Response> promise = Promise.promise();

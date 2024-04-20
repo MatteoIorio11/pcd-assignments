@@ -11,4 +11,9 @@ public class EventLoopCounter extends AbstractVerticle implements WordOccurrence
     public Future<Response> getWordOccurrences(String url, String word, int depth) {
         return null;
     }
+
+    @Override
+    public void stopProcess() {
+
+    }
 }

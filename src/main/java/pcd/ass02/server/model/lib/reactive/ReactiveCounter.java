@@ -8,4 +8,9 @@ public class ReactiveCounter implements WordOccurrence {
     public Response getWordOccurrences(String url, String word, int depth) {
         return null;
     }
+
+    @Override
+    public void stopProcess() {
+
+    }
 }
