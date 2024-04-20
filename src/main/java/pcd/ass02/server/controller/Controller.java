@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class Controller {
 
@@ -17,16 +19,17 @@ public class Controller {
         return Arrays.stream(CounterModality.values()).toList();
     }
 
-    public Future<Response> startSearch(final String url, final int depth, final String word, final CounterModality algorith){
+    public CompletableFuture<Future<Response>> startSearch(final String url, final int depth, final String word, final CounterModality algorith) throws ExecutionException, InterruptedException {
         if(Objects.nonNull(url) &&
         Objects.nonNull(word) &&
         Objects.nonNull(algorith) &&
         depth >= 0){
-            return switch (algorith)  {
+            return CompletableFuture.supplyAsync(() -> switch (algorith)  {
                 case EVENT -> this.startEventLoop(url, depth, word);
                 case REACTIVE -> this.startReactive(url, depth, word);
                 case VIRTUAL -> this.startVirtual(url, depth, word);
-            };
+            });
+
         }else{
             throw new IllegalArgumentException("One of the input argument is not correct");
         }
