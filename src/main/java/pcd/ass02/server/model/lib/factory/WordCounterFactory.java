@@ -3,6 +3,7 @@ package pcd.ass02.server.model.lib.factory;
 import io.vertx.core.AbstractVerticle;
 import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.event.fs.EventLoopCounterFS;
+import pcd.ass02.server.model.lib.event.html.EventLoopCounter;
 import pcd.ass02.server.model.lib.response.Response;
 import pcd.ass02.server.model.lib.virtual.fs.VirtualCounterFS;
 import pcd.ass02.server.model.lib.virtual.html.VirtualCounter;
@@ -15,8 +16,8 @@ public class WordCounterFactory {
         return new EventLoopCounterFS();
     }
 
-    public static AbstractVerticle fromLoopCounter(){
-        return null;
+    public static EventLoopCounter fromLoopCounter(){
+        return new EventLoopCounter();
     }
 
     public static WordOccurrence<Response> fromVirtual() {
