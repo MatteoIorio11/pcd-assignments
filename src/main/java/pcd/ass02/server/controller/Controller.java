@@ -11,7 +11,7 @@ public class Controller {
         return Arrays.stream(CounterModality.values()).toList();
     }
 
-    public void startSearch(final String url, final int depth, final String word){
+    public void startSearch(final String url, final int depth, final String word, final CounterModality algorith){
 
     }
 }
