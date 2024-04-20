@@ -51,8 +51,9 @@ public record Page(String url, Document document) {
      */
     public List<Page> getLinks(){
         final Elements links = this.document.getElementsByTag(Page.LINK_TAG);
-        return links.parallelStream()
+        return links.stream()
                 .limit(100)
+                .parallel()
                 .map(link ->link.attr(Page.HREF_ATTRIBUTE))
                 .map(this::createUrl)
                 .map(Page::from)
