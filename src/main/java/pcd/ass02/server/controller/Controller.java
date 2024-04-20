@@ -2,18 +2,33 @@ package pcd.ass02.server.controller;
 
 import io.vertx.core.*;
 import pcd.ass02.server.model.lib.CounterModality;
+import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.event.html.EventLoopCounter;
 import pcd.ass02.server.model.lib.factory.WordCounterFactory;
 import pcd.ass02.server.model.lib.response.Response;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class Controller {
+
+    private record CurrentAlgorithm<E>(WordOccurrence<E> algorithm){
+        public static CurrentAlgorithm<Response> from(final WordOccurrence<Response> inputAlgorithm){
+            return new CurrentAlgorithm<>(inputAlgorithm);
+        }
+
+        public static CurrentAlgorithm<Future<Response>> fromFuture(final EventLoopCounter inputAlgorithm){
+            return new CurrentAlgorithm<>(inputAlgorithm);
+        }
+
+        public void stop(){
+            this.algorithm.stopProcess();
+        }
+    }
+
+    private Optional<CurrentAlgorithm<Response>> optResponseAlgorithm = Optional.empty();
+    private Optional<CurrentAlgorithm<Future<Response>>> optFutureAlgorithm = Optional.empty();
 
     public List<CounterModality> getAlgorithms(){
         return Arrays.stream(CounterModality.values()).toList();
@@ -23,7 +38,8 @@ public class Controller {
         if(Objects.nonNull(url) &&
         Objects.nonNull(word) &&
         Objects.nonNull(algorith) &&
-        depth >= 0){
+        depth >= 0 &&
+        this.optFutureAlgorithm.isEmpty() && this.optResponseAlgorithm.isEmpty()){
             return CompletableFuture.supplyAsync(() -> switch (algorith)  {
                 case EVENT -> this.startEventLoop(url, depth, word);
                 case REACTIVE -> this.startReactive(url, depth, word);
@@ -37,6 +53,7 @@ public class Controller {
 
     private Future<Response> startVirtual(final String url, final int depth, final String word) {
         final var algorithm = WordCounterFactory.fromVirtual();
+        this.optResponseAlgorithm = Optional.of(CurrentAlgorithm.from(algorithm));
         final Promise<Response> promise = Promise.promise();
         promise.complete(algorithm.getWordOccurrences(url, word, depth));
         return promise.future();
@@ -48,8 +65,14 @@ public class Controller {
 
     private Future<Response> startEventLoop(final String url, final int depth, final String word){
         final EventLoopCounter algorithm = WordCounterFactory.fromLoopCounter();
+        this.optFutureAlgorithm = Optional.of(CurrentAlgorithm.fromFuture(algorithm));
         final Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(algorithm);
         return algorithm.getWordOccurrences(url, word, depth);
+    }
+
+    public void stop(){
+        this.optResponseAlgorithm.ifPresent(CurrentAlgorithm::stop);
+        this.optFutureAlgorithm.ifPresent(CurrentAlgorithm::stop);
     }
 }
