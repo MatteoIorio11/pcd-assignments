@@ -25,11 +25,13 @@ public class VirtualCounter implements WordOccurrence<Response> {
                     response.addParagraph(page.url(), p);
                 })).toList());
 
-
+        /*
         this.joinThreads(page.getLinks().stream()
                 .map(l -> Thread.ofVirtual().start(() -> {
                     this.explorePath(depth-1, l, response);
         })).toList());
+         */
+        page.getLinks().forEach(link -> this.explorePath(depth - 1, link, response));
 
     }
 
