@@ -2,12 +2,8 @@ package pcd.ass02.server.model;
 
 import io.vertx.core.Vertx;
 import pcd.ass02.server.model.lib.factory.WordCounterFactory;
-import pcd.ass02.server.model.lib.html.Page;
-import pcd.ass02.server.model.lib.virtual.html.VirtualCounter;
 
-import java.util.Optional;
-
-public class main {
+public class CounterMain {
 
     public static void main(String[] args) {
         /*
