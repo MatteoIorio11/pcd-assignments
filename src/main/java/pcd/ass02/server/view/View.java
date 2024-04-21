@@ -90,6 +90,7 @@ public class View extends JFrame {
                    final CompletableFuture<Future<Response>> response = this.controller.startSearch(url, depth, word, algorithm);
                    this.inProgress = true;
                    SwingUtilities.invokeLater(() -> {
+                       this.outputArea.setText("The algorithm is running, please wait...");
                        new Thread(() -> {
                            try {
                                response.get().onSuccess(r -> {
