@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import static javax.swing.JOptionPane.showMessageDialog;
+
 public class View extends JFrame {
     private JTextField urlField, wordField, depthField;
     private JTextArea outputArea;
@@ -97,6 +99,7 @@ public class View extends JFrame {
                                    this.outputArea.setText("");
                                    r.count().forEach((key, value) -> this.outputArea.append("Page: " + key + " Occurrences: " + value +"\n"));
                                    this.inProgress = false;
+                                   this.controller.stop();
                                });
                            } catch (InterruptedException | ExecutionException ex) {
                                throw new RuntimeException(ex);
@@ -104,12 +107,10 @@ public class View extends JFrame {
                        }).start();
                    });
                }else {
-                   System.out.println("Already running please wait.");
+                   showMessageDialog(this, "Already running please wait.");
                }
-           }catch (IllegalArgumentException exception){
-                System.err.println(exception.getMessage());
-           } catch (ExecutionException | InterruptedException ex) {
-               throw new RuntimeException(ex);
+           }catch (IllegalArgumentException | ExecutionException | InterruptedException exception){
+               showMessageDialog(this, exception.getMessage());
            }
         });
         buttonPanel.add(startButton);
