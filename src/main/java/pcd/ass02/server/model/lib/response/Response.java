@@ -43,6 +43,7 @@ public class Response {
 
     public Map<String, Long> count(){
         return Map.copyOf(this.results).keySet().stream()
+                .parallel()
                 .map(fileName -> Map.entry(fileName, this.countWords(fileName)))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
@@ -50,10 +51,10 @@ public class Response {
     private long countWords(final String fileName){
         final Optional<Long> result = this.results.get(Objects.requireNonNull(fileName))
                 .stream()
-                .filter(lines -> lines.toLowerCase().contains(this.word))
+                .filter(paragraph -> paragraph.contains(this.word))
                 .distinct()
                 .parallel()
-                .map(lines -> Arrays.stream(lines.split(" "))
+                .map(paragraph -> Arrays.stream(paragraph.split(" "))
                         .map(String::toLowerCase)
                         .filter(word -> word.equals(this.word))
                         .count())
