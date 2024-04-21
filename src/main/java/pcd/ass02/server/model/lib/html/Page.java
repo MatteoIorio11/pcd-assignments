@@ -16,7 +16,7 @@ public record Page(String url, Document document) {
     private final static String LINK_TAG = "a";
     private final static String HREF_ATTRIBUTE = "href";
     private final static String HTTPS_WEBSITE = "https://";
-    private final static long LINKS_LIMIT = 20;
+    private final static long LINKS_LIMIT = 10;
 
     /**
      * @param url: input url of the page
@@ -55,16 +55,28 @@ public record Page(String url, Document document) {
         final Elements links = this.document.getElementsByTag(Page.LINK_TAG);
         return links.stream()
                 .limit(Page.LINKS_LIMIT)
-                .map(link ->link.attr(Page.HREF_ATTRIBUTE))
-                .map(this::createUrl)
-                .map(Page::from)
+                .map(this::mapElement)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .toList();
     }
 
+    private String getHref(final Element element){
+        return element.attr(Page.HREF_ATTRIBUTE);
+    }
+
     private String createUrl(final String inputUrl){
         return inputUrl.startsWith(Page.HTTPS_WEBSITE) ? inputUrl :this.url;
+    }
+
+    private Optional<Page> createPage(final String url){
+        return Page.from(url);
+    }
+
+    private Optional<Page> mapElement(final Element element){
+        return this.createPage(
+                this.createUrl(
+                        this.getHref(element)));
     }
 
 }
