@@ -40,8 +40,8 @@ public record Page(String url, Document document) {
      * @return By getting all the paragraphs inside the current page, we get each single text for each paragraph, we return it as a List.
      */
     public List<String> getParagraphs(){
-        final Elements paragraphs = this.document.getElementsByTag(Page.PARAGRAPH_TAG);
-        return paragraphs.stream()
+        return this.document.getElementsByTag(Page.PARAGRAPH_TAG)
+                .stream()
                 .map(Element::text)
                 .filter(text -> !text.isEmpty() && !text.isBlank())
                 .toList();
