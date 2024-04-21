@@ -52,8 +52,8 @@ public record Page(String url, Document document) {
      * @return By getting all the "a" links inside this page, we return a new List of all the linked Pages.
      */
     public List<Page> getLinks(){
-        final Elements links = this.document.getElementsByTag(Page.LINK_TAG);
-        return links.stream()
+        return this.document.getElementsByTag(Page.LINK_TAG)
+                .stream()
                 .limit(Page.LINKS_LIMIT)
                 .map(this::mapElement)
                 .filter(Optional::isPresent)
