@@ -19,6 +19,11 @@ public class VirtualCounterFS implements WordOccurrence<Response> {
     }
 
     @Override
+    public Response partialResult() {
+        return null;
+    }
+
+    @Override
     public void stopProcess() {
 
     }

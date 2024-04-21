@@ -26,6 +26,11 @@ public class EventLoopCounterFS extends AbstractVerticle implements WordOccurren
     }
 
     @Override
+    public Response partialResult() {
+        return null;
+    }
+
+    @Override
     public void stopProcess() {
 
     }

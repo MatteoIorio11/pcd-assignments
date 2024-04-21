@@ -16,6 +16,11 @@ public class VirtualCounter implements WordOccurrence<Response> {
         return response;
     }
 
+    @Override
+    public Response partialResult() {
+        return null;
+    }
+
     private void explorePath(final int depth, final Page page, final Response response){
         if(depth == 0){
             return;

@@ -12,6 +12,8 @@ import java.util.Objects;
 
 public class EventLoopCounter extends AbstractVerticle implements WordOccurrence<Future<Response>> {
 
+    private Response response;
+
     @Override
     public Future<Response> getWordOccurrences(String url, String word, int depth) {
         assert depth >= 0;
@@ -21,14 +23,19 @@ public class EventLoopCounter extends AbstractVerticle implements WordOccurrence
         final var page = Page.from(url);
         assert page.isPresent();
 
-        final Response res = new Response(word);
+        this.response = new Response(word);
         final Promise<Response> promise = Promise.promise();
 
         this.getVertx().runOnContext(h -> {
-            new CounterAgent(this.getVertx(), page.get(), word, depth).countOccurrenciesOnPage(res, promise);
+            new CounterAgent(this.getVertx(), page.get(), word, depth).countOccurrenciesOnPage(response, promise);
         });
 
         return promise.future();
+    }
+
+    @Override
+    public Response partialResult() {
+        return this.response;
     }
 
     @Override

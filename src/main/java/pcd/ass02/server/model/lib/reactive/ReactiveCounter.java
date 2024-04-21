@@ -10,6 +10,11 @@ public class ReactiveCounter implements WordOccurrence {
     }
 
     @Override
+    public Response partialResult() {
+        return null;
+    }
+
+    @Override
     public void stopProcess() {
 
     }
