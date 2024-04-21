@@ -93,18 +93,31 @@ public class View extends JFrame {
                    this.inProgress = true;
                    SwingUtilities.invokeLater(() -> {
                        this.outputArea.setText("The algorithm is running, please wait...");
-                       new Thread(() -> {
+                       Thread.ofVirtual().start(() -> {
                            try {
                                response.get().onSuccess(r -> {
                                    this.outputArea.setText("");
                                    r.count().forEach((key, value) -> this.outputArea.append("Page: " + key + " Occurrences: " + value +"\n"));
                                    this.inProgress = false;
                                    this.controller.stop();
+                                   showMessageDialog(this, "Done :)");
                                });
                            } catch (InterruptedException | ExecutionException ex) {
                                throw new RuntimeException(ex);
                            }
-                       }).start();
+                       });
+                       Thread.ofVirtual().start(() -> {
+                           while(this.inProgress) {
+                               this.outputArea.setText("");
+                               this.controller.getPartialResult()
+                                       .ifPresent(r -> r.count().forEach((key, value) -> this.outputArea.append("Page: " + key + " Occurrences: " + value + "\n")));
+                               try {
+                                   Thread.sleep(100);
+                               } catch (InterruptedException ex) {
+                                   throw new RuntimeException(ex);
+                               }
+                           }
+                       });
                    });
                }else {
                    showMessageDialog(this, "Already running please wait.");
