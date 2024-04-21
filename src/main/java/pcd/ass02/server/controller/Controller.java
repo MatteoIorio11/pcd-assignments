@@ -73,6 +73,12 @@ public class Controller {
         return algorithm.getWordOccurrences(url, word, depth);
     }
 
+    public Optional<Response> getPartialResult(){
+        return this.optResponseAlgorithm
+                .map(responseCurrentAlgorithm -> responseCurrentAlgorithm.algorithm.partialResult())
+                .or(() -> this.optFutureAlgorithm.map(futureCurrentAlgorithm -> futureCurrentAlgorithm.algorithm.partialResult()));
+    }
+
     public void stop(){
         this.optResponseAlgorithm.ifPresent(CurrentAlgorithm::stop);
         this.optFutureAlgorithm.ifPresent(CurrentAlgorithm::stop);
