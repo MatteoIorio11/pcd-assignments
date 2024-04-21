@@ -14,13 +14,17 @@ public class CounterMain {
             - https://www.tensorflow.org/?hl=it
          */
         // EventLoop Test
+        System.out.println("[TEST] Start");
+        final long startingTime = System.nanoTime();
         final var elvc = WordCounterFactory.fromLoopCounter();
         final Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(elvc);
-        elvc.getWordOccurrences("https://en.wikipedia.org/wiki/Main_Page", "the", 2)
+        elvc.getWordOccurrences("https://en.wikipedia.org/wiki/Main_Page", "the", 3)
                 .onSuccess(res -> {
-                    System.out.println(res.count());
+                    res.count()
+                            .forEach((k, v) -> System.out.println("Page: " + k + " Count : " + v));
                     vertx.close();
+                    System.out.println("[TEST] End, elapsed time: " + Math.abs(System.nanoTime() - startingTime) + " ns");
                 });
     }
 }
