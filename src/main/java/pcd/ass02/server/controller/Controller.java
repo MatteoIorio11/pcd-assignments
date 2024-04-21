@@ -38,7 +38,7 @@ public class Controller {
         if(Objects.nonNull(url) &&
         Objects.nonNull(word) &&
         Objects.nonNull(algorith) &&
-        depth >= 0 &&
+        depth >= 1 &&
         this.optFutureAlgorithm.isEmpty() && this.optResponseAlgorithm.isEmpty()){
             return CompletableFuture.supplyAsync(() -> switch (algorith)  {
                 case EVENT -> this.startEventLoop(url, depth, word);
