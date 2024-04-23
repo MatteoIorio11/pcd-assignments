@@ -30,6 +30,9 @@ dependencies {
     //jsoup for HTML parsing
     // https://mvnrepository.com/artifact/org.jsoup/jsoup
     implementation("org.jsoup:jsoup:1.7.2")
+
+    implementation("io.reactivex.rxjava3:rxjava:3.1.8")
+
 }
 
 tasks.test {
