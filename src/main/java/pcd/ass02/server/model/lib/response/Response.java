@@ -7,7 +7,27 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class Response {
-    private final Map<String, List<String>> results;
+    private final Map<String, Paragraphs> results;
+    private record Paragraphs(List<String> list){
+
+        public static Paragraphs from(final String line) {
+            return new Paragraphs(new LinkedList<>(List.of(Objects.requireNonNull(line))));
+        }
+
+        public static Paragraphs from(final List<String> lines){
+            return new Paragraphs(new LinkedList<>(Objects.requireNonNull(lines)));
+        }
+
+        public Paragraphs addLines(final List<String> lines){
+            list.addAll(Objects.requireNonNull(lines));
+            return this;
+        }
+
+        public Paragraphs addLine(final String line){
+            list.add(Objects.requireNonNull(line));
+            return this;
+        }
+    }
     private final String word;
 
     public Response(final String word){
@@ -17,19 +37,17 @@ public class Response {
 
     public synchronized void addParagraph(final String fileName, final String line){
         if(this.results.containsKey(Objects.requireNonNull(fileName))){
-            this.results.get(fileName).add(Objects.requireNonNull(line));
+            this.results.computeIfPresent(Objects.requireNonNull(fileName), (key, value) -> value.addLine(line));
         }else{
-            this.results.put(Objects.requireNonNull(fileName),
-                    new LinkedList<>(Collections.singleton(Objects.requireNonNull(line))));
+            this.results.putIfAbsent(Objects.requireNonNull(fileName), Paragraphs.from(line));
         }
     }
 
     public void addParagraph(final String fileName, final List<String> lines){
         if(this.results.containsKey(Objects.requireNonNull(fileName))){
-            this.results.get(fileName).addAll(Objects.requireNonNull(lines));
+            this.results.computeIfPresent(fileName, (key, value) -> value.addLines(Objects.requireNonNull(lines)));
         }else{
-            this.results.put(Objects.requireNonNull(fileName),
-                    new LinkedList<>(Objects.requireNonNull(lines)));
+            this.results.putIfAbsent(fileName, Paragraphs.from(Objects.requireNonNull(lines)));
         }
     }
 
@@ -37,7 +55,7 @@ public class Response {
 
     public JsonObject toJson(){
         final JsonObject response = new JsonObject();
-        this.results.forEach((key, value) -> response.put(key, value.stream().toList()));
+        this.results.forEach((key, value) -> response.put(key, value.list().stream().toList()));
         return response;
     }
 
@@ -50,6 +68,7 @@ public class Response {
 
     private long countWords(final String fileName){
         final Optional<Long> result = this.results.get(Objects.requireNonNull(fileName))
+                .list()
                 .stream()
                 .filter(paragraph -> paragraph.contains(this.word))
                 .distinct()
