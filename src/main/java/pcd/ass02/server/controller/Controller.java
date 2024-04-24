@@ -62,7 +62,11 @@ public class Controller {
     }
 
     private Future<Response> startReactive(final String url, final int depth, final String word) {
-        return null;
+        final var algorithm = WordCounterFactory.fromReactive();
+        this.optResponseAlgorithm = Optional.of(CurrentAlgorithm.from(algorithm));
+        final Promise<Response> promise = Promise.promise();
+        promise.complete(algorithm.getWordOccurrences(url, word, depth));
+        return promise.future();
     }
 
     private Future<Response> startEventLoop(final String url, final int depth, final String word){
