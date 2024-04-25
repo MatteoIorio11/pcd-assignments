@@ -3,6 +3,7 @@ package pcd.ass02.server.model.lib.reactive;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.exceptions.OnErrorNotImplementedException;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.html.Page;
@@ -27,18 +28,21 @@ public class ReactiveCounter implements WordOccurrence<Response> {
         if(depth <= 0){
             return;
         }
+        try{
         Flowable
                 .fromArray(page.getParagraphs())
                 .subscribeOn(Schedulers.computation())
-                .doOnEach(paragraphs -> response.addParagraph(page.url(), paragraphs.getValue()))
-                .subscribe();
-
+                .doOnNext(paragraphs -> response.addParagraph(page.url(), paragraphs))
+                .subscribe(s -> {});
+        }catch (OnErrorNotImplementedException exception){
+            //
+        }
         page.getLinks().forEach(link -> this.explorePages(depth - 1, link, response));
     }
 
     @Override
     public Response partialResult() {
-        return null;
+        return this.response;
     }
 
     @Override
