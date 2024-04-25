@@ -10,10 +10,13 @@ import java.util.Objects;
 public class VirtualCounter implements WordOccurrence<Response> {
     @Override
     public Response getWordOccurrences(String url, String word, int depth) {
-        String inputWord = Objects.requireNonNull(word);
-        final var response = new Response(inputWord);
-        Page.from(url).ifPresent(page -> this.explorePath(depth, page, response));
-        return response;
+        if(depth > 0) {
+            String inputWord = Objects.requireNonNull(word);
+            final var response = new Response(inputWord);
+            Page.from(Objects.requireNonNull(url)).ifPresent(page -> this.explorePath(depth, page, response));
+            return response;
+        }
+        throw new IllegalArgumentException("The depth can not be equals or lower than 0");
     }
 
     @Override
