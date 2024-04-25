@@ -5,6 +5,10 @@ import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.factory.WordCounterFactory;
 import pcd.ass02.server.model.lib.response.Response;
 
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class VirtualThreadTests {
@@ -18,6 +22,17 @@ public class VirtualThreadTests {
 
     @Test
     public void testInvalidDepth(){
+        assertThrows(IllegalArgumentException.class, () -> this.virtualThread.getWordOccurrences("url.com", "the", 0));
+        assertThrows(IllegalArgumentException.class, () -> this.virtualThread.getWordOccurrences("url.com", "the", -1));
+    }
 
+    @Test
+    public void testCountWords(){
+        final Response response = new Response("the");
+        response.addParagraph("https://matteoiorio11.github.io",
+                List.of("p1 the", "p2 the", "p3 the", "hello world", "p4 the", "p5 the"));
+
+        assertEquals(response.count(),
+                this.virtualThread.getWordOccurrences("https://matteoiorio11.github.io", "the", 1).count());
     }
 }
