@@ -35,4 +35,15 @@ public class VirtualThreadTests {
         assertEquals(response.count(),
                 this.virtualThread.getWordOccurrences("https://matteoiorio11.github.io", "the", 1).count());
     }
+
+    @Test
+    public void testCountZeroWords(){
+        final String impossibleWord = "supercalifragilistichespiralidoso";
+        final Response response = new Response(impossibleWord);
+        response.addParagraph("https://matteoiorio11.github.io",
+                List.of("p1 the", "p2 the", "p3 the", "hello world", "p4 the", "p5 the"));
+
+        assertEquals(response.count(),
+                this.virtualThread.getWordOccurrences("https://matteoiorio11.github.io", impossibleWord, 1).count());
+    }
 }
