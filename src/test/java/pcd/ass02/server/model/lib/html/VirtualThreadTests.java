@@ -1,4 +1,4 @@
-package pcd.ass02.server.model.lib.fs;
+package pcd.ass02.server.model.lib.html;
 
 import org.junit.jupiter.api.Test;
 import pcd.ass02.server.model.lib.WordOccurrence;
