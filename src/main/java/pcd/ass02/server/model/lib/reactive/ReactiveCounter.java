@@ -3,8 +3,11 @@ package pcd.ass02.server.model.lib.reactive;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.exceptions.OnErrorNotImplementedException;
+import io.reactivex.rxjava3.functions.Action;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import org.checkerframework.checker.units.qual.A;
 import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.html.Page;
 import pcd.ass02.server.model.lib.response.Response;
@@ -15,6 +18,7 @@ import java.util.Optional;
 
 public class ReactiveCounter implements WordOccurrence<Response> {
     private Response response;
+    private Disposable disposable;
     @Override
     public Response getWordOccurrences(String url, String word, int depth) {
         this.response = new Response(Objects.requireNonNull(word));
@@ -29,11 +33,11 @@ public class ReactiveCounter implements WordOccurrence<Response> {
             return;
         }
         try{
-        Flowable
-                .fromArray(page.getParagraphs())
-                .subscribeOn(Schedulers.computation())
-                .doOnNext(paragraphs -> response.addParagraph(page.url(), paragraphs))
-                .subscribe(s -> {});
+            this.disposable = Flowable
+                    .fromArray(page.getParagraphs())
+                    .subscribeOn(Schedulers.computation())
+                    .doOnNext(paragraphs -> response.addParagraph(page.url(), paragraphs))
+                    .subscribe();
         }catch (OnErrorNotImplementedException exception){
             //
         }
@@ -47,6 +51,11 @@ public class ReactiveCounter implements WordOccurrence<Response> {
 
     @Override
     public void stopProcess() {
-
+        if(Objects.nonNull(this.disposable)){
+            System.out.println(this.disposable.isDisposed());
+            System.out.println(this.disposable);
+            this.disposable.dispose();
+            System.out.println(this.disposable.isDisposed());
+        }
     }
 }
