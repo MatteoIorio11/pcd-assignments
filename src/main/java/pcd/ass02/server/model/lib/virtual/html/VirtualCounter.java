@@ -59,7 +59,6 @@ public class VirtualCounter implements WordOccurrence<Response> {
 
     @Override
     public synchronized void stopProcess(){
-
         this.stop = true;
     }
 }
