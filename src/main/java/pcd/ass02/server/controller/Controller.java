@@ -78,9 +78,12 @@ public class Controller {
     }
 
     public Optional<Response> getPartialResult(){
-        return this.optResponseAlgorithm
-                .map(responseCurrentAlgorithm -> responseCurrentAlgorithm.algorithm.partialResult())
-                .or(() -> this.optFutureAlgorithm.map(futureCurrentAlgorithm -> futureCurrentAlgorithm.algorithm.partialResult()));
+        if(this.optResponseAlgorithm.isPresent()){
+            return this.optResponseAlgorithm.get().algorithm().partialResult();
+        }else if(this.optFutureAlgorithm.isPresent()) {
+            return this.optFutureAlgorithm.get().algorithm().partialResult();
+        }
+        return Optional.empty();
     }
 
     public void stop(){
