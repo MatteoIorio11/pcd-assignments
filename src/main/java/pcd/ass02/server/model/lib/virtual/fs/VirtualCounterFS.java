@@ -6,6 +6,7 @@ import pcd.ass02.server.model.lib.response.Response;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class VirtualCounterFS implements WordOccurrence<Response> {
@@ -19,8 +20,8 @@ public class VirtualCounterFS implements WordOccurrence<Response> {
     }
 
     @Override
-    public Response partialResult() {
-        return null;
+    public Optional<Response> partialResult() {
+        return Optional.empty();
     }
 
     @Override

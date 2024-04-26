@@ -8,6 +8,7 @@ import pcd.ass02.server.model.lib.fs.Directory;
 import pcd.ass02.server.model.lib.response.Response;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class EventLoopCounterFS extends AbstractVerticle implements WordOccurrence<Future<Response>> {
 
@@ -26,8 +27,8 @@ public class EventLoopCounterFS extends AbstractVerticle implements WordOccurren
     }
 
     @Override
-    public Response partialResult() {
-        return null;
+    public Optional<Response> partialResult() {
+        return Optional.empty();
     }
 
     @Override
