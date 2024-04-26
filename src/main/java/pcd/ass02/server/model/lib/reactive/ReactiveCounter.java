@@ -1,19 +1,13 @@
 package pcd.ass02.server.model.lib.reactive;
 
-import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.exceptions.OnErrorNotImplementedException;
-import io.reactivex.rxjava3.functions.Action;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import org.checkerframework.checker.units.qual.A;
 import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.html.Page;
 import pcd.ass02.server.model.lib.response.Response;
 
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ReactiveCounter implements WordOccurrence<Response> {
     private Response response;
