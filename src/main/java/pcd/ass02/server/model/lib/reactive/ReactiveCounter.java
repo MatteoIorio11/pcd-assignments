@@ -12,32 +12,38 @@ import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.html.Page;
 import pcd.ass02.server.model.lib.response.Response;
 
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ReactiveCounter implements WordOccurrence<Response> {
     private Response response;
-    private Disposable disposable;
+    private final List<Disposable> disposable;
+    private volatile boolean stop = false;
+
+    public ReactiveCounter(){
+        this.disposable = new LinkedList<>();
+    }
     @Override
     public Response getWordOccurrences(String url, String word, int depth) {
         this.response = new Response(Objects.requireNonNull(word));
         assert depth > 0;
+        this.stop = false;
         final Optional<Page> optPage = Page.from(Objects.requireNonNull(url));
         optPage.ifPresent(page -> this.explorePages(depth, page, response));
         return this.response;
     }
 
     private void explorePages(final int depth, final Page page, final Response response){
-        if(depth <= 0){
+        if(depth <= 0 || this.stop){
             return;
         }
         try{
-            this.disposable = Flowable
+            this.disposable.add(Observable
                     .fromArray(page.getParagraphs())
-                    .subscribeOn(Schedulers.computation())
+                    //.subscribeOn(Schedulers.computation())
                     .doOnNext(paragraphs -> response.addParagraph(page.url(), paragraphs))
-                    .subscribe();
+                    .subscribe());
+            System.out.println("Inside the method: " + this.disposable);
         }catch (OnErrorNotImplementedException exception){
             //
         }
@@ -51,11 +57,10 @@ public class ReactiveCounter implements WordOccurrence<Response> {
 
     @Override
     public void stopProcess() {
-        if(Objects.nonNull(this.disposable)){
-            System.out.println(this.disposable.isDisposed());
-            System.out.println(this.disposable);
-            this.disposable.dispose();
-            System.out.println(this.disposable.isDisposed());
+        this.stop = true;
+        if(!this.disposable.isEmpty()){
+            this.disposable.parallelStream().forEach(Disposable::dispose);
+            this.disposable.clear();
         }
     }
 }
