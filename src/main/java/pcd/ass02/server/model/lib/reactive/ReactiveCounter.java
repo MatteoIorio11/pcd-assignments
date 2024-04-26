@@ -40,10 +40,8 @@ public class ReactiveCounter implements WordOccurrence<Response> {
         try{
             this.disposable.add(Observable
                     .fromArray(page.getParagraphs())
-                    //.subscribeOn(Schedulers.computation())
                     .doOnNext(paragraphs -> response.addParagraph(page.url(), paragraphs))
                     .subscribe());
-            System.out.println("Inside the method: " + this.disposable);
         }catch (OnErrorNotImplementedException exception){
             //
         }
