@@ -10,9 +10,11 @@ import java.util.Optional;
 
 public class VirtualCounter implements WordOccurrence<Response> {
     private Response response;
+    private volatile boolean stop = false;
     @Override
     public Response getWordOccurrences(String url, String word, int depth) {
         if(depth > 0) {
+            this.stop = false;
             String inputWord = Objects.requireNonNull(word);
             this.response = new Response(inputWord);
             Page.from(Objects.requireNonNull(url)).ifPresent(page -> this.explorePath(depth, page, response));
@@ -27,7 +29,7 @@ public class VirtualCounter implements WordOccurrence<Response> {
     }
 
     private void explorePath(final int depth, final Page page, final Response response){
-        if(depth == 0){
+        if(depth == 0 || this.stop){
             return;
         }
         this.joinThreads(page.getParagraphs().stream()
@@ -56,7 +58,8 @@ public class VirtualCounter implements WordOccurrence<Response> {
     }
 
     @Override
-    public void stopProcess(){
+    public synchronized void stopProcess(){
 
+        this.stop = true;
     }
 }
