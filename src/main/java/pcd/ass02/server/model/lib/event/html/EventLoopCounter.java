@@ -8,6 +8,7 @@ import pcd.ass02.server.model.lib.html.Page;
 import pcd.ass02.server.model.lib.response.Response;
 
 import java.util.Objects;
+import java.util.Optional;
 
 
 public class EventLoopCounter extends AbstractVerticle implements WordOccurrence<Future<Response>> {
@@ -34,8 +35,8 @@ public class EventLoopCounter extends AbstractVerticle implements WordOccurrence
     }
 
     @Override
-    public Response partialResult() {
-        return this.response;
+    public Optional<Response> partialResult() {
+        return Optional.ofNullable(this.response);
     }
 
     @Override

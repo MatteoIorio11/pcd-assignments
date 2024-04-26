@@ -6,13 +6,15 @@ import pcd.ass02.server.model.lib.response.Response;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class VirtualCounter implements WordOccurrence<Response> {
+    private Response response;
     @Override
     public Response getWordOccurrences(String url, String word, int depth) {
         if(depth > 0) {
             String inputWord = Objects.requireNonNull(word);
-            final var response = new Response(inputWord);
+            this.response = new Response(inputWord);
             Page.from(Objects.requireNonNull(url)).ifPresent(page -> this.explorePath(depth, page, response));
             return response;
         }
@@ -20,8 +22,8 @@ public class VirtualCounter implements WordOccurrence<Response> {
     }
 
     @Override
-    public Response partialResult() {
-        return null;
+    public Optional<Response> partialResult() {
+        return Optional.ofNullable(this.response);
     }
 
     private void explorePath(final int depth, final Page page, final Response response){

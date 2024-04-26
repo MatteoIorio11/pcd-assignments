@@ -51,8 +51,8 @@ public class ReactiveCounter implements WordOccurrence<Response> {
     }
 
     @Override
-    public Response partialResult() {
-        return this.response;
+    public Optional<Response> partialResult() {
+        return Optional.ofNullable(this.response);
     }
 
     @Override
