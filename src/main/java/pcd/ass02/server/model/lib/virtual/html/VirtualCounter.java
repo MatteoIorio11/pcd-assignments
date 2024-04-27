@@ -32,13 +32,14 @@ public class VirtualCounter implements WordOccurrence<Response> {
         if(depth == 0 || this.stop){
             return;
         }
-        this.joinThreads(page.getParagraphs().stream()
-                .map(p -> Thread.ofVirtual().start(() -> {
-                    response.addParagraph(page.url(), p);
-                })).toList());
 
-        page.getLinks().forEach(link -> this.explorePath(depth - 1, link, response));
+        page.getParagraphs().forEach(p -> response.addParagraph(page.url(), p));
 
+        this.joinThreads(page.getLinks().stream()
+                .map(link -> Thread.ofVirtual()
+                        .start(() -> {
+            this.explorePath(depth - 1, link, response);
+        })).toList());
     }
 
     private void joinThreads(final List<Thread> list){
