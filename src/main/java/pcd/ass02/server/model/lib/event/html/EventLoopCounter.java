@@ -17,7 +17,7 @@ public class EventLoopCounter extends AbstractVerticle implements WordOccurrence
 
     @Override
     public Future<Response> getWordOccurrences(String url, String word, int depth) {
-        assert depth >= 0;
+        assert depth >= 1;
         Objects.requireNonNull(url);
         Objects.requireNonNull(word);
 
@@ -28,7 +28,7 @@ public class EventLoopCounter extends AbstractVerticle implements WordOccurrence
         final Promise<Response> promise = Promise.promise();
 
         this.getVertx().runOnContext(h -> {
-            new CounterAgent(this.getVertx(), page.get(), word, depth).countOccurrenciesOnPage(response, promise);
+            new CounterAgent(this.getVertx(), page.get(), word, depth).countOccurrenciesOnPage(this.response, promise);
         });
 
         return promise.future();
