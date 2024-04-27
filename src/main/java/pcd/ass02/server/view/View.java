@@ -114,11 +114,7 @@ public class View extends JFrame {
                         this.createVirtualEvent(() -> {
                             try {
                                 response.get().onSuccess(r -> {
-                                    this.outputArea.setText("");
-                                    r.count().forEach((key, value) -> this.outputArea.append("Page: " + key + " Occurrences: " + value +"\n"));
                                     this.inProgress = false;
-                                    this.controller.stop();
-                                    showMessageDialog(this, "Done :)");
                                 });
                             } catch (InterruptedException | ExecutionException ex) {
                                 throw new RuntimeException(ex);
@@ -130,12 +126,9 @@ public class View extends JFrame {
                                 this.outputArea.setText("");
                                 this.controller.getPartialResult()
                                         .ifPresent(r -> r.count().forEach((key, value) -> this.outputArea.append("Page: " + key + " Occurrences: " + value + "\n")));
-                                try {
-                                    Thread.sleep(100);
-                                } catch (InterruptedException ex) {
-                                    throw new RuntimeException(ex);
-                                }
+                                this.waitTime(100);
                             }
+                            this.inProgress = false;
                         });
                     });
                 }else {
@@ -149,5 +142,12 @@ public class View extends JFrame {
 
     private void createVirtualEvent(Runnable runnable){
         Thread.ofVirtual().start(runnable);
+    }
+    private void waitTime(final long time){
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }
