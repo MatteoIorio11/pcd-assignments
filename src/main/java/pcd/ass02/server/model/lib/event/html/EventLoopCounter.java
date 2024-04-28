@@ -41,6 +41,6 @@ public class EventLoopCounter extends AbstractVerticle implements WordOccurrence
 
     @Override
     public void stopProcess() {
-        this.getVertx().close(h -> System.out.println("Verticle closed gracefully!"));
+        this.getVertx().close(h -> System.out.println("[Verticle] closed gracefully!"));
     }
 }
