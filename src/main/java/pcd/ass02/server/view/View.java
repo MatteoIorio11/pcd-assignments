@@ -113,8 +113,9 @@ public class View extends JFrame {
                         this.outputArea.setText("The algorithm is running, please wait...");
                         this.createVirtualEvent(() -> {
                             try {
-                                response.get().onSuccess(r -> {
+                                response.get().onSuccess(res -> {
                                     this.inProgress = false;
+                                    res.count().forEach((key, value) -> this.outputArea.append("Page: " + key + " Occurrences: " + value + "\n"));
                                 });
                             } catch (InterruptedException | ExecutionException ex) {
                                 throw new RuntimeException(ex);
@@ -128,7 +129,6 @@ public class View extends JFrame {
                                         .ifPresent(r -> r.count().forEach((key, value) -> this.outputArea.append("Page: " + key + " Occurrences: " + value + "\n")));
                                 this.waitTime(100);
                             }
-                            this.inProgress = false;
                         });
                     });
                 }else {
