@@ -1,7 +1,7 @@
 package pcd.ass02.server.model;
 
 import io.vertx.core.Vertx;
-import pcd.ass02.server.model.lib.factory.WordCounterFactory;
+import pcd.ass02.server.model.lib.strategy.factory.WordCounterFactory;
 
 public class CounterMain {
 

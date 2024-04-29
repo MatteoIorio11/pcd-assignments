@@ -4,7 +4,7 @@ import io.vertx.core.*;
 import pcd.ass02.server.model.lib.strategy.CounterModality;
 import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.strategy.event.html.EventLoopCounter;
-import pcd.ass02.server.model.lib.factory.WordCounterFactory;
+import pcd.ass02.server.model.lib.strategy.factory.WordCounterFactory;
 import pcd.ass02.server.model.lib.response.Response;
 
 import java.util.*;

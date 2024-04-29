@@ -2,10 +2,9 @@ package pcd.ass02.server.model.lib.html;
 
 import org.junit.jupiter.api.Test;
 import pcd.ass02.server.model.lib.WordOccurrence;
-import pcd.ass02.server.model.lib.factory.WordCounterFactory;
+import pcd.ass02.server.model.lib.strategy.factory.WordCounterFactory;
 import pcd.ass02.server.model.lib.response.Response;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

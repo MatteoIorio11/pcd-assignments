@@ -1,4 +1,4 @@
-package pcd.ass02.server.model.lib.factory;
+package pcd.ass02.server.model.lib.strategy.factory;
 
 import io.vertx.core.AbstractVerticle;
 import pcd.ass02.server.model.lib.WordOccurrence;
