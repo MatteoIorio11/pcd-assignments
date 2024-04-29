@@ -78,9 +78,6 @@ public class Response {
                         .filter(word -> word.equals(this.word))
                         .count())
                 .reduce(Long::sum);
-        if (result.isPresent()){
-            return result.get();
-        }
-        return 0;
+        return result.orElseGet(() -> 0L);
     }
 }
