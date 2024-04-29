@@ -28,20 +28,24 @@ public class VirtualCounter implements WordOccurrence<Response> {
 
     private void explorePages(final int depth, final Page page, final Response response){
         final Deque<Task> tasks = new ArrayDeque<>();
+        final Set<String> pages = new HashSet<>();
         tasks.push(new Task(depth, page, response));
         while (!tasks.isEmpty() && this.run) {
 
             final Task currentTask = tasks.pop();
-            if (currentTask.depth >= 1) {
-                Page currentPage = currentTask.page;
-
+            System.out.println("Running: " + currentTask.page.url() + " Depth: " + currentTask.depth);
+            if (currentTask.depth >= 1 && !pages.contains(currentTask.page.url())) {
+                final Page currentPage = currentTask.page;
+                System.out.println("Running: " + currentTask.depth);
+                System.out.println("Page: " + currentTask.page.url());
                 currentPage.getParagraphs().forEach(paragraph -> Thread.ofVirtual().start(() -> {
                     currentTask.response.addParagraph(currentPage.url(), paragraph);
                 }));
-
-                page.getLinks().forEach(link -> {
+                page.getLinks().stream().filter(link -> !pages.contains(link.url())).forEach(link -> {
+                    System.out.println("Link: " + link.url());
                     tasks.push(new Task(currentTask.depth - 1, link, currentTask.response));
                 });
+                pages.add(currentPage.url());
             }
         }
     }
