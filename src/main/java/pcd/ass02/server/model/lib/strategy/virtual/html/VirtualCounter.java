@@ -15,7 +15,7 @@ public class VirtualCounter implements WordOccurrence<Response> {
         if(depth > 0) {
             final String inputWord = Objects.requireNonNull(word);
             this.response = new Response(inputWord);
-            Page.from(Objects.requireNonNull(url)).ifPresent(page -> this.explorePaths(depth, page, response));
+            Page.from(Objects.requireNonNull(url)).ifPresent(page -> this.explorePages(depth, page, response));
             return response;
         }
         throw new IllegalArgumentException("The depth can not be equals or lower than 0");
@@ -26,7 +26,7 @@ public class VirtualCounter implements WordOccurrence<Response> {
         return Optional.ofNullable(this.response);
     }
 
-    private void explorePaths(final int depth, final Page page, final Response response){
+    private void explorePages(final int depth, final Page page, final Response response){
         final Deque<Task> tasks = new ArrayDeque<>();
         tasks.push(new Task(depth, page, response));
         while (!tasks.isEmpty() && this.run) {
