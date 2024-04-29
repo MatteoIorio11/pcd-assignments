@@ -61,7 +61,6 @@ public class Response {
 
     public Map<String, Long> count(){
         return Map.copyOf(this.results).keySet().stream()
-                .parallel()
                 .map(fileName -> Map.entry(fileName, this.countWords(fileName)))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
