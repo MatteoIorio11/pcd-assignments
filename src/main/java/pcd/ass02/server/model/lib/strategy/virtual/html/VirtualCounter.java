@@ -4,20 +4,18 @@ import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.component.html.Page;
 import pcd.ass02.server.model.lib.response.Response;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.*;
 
 public class VirtualCounter implements WordOccurrence<Response> {
     private Response response;
-    private final List<Thread> threads = new CopyOnWriteArrayList<>();
+    private record Task(int depth, Page page, Response response){}
+    private boolean run = true;
     @Override
     public Response getWordOccurrences(String url, String word, int depth) {
         if(depth > 0) {
             final String inputWord = Objects.requireNonNull(word);
             this.response = new Response(inputWord);
-            Page.from(Objects.requireNonNull(url)).ifPresent(page -> this.explorePath(depth, page, response));
+            Page.from(Objects.requireNonNull(url)).ifPresent(page -> this.explorePaths(depth, page, response));
             return response;
         }
         throw new IllegalArgumentException("The depth can not be equals or lower than 0");
@@ -28,37 +26,28 @@ public class VirtualCounter implements WordOccurrence<Response> {
         return Optional.ofNullable(this.response);
     }
 
-    private void explorePath(final int depth, final Page page, final Response response){
-        if(depth == 0){
-            return;
-        }
+    private void explorePaths(final int depth, final Page page, final Response response){
+        final Deque<Task> tasks = new ArrayDeque<>();
+        tasks.push(new Task(depth, page, response));
+        while (!tasks.isEmpty() && this.run) {
 
-        page.getParagraphs().forEach(p -> response.addParagraph(page.url(), p));
+            final Task currentTask = tasks.pop();
+            if (currentTask.depth >= 1) {
+                Page currentPage = currentTask.page;
 
-        final var startedThreads = page.getLinks().stream()
-                .map(link -> Thread.ofVirtual()
-                        .start(() -> {
-            this.explorePath(depth - 1, link, response);
-        })).toList();
+                currentPage.getParagraphs().forEach(paragraph -> Thread.ofVirtual().start(() -> {
+                    currentTask.response.addParagraph(currentPage.url(), paragraph);
+                }));
 
-        this.threads.addAll(startedThreads);
-        this.joinThreads(startedThreads);
-        this.threads.removeAll(startedThreads);
-
-    }
-
-    private void joinThreads(final List<Thread> list){
-        list.forEach(thread -> {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                page.getLinks().forEach(link -> {
+                    tasks.push(new Task(currentTask.depth - 1, link, currentTask.response));
+                });
             }
-        });
+        }
     }
 
     @Override
     public void stopProcess(){
-        this.joinThreads(this.threads);
+        this.run = false;
     }
 }
