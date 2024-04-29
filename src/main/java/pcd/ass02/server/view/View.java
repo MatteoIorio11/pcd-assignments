@@ -96,6 +96,7 @@ public class View extends JFrame {
         this.stopButton.addActionListener(e -> {
             this.outputArea.setText("");
             this.controller.stop();
+            this.inProgress = false;
         });
     }
 
