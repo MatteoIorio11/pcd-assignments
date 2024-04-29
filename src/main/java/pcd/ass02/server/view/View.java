@@ -30,7 +30,7 @@ public class View extends JFrame {
 
     public void createGUI(){
         setTitle("Main GUI");
-        setSize(600, 400);
+        setSize(800, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -115,10 +115,13 @@ public class View extends JFrame {
                             try {
                                 response.get().onSuccess(res -> {
                                     this.inProgress = false;
+                                    this.outputArea.setText("");
                                     res.count().forEach((key, value) -> this.outputArea.append("Page: " + key + " Occurrences: " + value + "\n"));
                                 });
                             } catch (InterruptedException | ExecutionException ex) {
                                 throw new RuntimeException(ex);
+                            } finally {
+                                this.inProgress = false;
                             }
                         });
 
