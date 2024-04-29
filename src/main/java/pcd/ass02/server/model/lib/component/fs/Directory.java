@@ -1,4 +1,4 @@
-package pcd.ass02.server.model.lib.fs;
+package pcd.ass02.server.model.lib.component.fs;
 
 import java.io.File;
 import java.util.Arrays;

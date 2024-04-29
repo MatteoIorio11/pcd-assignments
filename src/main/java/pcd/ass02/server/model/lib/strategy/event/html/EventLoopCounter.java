@@ -4,7 +4,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import pcd.ass02.server.model.lib.WordOccurrence;
-import pcd.ass02.server.model.lib.html.Page;
+import pcd.ass02.server.model.lib.component.html.Page;
 import pcd.ass02.server.model.lib.response.Response;
 
 import java.util.Objects;

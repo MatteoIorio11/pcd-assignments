@@ -1,7 +1,7 @@
 package pcd.ass02.server.model.lib.strategy.virtual.fs;
 
 import pcd.ass02.server.model.lib.WordOccurrence;
-import pcd.ass02.server.model.lib.fs.Directory;
+import pcd.ass02.server.model.lib.component.fs.Directory;
 import pcd.ass02.server.model.lib.response.Response;
 
 import java.util.List;

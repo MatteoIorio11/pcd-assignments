@@ -4,7 +4,7 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.exceptions.OnErrorNotImplementedException;
 import pcd.ass02.server.model.lib.WordOccurrence;
-import pcd.ass02.server.model.lib.html.Page;
+import pcd.ass02.server.model.lib.component.html.Page;
 import pcd.ass02.server.model.lib.response.Response;
 
 import java.util.*;

@@ -1,10 +1,9 @@
-package pcd.ass02.server.model.lib.html;
+package pcd.ass02.server.model.lib.component.html;
 
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.List;

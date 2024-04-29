@@ -1,6 +1,8 @@
 package pcd.ass02.server.model.lib.fs;
 
 import org.junit.jupiter.api.Test;
+import pcd.ass02.server.model.lib.component.fs.Directory;
+import pcd.ass02.server.model.lib.component.fs.Document;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

@@ -1,7 +1,7 @@
 package pcd.ass02.server.model.lib.strategy.virtual.html;
 
 import pcd.ass02.server.model.lib.WordOccurrence;
-import pcd.ass02.server.model.lib.html.Page;
+import pcd.ass02.server.model.lib.component.html.Page;
 import pcd.ass02.server.model.lib.response.Response;
 
 import java.util.List;
