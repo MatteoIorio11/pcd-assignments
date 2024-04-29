@@ -1,4 +1,4 @@
-package pcd.ass02.server.model.lib.reactive;
+package pcd.ass02.server.model.lib.strategy.reactive;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;

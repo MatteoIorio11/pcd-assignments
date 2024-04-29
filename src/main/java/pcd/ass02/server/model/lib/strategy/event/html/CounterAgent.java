@@ -1,4 +1,4 @@
-package pcd.ass02.server.model.lib.event.html;
+package pcd.ass02.server.model.lib.strategy.event.html;
 
 import io.vertx.core.*;
 import pcd.ass02.server.model.lib.html.Page;

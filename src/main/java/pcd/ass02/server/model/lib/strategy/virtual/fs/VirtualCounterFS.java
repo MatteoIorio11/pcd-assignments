@@ -1,4 +1,4 @@
-package pcd.ass02.server.model.lib.virtual.fs;
+package pcd.ass02.server.model.lib.strategy.virtual.fs;
 
 import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.fs.Directory;

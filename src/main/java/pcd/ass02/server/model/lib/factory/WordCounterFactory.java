@@ -2,12 +2,12 @@ package pcd.ass02.server.model.lib.factory;
 
 import io.vertx.core.AbstractVerticle;
 import pcd.ass02.server.model.lib.WordOccurrence;
-import pcd.ass02.server.model.lib.event.fs.EventLoopCounterFS;
-import pcd.ass02.server.model.lib.event.html.EventLoopCounter;
-import pcd.ass02.server.model.lib.reactive.ReactiveCounter;
+import pcd.ass02.server.model.lib.strategy.event.fs.EventLoopCounterFS;
+import pcd.ass02.server.model.lib.strategy.event.html.EventLoopCounter;
+import pcd.ass02.server.model.lib.strategy.reactive.ReactiveCounter;
 import pcd.ass02.server.model.lib.response.Response;
-import pcd.ass02.server.model.lib.virtual.fs.VirtualCounterFS;
-import pcd.ass02.server.model.lib.virtual.html.VirtualCounter;
+import pcd.ass02.server.model.lib.strategy.virtual.fs.VirtualCounterFS;
+import pcd.ass02.server.model.lib.strategy.virtual.html.VirtualCounter;
 
 public class WordCounterFactory {
 

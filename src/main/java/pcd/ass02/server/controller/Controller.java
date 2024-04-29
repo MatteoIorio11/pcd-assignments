@@ -1,9 +1,9 @@
 package pcd.ass02.server.controller;
 
 import io.vertx.core.*;
-import pcd.ass02.server.model.lib.CounterModality;
+import pcd.ass02.server.model.lib.strategy.CounterModality;
 import pcd.ass02.server.model.lib.WordOccurrence;
-import pcd.ass02.server.model.lib.event.html.EventLoopCounter;
+import pcd.ass02.server.model.lib.strategy.event.html.EventLoopCounter;
 import pcd.ass02.server.model.lib.factory.WordCounterFactory;
 import pcd.ass02.server.model.lib.response.Response;
 

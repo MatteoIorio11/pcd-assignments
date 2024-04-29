@@ -1,4 +1,4 @@
-package pcd.ass02.server.model.lib.event.fs;
+package pcd.ass02.server.model.lib.strategy.event.fs;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;

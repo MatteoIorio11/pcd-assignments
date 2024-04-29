@@ -1,4 +1,4 @@
-package pcd.ass02.server.model.lib;
+package pcd.ass02.server.model.lib.strategy;
 
 import java.util.Objects;
 

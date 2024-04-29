@@ -1,4 +1,4 @@
-package pcd.ass02.server.model.lib.virtual.html;
+package pcd.ass02.server.model.lib.strategy.virtual.html;
 
 import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.html.Page;
