@@ -7,15 +7,15 @@ import pcd.ass02.server.model.lib.response.Response;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class VirtualCounter implements WordOccurrence<Response> {
     private Response response;
-    private volatile boolean stop = false;
+    private final List<Thread> threads = new CopyOnWriteArrayList<>();
     @Override
     public Response getWordOccurrences(String url, String word, int depth) {
         if(depth > 0) {
-            this.stop = false;
-            String inputWord = Objects.requireNonNull(word);
+            final String inputWord = Objects.requireNonNull(word);
             this.response = new Response(inputWord);
             Page.from(Objects.requireNonNull(url)).ifPresent(page -> this.explorePath(depth, page, response));
             return response;
@@ -29,17 +29,22 @@ public class VirtualCounter implements WordOccurrence<Response> {
     }
 
     private void explorePath(final int depth, final Page page, final Response response){
-        if(depth == 0 || this.stop){
+        if(depth == 0){
             return;
         }
 
         page.getParagraphs().forEach(p -> response.addParagraph(page.url(), p));
 
-        this.joinThreads(page.getLinks().stream()
+        final var startedThreads = page.getLinks().stream()
                 .map(link -> Thread.ofVirtual()
                         .start(() -> {
             this.explorePath(depth - 1, link, response);
-        })).toList());
+        })).toList();
+
+        this.threads.addAll(startedThreads);
+        this.joinThreads(startedThreads);
+        this.threads.removeAll(startedThreads);
+
     }
 
     private void joinThreads(final List<Thread> list){
@@ -53,7 +58,7 @@ public class VirtualCounter implements WordOccurrence<Response> {
     }
 
     @Override
-    public synchronized void stopProcess(){
-        this.stop = true;
+    public void stopProcess(){
+        this.joinThreads(this.threads);
     }
 }
