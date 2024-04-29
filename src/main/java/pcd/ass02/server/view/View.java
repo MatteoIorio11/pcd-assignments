@@ -2,7 +2,7 @@ package pcd.ass02.server.view;
 
 import io.vertx.core.Future;
 import pcd.ass02.server.controller.Controller;
-import pcd.ass02.server.model.lib.CounterModality;
+import pcd.ass02.server.model.lib.strategy.CounterModality;
 import pcd.ass02.server.model.lib.response.Response;
 
 import javax.swing.*;
