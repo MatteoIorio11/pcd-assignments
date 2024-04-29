@@ -35,7 +35,7 @@ public class Response {
         this.word = Objects.requireNonNull(word).toLowerCase();
     }
 
-    public synchronized void addParagraph(final String fileName, final String line){
+    public void addParagraph(final String fileName, final String line){
         if(this.results.containsKey(Objects.requireNonNull(fileName))){
             this.results.computeIfPresent(Objects.requireNonNull(fileName), (key, value) -> value.addLine(line));
         }else{
