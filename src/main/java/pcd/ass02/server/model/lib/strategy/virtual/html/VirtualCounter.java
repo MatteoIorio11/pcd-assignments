@@ -9,7 +9,7 @@ import java.util.*;
 public class VirtualCounter implements WordOccurrence<Response> {
     private static final int MINIMUM_DEPTH = 1;
     private Response response;
-    private record Task(int depth, Page page, Response response){}
+    private record Task(int depth, Page page){}
     private boolean run = true;
     @Override
     public Response getWordOccurrences(String url, String word, int depth) {
@@ -30,16 +30,16 @@ public class VirtualCounter implements WordOccurrence<Response> {
     private void explorePages(final int depth, final Page page, final Response response){
         final Deque<Task> tasks = new ArrayDeque<>();
         final Set<Page> pages = new HashSet<>();
-        tasks.push(new Task(depth, page, response));
+        tasks.push(new Task(depth, page));
         while (!tasks.isEmpty() && this.run) {
             final Task currentTask = tasks.pop();
             if (currentTask.depth >= VirtualCounter.MINIMUM_DEPTH && !pages.contains(currentTask.page)) {
                 final Page currentPage = currentTask.page;
                 currentPage.getParagraphs().forEach(paragraph -> Thread.ofVirtual().start(() -> {
-                    currentTask.response.addParagraph(currentPage.url(), paragraph);
+                    response.addParagraph(currentPage.url(), paragraph);
                 }));
                 page.getLinks().forEach(link -> {
-                    tasks.push(new Task(currentTask.depth - 1, link, currentTask.response));
+                    tasks.push(new Task(currentTask.depth - 1, link));
                 });
                 pages.add(currentPage);
             }
