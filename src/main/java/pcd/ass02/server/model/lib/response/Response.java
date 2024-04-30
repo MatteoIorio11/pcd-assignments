@@ -70,7 +70,6 @@ public class Response {
                 .list()
                 .stream()
                 .filter(paragraph -> paragraph.contains(this.word))
-                .distinct()
                 .parallel()
                 .map(paragraph -> Arrays.stream(paragraph.split(" "))
                         .map(String::toLowerCase)
