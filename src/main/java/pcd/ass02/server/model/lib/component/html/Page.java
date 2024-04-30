@@ -29,7 +29,7 @@ public record Page(String url, Document document) {
             System.err.println("[PAGE] The input url: " + url + " does not exists.");
             return Optional.empty();
         } catch (IOException e) {
-            System.err.println("[PAGE] An error occurred lol.");
+            System.err.println("[PAGE] A 404 error occurred lol.");
             return Optional.empty();
         }
     }
@@ -65,7 +65,9 @@ public record Page(String url, Document document) {
     }
 
     private String createUrl(final String inputUrl){
-        return inputUrl.startsWith(Page.HTTPS_WEBSITE) ? inputUrl :this.url;
+
+        return inputUrl.startsWith(Page.HTTPS_WEBSITE) ? inputUrl :
+                inputUrl.startsWith("/") ? this.url + inputUrl.substring(1, inputUrl.length() - 1) : this.url;
     }
 
     private Optional<Page> createPage(final String url){
