@@ -85,7 +85,7 @@ public class View extends JFrame {
         this.addStartHandler();
         buttonPanel.add(startButton);
 
-        stopButton = new JButton("Stop");
+        stopButton = new JButton("Stop/Clear");
         this.addStopHandler();
         buttonPanel.add(stopButton);
 
@@ -94,9 +94,9 @@ public class View extends JFrame {
 
     private void addStopHandler(){
         this.stopButton.addActionListener(e -> {
-            this.outputArea.setText("");
             this.controller.stop();
             this.inProgress = false;
+            this.outputArea.setText("");
         });
     }
 
