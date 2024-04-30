@@ -7,6 +7,7 @@ import pcd.ass02.server.model.lib.response.Response;
 import java.util.*;
 
 public class VirtualCounter implements WordOccurrence<Response> {
+    private static final int MINIMUM_DEPTH = 1;
     private Response response;
     private record Task(int depth, Page page, Response response){}
     private boolean run = true;
@@ -32,7 +33,7 @@ public class VirtualCounter implements WordOccurrence<Response> {
         tasks.push(new Task(depth, page, response));
         while (!tasks.isEmpty() && this.run) {
             final Task currentTask = tasks.pop();
-            if (currentTask.depth >= 1 && !pages.contains(currentTask.page)) {
+            if (currentTask.depth >= VirtualCounter.MINIMUM_DEPTH && !pages.contains(currentTask.page)) {
                 final Page currentPage = currentTask.page;
                 currentPage.getParagraphs().forEach(paragraph -> Thread.ofVirtual().start(() -> {
                     currentTask.response.addParagraph(currentPage.url(), paragraph);
