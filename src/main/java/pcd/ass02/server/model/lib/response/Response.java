@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 
 public class Response {
     private final Map<String, Paragraphs> results;
-    private record Paragraphs(List<String> list){
+    private record Paragraphs(Set<String> list){
 
         public static Paragraphs from(final String line) {
-            return new Paragraphs(new LinkedList<>(List.of(Objects.requireNonNull(line))));
+            return new Paragraphs(new HashSet<>(List.of(Objects.requireNonNull(line))));
         }
 
         public static Paragraphs from(final List<String> lines){
-            return new Paragraphs(new LinkedList<>(Objects.requireNonNull(lines)));
+            return new Paragraphs(new HashSet<>(Objects.requireNonNull(lines)));
         }
 
         public Paragraphs addLines(final List<String> lines){
