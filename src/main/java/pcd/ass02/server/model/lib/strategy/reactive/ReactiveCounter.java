@@ -3,6 +3,7 @@ package pcd.ass02.server.model.lib.strategy.reactive;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.exceptions.OnErrorNotImplementedException;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import pcd.ass02.server.model.lib.WordOccurrence;
 import pcd.ass02.server.model.lib.component.html.Page;
 import pcd.ass02.server.model.lib.response.Response;
@@ -34,6 +35,7 @@ public class ReactiveCounter implements WordOccurrence<Response> {
         try{
             this.disposable.add(Observable
                     .fromArray(page.getParagraphs())
+                    .subscribeOn(Schedulers.computation())
                     .doOnNext(paragraphs -> response.addParagraph(page.url(), paragraphs))
                     .subscribe());
         }catch (OnErrorNotImplementedException exception){
@@ -51,7 +53,7 @@ public class ReactiveCounter implements WordOccurrence<Response> {
     public void stopProcess() {
         this.stop = true;
         if(!this.disposable.isEmpty()){
-            this.disposable.parallelStream().forEach(Disposable::dispose);
+            this.disposable.forEach(Disposable::dispose);
             this.disposable.clear();
         }
     }
