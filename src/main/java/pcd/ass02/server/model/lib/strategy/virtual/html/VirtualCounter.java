@@ -35,15 +35,19 @@ public class VirtualCounter implements WordOccurrence<Response> {
             final Task currentTask = tasks.pop();
             if (currentTask.depth >= VirtualCounter.MINIMUM_DEPTH && !pages.contains(currentTask.page)) {
                 final Page currentPage = currentTask.page;
-                currentPage.getParagraphs().forEach(paragraph -> Thread.ofVirtual().start(() -> {
+                currentPage.getParagraphs().parallelStream().forEach(paragraph -> Thread.ofVirtual().start(() -> {
                     response.addParagraph(currentPage.url(), paragraph);
                 }));
-                page.getLinks().forEach(link -> {
-                    tasks.push(new Task(currentTask.depth - 1, link));
-                });
+                if(currentTask.depth > VirtualCounter.MINIMUM_DEPTH) {
+                    page.getLinks().forEach(link -> {
+                        tasks.push(new Task(currentTask.depth - 1, link));
+                    });
+                }
                 pages.add(currentPage);
             }
         }
+        tasks.clear();
+        pages.clear();
     }
 
     @Override
