@@ -15,18 +15,18 @@ public class AgentTask {
         this.dt = dt;
     }
 
-    public Callable<Boolean> performSenseAndDecideSteps() {
+    public Callable<Void> performSenseAndDecideSteps() {
         return () -> {
             this.agent.senseStep();
             this.agent.decideStep(this.dt);
-            return true;
+            return null;
         };
     }
 
     public Callable<Boolean> performActStep() {
         return () -> {
             this.synchronizer.executeCriticalSection(this.agent::actStep);
-            return true;
+            return null;
         };
     }
 }
