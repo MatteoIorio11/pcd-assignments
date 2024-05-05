@@ -88,6 +88,7 @@ public abstract class AbstractSimulation {
 
 			final var agentTasks = agents.stream().map(a -> new AgentTask(a, dt)).toList();
 
+
 			service.invokeAll(agentTasks.stream().map(AgentTask::performSenseAndDecideSteps).collect(Collectors.toList()));
 			service.invokeAll(agentTasks.stream().map(AgentTask::performActStep).collect(Collectors.toList()));
 

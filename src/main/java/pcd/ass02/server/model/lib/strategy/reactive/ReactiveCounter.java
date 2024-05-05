@@ -13,7 +13,7 @@ import java.util.*;
 public class ReactiveCounter implements WordOccurrence<Response> {
     private Response response;
     private final List<Disposable> disposable;
-    private volatile boolean stop = false;
+    private boolean stop = false;
 
     public ReactiveCounter(){
         this.disposable = new LinkedList<>();
