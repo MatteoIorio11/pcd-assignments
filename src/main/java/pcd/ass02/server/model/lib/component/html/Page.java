@@ -29,7 +29,7 @@ public record Page(String url, Document document) {
             System.err.println("[PAGE] The input url: " + url + " does not exists.");
             return Optional.empty();
         } catch (IOException e) {
-            System.err.println("[PAGE] A 404 error occurred lol.");
+            System.err.println("[PAGE] An error occurred: " + e.getMessage());
             return Optional.empty();
         }
     }
