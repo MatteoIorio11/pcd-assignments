@@ -23,7 +23,7 @@ public class CounterAgent extends AbstractVerticle {
 
     public Promise<Response> countOccurrenciesOnPage(final Response res, Promise<Response> promise) {
         this.vertx.runOnContext(h -> {
-            if (depth == 1) {
+            if (depth == 1 || this.page.getLinks().isEmpty()) {
                 res.addParagraph(this.page.url(), this.page.getParagraphs());
                 promise.complete(res);
                 return;
