@@ -4,10 +4,6 @@ import javax.swing.*;
 
 public class StartApplication {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new View().setVisible(true);
-            }
-        });
+        SwingUtilities.invokeLater(() -> new View().setVisible(true));
     }
 }
