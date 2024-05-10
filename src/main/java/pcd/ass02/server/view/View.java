@@ -118,6 +118,7 @@ public class View extends JFrame {
                                     this.inProgress = false;
                                     this.outputArea.setText("");
                                     res.count().forEach((key, value) -> this.outputArea.append("Page: " + key + " Occurrences: " + value + "\n"));
+                                    showMessageDialog(this, "Done.");
                                 });
                             } catch (InterruptedException | ExecutionException ex) {
                                 throw new RuntimeException(ex);
