@@ -4,7 +4,7 @@ plugins {
 }
 
 application {
-    mainClass.set("pcd.ass01.simtrafficexamples.RunTrafficSimulationMassiveTest")
+    mainClass.set("pcd.ass02.part1.simtrafficexamples.RunTrafficSimulationMassiveTest")
 }
 
 group = "org.example"
