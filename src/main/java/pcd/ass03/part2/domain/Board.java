@@ -16,7 +16,7 @@ public class Board {
 
     public void putValue(final Cell cell, final int number) {
         if (number < 1 || number > 9) {
-            throw new IllegalStateException("Number " + number + " is not in range 1..9")
+            throw new IllegalStateException("Number " + number + " is not in range 1..9");
         }
 
         // TODO check if move is legit
