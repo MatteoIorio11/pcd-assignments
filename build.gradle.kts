@@ -11,7 +11,7 @@ plugins {
 }
 
 application {
-	mainClass.set("ass01.simtrafficexamples.version1.RunTrafficSimulationMassiveTest")
+	mainClass.set("pcd.part1.simtrafficexamples.version1.RunTrafficSimulationMassiveTest")
 }
 
 repositories {
