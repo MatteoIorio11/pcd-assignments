@@ -6,26 +6,30 @@ import java.util.Map;
 public class Board {
     private final Map<Cell, Integer> cells;
 
-    public Board(/* TODO: insert generator */) {
+    public Board() {
         this.cells = new HashMap<>();
+        this.initializeGrid();
     }
 
     private void initializeGrid() {
-        // TODO call generator
+        this.cells.putAll(BoardGenerator.initializeBoard().getCells());
     }
 
-    public void putValue(final Cell cell, final int number) {
+    public boolean putValue(final Cell cell, final int number) {
         if (number < 1 || number > 9) {
             throw new IllegalStateException("Number " + number + " is not in range 1..9");
         }
 
-        if (this.isCellEmpty(cell)) {
-            return; // TODO: change to something meaningful
+        if (!this.isCellEmpty(cell)) {
+            return false;
         }
 
-        // TODO check if move is legit
+        if (Logic.isMoveAllowed(this, cell, number)) {
+            this.cells.put(Cell.copyOf(cell), number);
+            return true;
+        }
 
-        this.cells.put(Cell.copyOf(cell), number);
+        return false;
     }
 
     public Map<Cell, Integer> getCells() {

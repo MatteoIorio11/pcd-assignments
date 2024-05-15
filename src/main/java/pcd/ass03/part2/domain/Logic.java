@@ -1,6 +1,5 @@
 package pcd.ass03.part2.domain;
 
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
