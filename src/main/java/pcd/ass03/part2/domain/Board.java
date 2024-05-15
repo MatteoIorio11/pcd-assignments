@@ -10,13 +10,17 @@ public class Board {
         this.cells = new HashMap<>();
     }
 
-    public void initializeGrid() {
+    private void initializeGrid() {
         // TODO call generator
     }
 
     public void putValue(final Cell cell, final int number) {
         if (number < 1 || number > 9) {
             throw new IllegalStateException("Number " + number + " is not in range 1..9");
+        }
+
+        if (this.isCellEmpty(cell)) {
+            return; // TODO: change to something meaningful
         }
 
         // TODO check if move is legit
@@ -26,5 +30,9 @@ public class Board {
 
     public Map<Cell, Integer> getCells() {
         return Map.copyOf(this.cells);
+    }
+
+    public boolean isCellEmpty(final Cell cell) {
+        return this.cells.containsKey(cell);
     }
 }
