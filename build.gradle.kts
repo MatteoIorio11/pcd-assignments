@@ -6,14 +6,14 @@
  */
 
 plugins {
-	java
-	application
+    java
+    application
 }
 
 application {
-	mainClass.set("pcd.part1.simtrafficexamples.version1.RunTrafficSimulationMassiveTest")
+    mainClass.set("pcd.ass03.part1.simtrafficexamples.RunTrafficSimulationMassiveTest")
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
