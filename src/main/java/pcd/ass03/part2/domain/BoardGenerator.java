@@ -1,16 +1,17 @@
 package pcd.ass03.part2.domain;
 
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.IntStream;
 
 public class BoardGenerator {
     private final Board board;
-    public BoardGenerator(){
-        this.board = new Board();
+    public BoardGenerator(final Board board){
+        this.board = Objects.requireNonNull(board);
         this.initializeBoard();
     }
 
-    public void initializeBoard(){
+    private void initializeBoard(){
         final Random random = new Random();
         int positionedNumbers = 0;
         // add 9 numbers in random positions
@@ -23,5 +24,9 @@ public class BoardGenerator {
                 this.board.putValue(boardCell, positionedNumbers);
             }
         }
+    }
+
+    public static void main(String[] args) {
+        var b = new BoardGenerator();
     }
 }
