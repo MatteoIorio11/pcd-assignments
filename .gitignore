@@ -2,3 +2,5 @@
 .DS_Store
 .gradle
 .idea
+# Ignore Gradle build output directory
+build
