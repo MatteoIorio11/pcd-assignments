@@ -25,8 +25,4 @@ public class BoardGenerator {
             }
         }
     }
-
-    public static void main(String[] args) {
-        var b = new BoardGenerator();
-    }
 }
