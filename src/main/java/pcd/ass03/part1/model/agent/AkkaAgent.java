@@ -45,7 +45,6 @@ public class AkkaAgent extends AbstractBehavior<AkkaAgent.AgentBehaviors> {
         super(context);
         this.agent = Objects.requireNonNull(agent);
         context.getLog().info("[Akka Agent] Agent created");
-        System.err.println(context.getSystem());
     }
 
     @Override
