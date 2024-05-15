@@ -3,11 +3,8 @@ package pcd.ass03.part1.model.simengineseq;
 import akka.actor.typed.ActorRef;
 import akka.actor.typed.ActorSystem;
 import pcd.ass03.part1.model.agent.AkkaAgent;
-import pcd.ass03.part1.model.simtrafficbase.AgentTask;
 
 import java.util.*;
-import java.util.concurrent.ForkJoinPool;
-import java.util.stream.Collectors;
 
 /**
  * Base class for defining concrete simulations
@@ -82,8 +79,6 @@ public abstract class AbstractSimulation {
 		long timePerStep = 0;
 		int nSteps = 0;
 
-		final var service = ForkJoinPool.commonPool();
-		final AgentSynchronizer agentSynchronizer = AgentSynchronizer.getInstance();
 		var asn = new AkkaAgent.AgentBehaviors.SenseDecide();
 		var aat = new AkkaAgent.AgentBehaviors.Act();
 
@@ -110,7 +105,6 @@ public abstract class AbstractSimulation {
 			}
 		}	
 
-		service.close();
 		endWallTime = System.currentTimeMillis();
 		this.averageTimePerStep = timePerStep / numSteps;
 		
