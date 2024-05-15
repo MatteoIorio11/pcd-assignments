@@ -8,6 +8,7 @@ import akka.actor.typed.javadsl.Receive;
 import pcd.ass03.part1.model.simengineseq.AbstractAgent;
 import pcd.ass03.part1.model.simengineseq.AgentSynchronizer;
 
+import java.time.Duration;
 import java.util.Objects;
 
 public class AkkaAgent extends AbstractBehavior<AkkaAgent.AgentBehaviors> {
@@ -40,9 +41,11 @@ public class AkkaAgent extends AbstractBehavior<AkkaAgent.AgentBehaviors> {
 
 
     private final AbstractAgent agent;
-    public AkkaAgent(final ActorContext<AgentBehaviors> context, final AbstractAgent agent){
+    private AkkaAgent(final ActorContext<AgentBehaviors> context, final AbstractAgent agent){
         super(context);
         this.agent = Objects.requireNonNull(agent);
+        context.getLog().info("[Akka Agent] Agent created");
+        System.err.println(context.getSystem());
     }
 
     @Override
@@ -56,20 +59,31 @@ public class AkkaAgent extends AbstractBehavior<AkkaAgent.AgentBehaviors> {
     }
 
     private Behavior<AgentBehaviors> onSenseDecide(AgentBehaviors.SenseDecide msg){
-        this.getContext().getLog().info("[Akka Agent] Sense step");
-        this.agent.senseStep();
+        try {
+            this.agent.senseStep();
+            this.getContext().getLog().info("[Akka Agent] Sense step");
+        }catch (Exception e){
+            //
+        }
         return this;
     }
 
     private Behavior<AgentBehaviors> onAct(AgentBehaviors.Act msg){
-        this.getContext().getLog().info("[Akka Agent] Act step");
-        AgentSynchronizer.getInstance().executeCriticalSection(this.agent::actStep);
+        try {
+            this.getContext().getLog().info("[Akka Agent] Act step");
+            AgentSynchronizer.getInstance().executeCriticalSection(this.agent::actStep);
+        }catch (Exception e){
+            //
+        }
         return this;
     }
 
     private Behavior<AgentBehaviors> onDeltaTime(AgentBehaviors.UpdateAgent msg){
-        this.getContext().getLog().info("[Akka Agent] Update delta time");
-        this.agent.decideStep(msg.getDt());
+        try {
+            this.agent.decideStep(msg.getDt());
+        }catch (Exception e){
+            //
+        }
         return this;
     }
 
