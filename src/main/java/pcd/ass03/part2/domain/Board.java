@@ -33,6 +33,6 @@ public class Board {
     }
 
     public boolean isCellEmpty(final Cell cell) {
-        return this.cells.containsKey(cell);
+        return !this.cells.containsKey(cell);
     }
 }
