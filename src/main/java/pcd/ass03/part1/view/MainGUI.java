@@ -14,6 +14,7 @@ public class MainGUI extends JFrame {
 
     public MainGUI() {
         this.controller = new Controller();
+
         this.setTitle("Assignment 01 GUI");
         this.setSize(700, 300);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -1,7 +1,10 @@
 package pcd.ass03.part1.controller;
 
+import akka.actor.typed.ActorRef;
+import akka.actor.typed.ActorSystem;
 import pcd.ass03.part1.model.simengineseq.AbstractSimulation;
 import pcd.ass03.part1.simtrafficexamples.*;
+import pcd.ass03.part1.view.agent.JavaGuiAgent;
 
 import java.awt.*;
 import java.util.List;
@@ -14,6 +17,7 @@ public class Controller {
     private static final int N_CARS_MASSIVE = 5_000;
     private final Map<String, AbstractSimulation> simulationMap;
     private record Pair(AbstractSimulation simulation, Optional<RoadSimView> view) {}
+    private ActorRef<JavaGuiAgent.GuiBehaviors> guiAgent;
 
     private Optional<Pair> runningSimulation;
     public Controller(){
@@ -33,6 +37,8 @@ public class Controller {
 
     public void run(final String simulation, final int steps) {
         final AbstractSimulation sim = this.simulationMap.get(simulation);
+        this.guiAgent = ActorSystem.create(JavaGuiAgent.create(sim, steps), "GuiAgentMS");
+
         Optional<RoadSimView> simView = Optional.empty();
         sim.setup();
         if(steps > 0){
@@ -44,12 +50,10 @@ public class Controller {
                 sim.addSimulationListener(stat);
                 sim.addSimulationListener(view);
             }
-            final Thread simulationThread = new Thread(() -> {
-                sim.run(steps);
-            });
+
+            this.guiAgent.tell(new JavaGuiAgent.GuiBehaviors.StartBehavior());
 
             this.runningSimulation = Optional.of(new Pair(sim, simView));
-            simulationThread.start();
         }else {
             throw new IllegalArgumentException("The step number must be greater than zero.");
         }
@@ -59,6 +63,7 @@ public class Controller {
         if(this.runningSimulation.isPresent()){
                 this.runningSimulation.ifPresent(simulation -> {
                     simulation.simulation.stopSimulation();
+                    this.guiAgent.tell(new JavaGuiAgent.GuiBehaviors.StopBehavior());
                     simulation.view.ifPresent(Window::dispose);
                 });
         }
