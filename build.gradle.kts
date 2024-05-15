@@ -12,9 +12,9 @@ plugins {
 
 repositories {
     mavenCentral()
-        maven {
-            url("https://repo.akka.io/maven")
-        }
+    maven {
+        setUrl("https://repo.akka.io/maven")
+    }
 }
 
 application {
@@ -24,8 +24,7 @@ application {
 val version = "2.13"
 
 dependencies {
-  implementation("com.typesafe.akka:akka-bom_${version}:2.9.3")
-  implementation("com.typesafe.akka:akka-actor-typed_${version}")
-  testImplementation("com.typesafe.akka:akka-actor-testkit-typed_${version}")
+    implementation(platform("com.typesafe.akka:akka-bom_$version:2.9.3"))
+    implementation("com.typesafe.akka:akka-actor-typed_$version")
+    testImplementation("com.typesafe.akka:akka-actor-testkit-typed_$version")
 }
-
