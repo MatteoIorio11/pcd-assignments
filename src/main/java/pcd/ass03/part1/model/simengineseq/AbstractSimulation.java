@@ -70,9 +70,11 @@ public abstract class AbstractSimulation {
 
 		env.init();
 		final List<ActorRef<AkkaAgent.AgentBehaviors>> akkaAgents = new LinkedList<>();
+		int index = 0;
 		for (var a: agents) {
-			akkaAgents.add(ActorSystem.create(AkkaAgent.create(a), "a"));
 			a.init(env);
+			akkaAgents.add(ActorSystem.create(AkkaAgent.create(a), "Agent"+index));
+			index = index + 1;
 		}
 
 		this.notifyReset(t, agents, env);
@@ -82,6 +84,8 @@ public abstract class AbstractSimulation {
 
 		final var service = ForkJoinPool.commonPool();
 		final AgentSynchronizer agentSynchronizer = AgentSynchronizer.getInstance();
+		var asn = new AkkaAgent.AgentBehaviors.SenseDecide();
+		var aat = new AkkaAgent.AgentBehaviors.Act();
 
 		while (nSteps < this.numSteps) {
 
@@ -90,11 +94,9 @@ public abstract class AbstractSimulation {
 			env.step(dt);
 
 			var adt = new AkkaAgent.AgentBehaviors.UpdateAgent(dt);
-			akkaAgents.forEach(agent -> {
-				agent.tell(adt);
-				agent.tell(new AkkaAgent.AgentBehaviors.SenseDecide());
-				agent.tell(new AkkaAgent.AgentBehaviors.Act());
-			});
+			akkaAgents.forEach(agent -> agent.tell(adt));
+			akkaAgents.forEach(agent -> agent.tell(asn));
+			akkaAgents.forEach(agent -> agent.tell(aat));
 
 			t += dt;
 			
