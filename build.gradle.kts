@@ -24,6 +24,7 @@ application {
 val version = "2.13"
 
 dependencies {
+    implementation("org.slf4j:slf4j-api:2.0.13")
     implementation(platform("com.typesafe.akka:akka-bom_$version:2.9.3"))
     implementation("com.typesafe.akka:akka-actor-typed_$version")
     testImplementation("com.typesafe.akka:akka-actor-testkit-typed_$version")
