@@ -10,10 +10,22 @@ plugins {
     application
 }
 
+repositories {
+    mavenCentral()
+        maven {
+            url("https://repo.akka.io/maven")
+        }
+}
+
 application {
     mainClass.set("pcd.ass03.part1.simtrafficexamples.RunTrafficSimulationMassiveTest")
 }
 
-repositories {
-    mavenCentral()
+val version = "2.13"
+
+dependencies {
+  implementation("com.typesafe.akka:akka-bom_${version}:2.9.3")
+  implementation("com.typesafe.akka:akka-actor-typed_${version}")
+  testImplementation("com.typesafe.akka:akka-actor-testkit-typed_${version}")
 }
+
