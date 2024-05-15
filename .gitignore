@@ -4,3 +4,6 @@
 .idea
 # Ignore Gradle build output directory
 build
+
+# Lasdkj
+kls_database.db
