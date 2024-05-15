@@ -1,5 +1,8 @@
 package pcd.ass03.part1.model.simengineseq;
 
+import akka.actor.typed.ActorRef;
+import akka.actor.typed.ActorSystem;
+import pcd.ass03.part1.model.agent.AkkaAgent;
 import pcd.ass03.part1.model.simtrafficbase.AgentTask;
 
 import java.util.*;
@@ -66,7 +69,9 @@ public abstract class AbstractSimulation {
 		int t = t0;
 
 		env.init();
+		final List<ActorRef<AkkaAgent.AgentBehaviors>> akkaAgents = new LinkedList<>();
 		for (var a: agents) {
+			akkaAgents.add(ActorSystem.create(AkkaAgent.create(a), "a"));
 			a.init(env);
 		}
 
@@ -84,11 +89,12 @@ public abstract class AbstractSimulation {
 			/* make a step */
 			env.step(dt);
 
-			final var agentTasks = agents.stream().map(a -> new AgentTask(a, dt)).toList();
-
-
-			service.invokeAll(agentTasks.stream().map(AgentTask::performSenseAndDecideSteps).collect(Collectors.toList()));
-			service.invokeAll(agentTasks.stream().map(AgentTask::performActStep).collect(Collectors.toList()));
+			var adt = new AkkaAgent.AgentBehaviors.UpdateAgent(dt);
+			akkaAgents.forEach(agent -> {
+				agent.tell(adt);
+				agent.tell(new AkkaAgent.AgentBehaviors.SenseDecide());
+				agent.tell(new AkkaAgent.AgentBehaviors.Act());
+			});
 
 			t += dt;
 			
