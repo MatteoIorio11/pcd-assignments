@@ -1,5 +1,6 @@
 package pcd.ass03.part2.domain;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,7 +25,6 @@ public class Board {
                         .forEach(j -> this.cells.put(new Cell(i, j), -1))
                 );
         BoardGenerator.initializeBoard(this);
-        System.err.println(this.cells);
     }
 
     public boolean putInitialValue(final Cell cell, final int number){
@@ -51,8 +51,8 @@ public class Board {
         return false;
     }
 
-    public Map<Cell, Integer> getCells() {
-        return Map.copyOf(this.cells);
+    public Map<Cell, Integer>getCells() {
+        return this.cells;
     }
 
     public boolean isCellEmpty(final Cell cell) {
