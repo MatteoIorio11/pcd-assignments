@@ -1,11 +1,13 @@
 package pcd.ass03.part2.domain;
 
+import scala.Int;
+
+import java.sql.Time;
 import java.util.Map;
 import java.util.Optional;
 
 public class SudokuSolver {
 
-    private static final int EMPTY_CELL = -1;
     /**
      * Solve a given sudoku board in a brute force fashion.
      * This implementation heavily relies on side effects and time complexity
@@ -41,15 +43,41 @@ public class SudokuSolver {
                 board.putValue(emptyCell, n);
                 if (solveHelper(board)) return true;
             }
-            board.putValue(emptyCell, EMPTY_CELL); // restore cell if no solution can be found
+            board.putValue(emptyCell, Board.EMPTY_CELL); // restore cell if no solution can be found
         }
         return false;
     }
 
     private static Optional<Cell> findEmptyCell(final Board board) {
-        return board.getCells().entrySet().stream()
-                .filter(e -> e.getValue() != EMPTY_CELL)
+        return board.getCells().entrySet().parallelStream()
+                .filter(e -> e.getValue() == Board.EMPTY_CELL)
                 .map(Map.Entry::getKey)
-                .findFirst();
+                .findAny();
+    }
+    public static void main(String[] args) {
+        final Board board = new Board();
+        final long startingTime = System.currentTimeMillis();
+//        System.exit(0);
+        SudokuSolver.solve(board);
+        final var endTime = Math.abs(System.currentTimeMillis() - startingTime);
+        printSudokuBoard(board.getCells());
+    }
+
+    public static void printSudokuBoard(Map<Cell, Integer> sudokuMap) {
+        for (int i = 0; i < 9; i++) {
+            if (i % 3 == 0 && i != 0) {
+                System.out.println("+-------+-------+-------+");
+            }
+            for (int j = 0; j < 9; j++) {
+                if (j % 3 == 0 && j != 0) {
+                    System.out.print("| ");
+                }
+                Cell position = new Cell(i, j);
+                Integer value = sudokuMap.getOrDefault(position, 0);
+                System.out.print(value == 0 ? "_ " : value + " ");
+            }
+            System.out.println();
+        }
     }
 }
+
