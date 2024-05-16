@@ -1,5 +1,6 @@
 package pcd.ass03.part2.domain;
 
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 /**
@@ -29,13 +30,25 @@ public class Logic {
     }
 
     private static boolean checkSubGrid(final Board board, final Cell cell, final int number) {
-        final int startRow = (cell.i() / 3) * 3; // NOTE: x/3 * 3 = x
-        final int startCol = (cell.j() / 3) * 3; // NOTE: y/3 * 3 = y
+        if (Logic.checkCell(cell)){
+            return false;
+        }
+        final int startRow = cell.i() / 3; //(cell.i() / 3) * 3; // NOTE: x/3 * 3 = x
+        final int startCol = cell.j() / 3; //(cell.j() / 3) * 3; // NOTE: y/3 * 3 = y
         final var grid  = board.getCells();
-
+        System.err.println("Row " + cell.i() + " Starting row " + startRow);
+        System.err.println("Col " + cell.j() + " Starting col " + startCol);
+        System.err.println(startCol);
+        System.exit(0);
         return IntStream.range(0, 3)
                 .flatMap(rowOffset -> IntStream.range(0, 3)
                         .map(colOffset -> grid.get(new Cell(startRow + rowOffset, startCol + colOffset))))
+                        .filter(Objects::nonNull)
                 .noneMatch(value -> value == number);
+    }
+
+    private static boolean checkCell(final Cell cell){
+        System.err.println(cell);
+        return cell.i() < 0 || cell.i() >= 9 || cell.j() < 0 || cell.j() >= 9;
     }
 }
