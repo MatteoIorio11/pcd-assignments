@@ -6,7 +6,7 @@ public class BoardGenerator {
 
     private static final int TOTAL_NUMBERS = 9;
     private static final int RND_LOWER_BOUND = 0;
-    private static final int RND_UPPER_BOUND = 10;
+    private static final int RND_UPPER_BOUND = 9;
 
     private BoardGenerator() {}
 
