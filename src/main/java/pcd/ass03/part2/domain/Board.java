@@ -31,7 +31,11 @@ public class Board {
         if (number < 1 || number > 9) {
             throw new IllegalStateException("Number " + number + " is not in range 1..9");
         }
-        return Objects.isNull(this.cells.putIfAbsent(cell, number));
+        if (this.cells.get(cell) == Board.EMPTY_CELL) {
+            this.cells.put(cell, number);
+            return true;
+        }
+        else return false;
     }
 
     public boolean putValue(final Cell cell, final int number) {
