@@ -2,6 +2,7 @@ package pcd.ass03.part2.domain;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class Board {
@@ -21,8 +22,15 @@ public class Board {
                 .forEach(i -> IntStream.range(0, 9)
                         .forEach(j -> this.cells.put(new Cell(i, j), -1))
                 );
+        BoardGenerator.initializeBoard(this);
+        System.err.println(this.cells);
+    }
 
-        this.cells.putAll(BoardGenerator.initializeBoard().getCells());
+    public boolean putInitialValue(final Cell cell, final int number){
+        if (number < 1 || number > 9) {
+            throw new IllegalStateException("Number " + number + " is not in range 1..9");
+        }
+        return Objects.isNull(this.cells.putIfAbsent(cell, number));
     }
 
     public boolean putValue(final Cell cell, final int number) {
