@@ -10,19 +10,20 @@ public class BoardGenerator {
 
     private BoardGenerator() {}
 
-    public static Board initializeBoard() {
-        final Board board = new Board();
+    public static void initializeBoard(final Board board) {
         final Random random = new Random();
-        int positionedNumbers = 0;
+        int positionedNumbers = 1;
+        System.err.println("<<QUI>>");
         // add 9 numbers in random positions
-        while (positionedNumbers < TOTAL_NUMBERS) {
+        while (positionedNumbers <= TOTAL_NUMBERS) {
             final int x = random.nextInt(RND_LOWER_BOUND, RND_UPPER_BOUND);
             final int y = random.nextInt(RND_LOWER_BOUND, RND_UPPER_BOUND);
             final Cell boardCell = new Cell(x, y);
-            if (board.putValue(boardCell, positionedNumbers)) {
+            System.err.println("Number: " + positionedNumbers);
+            System.err.println(boardCell);
+            if (board.putInitialValue(boardCell, positionedNumbers)) {
                 positionedNumbers = positionedNumbers + 1;
             }
         }
-        return board;
     }
 }
