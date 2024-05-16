@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.Optional;
 
 public class SudokuSolver {
+
+    private static final int EMPTY_CELL = -1;
     /**
      * Solve a given sudoku board in a brute force fashion.
      * This implementation heavily relies on side effects and time complexity
@@ -39,14 +41,14 @@ public class SudokuSolver {
                 board.putValue(emptyCell, n);
                 if (solveHelper(board)) return true;
             }
-            board.putValue(emptyCell, -1); // restore cell if no solution can be found
+            board.putValue(emptyCell, EMPTY_CELL); // restore cell if no solution can be found
         }
         return false;
     }
 
     private static Optional<Cell> findEmptyCell(final Board board) {
         return board.getCells().entrySet().stream()
-                .filter(e -> e.getValue() != -1)
+                .filter(e -> e.getValue() != EMPTY_CELL)
                 .map(Map.Entry::getKey)
                 .findFirst();
     }
