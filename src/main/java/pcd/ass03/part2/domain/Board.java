@@ -28,7 +28,7 @@ public class Board {
     }
 
     public boolean putInitialValue(final Cell cell, final int number){
-        if (number < 1 || number > 9) {
+        if (number < Board.EMPTY_CELL || number > 9) {
             throw new IllegalStateException("Number " + number + " is not in range 1..9");
         }
         if (this.cells.get(cell) == Board.EMPTY_CELL) {
