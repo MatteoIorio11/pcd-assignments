@@ -40,6 +40,7 @@ public class SudokuSolver {
         final var emptyCell = optCell.get();
         for (var n = 1; n <= 9; n++) {
             if (Logic.isMoveAllowed(board, emptyCell, n)) {
+                System.out.println("Testing: " + emptyCell + " with: " + n);
                 board.putValue(emptyCell, n);
                 if (solveHelper(board)) return true;
             }
@@ -52,7 +53,7 @@ public class SudokuSolver {
         return board.getCells().entrySet().parallelStream()
                 .filter(e -> e.getValue() == Board.EMPTY_CELL)
                 .map(Map.Entry::getKey)
-                .findAny();
+                .findFirst();
     }
     public static void main(String[] args) {
         final Board board = new Board();
@@ -74,7 +75,7 @@ public class SudokuSolver {
                 }
                 Cell position = new Cell(i, j);
                 Integer value = sudokuMap.getOrDefault(position, 0);
-                System.out.print(value == 0 ? "_ " : value + " ");
+                System.out.print(value == -1 ? "_ " : value + " ");
             }
             System.out.println();
         }
