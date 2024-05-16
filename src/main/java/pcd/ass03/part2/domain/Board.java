@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class Board {
+    public static final int EMPTY_CELL = -1;
     private final Map<Cell, Integer> cells;
 
     public Board() {
@@ -34,7 +35,7 @@ public class Board {
     }
 
     public boolean putValue(final Cell cell, final int number) {
-        if (number < 1 || number > 9) {
+        if (number < Board.EMPTY_CELL || number > 9) {
             throw new IllegalStateException("Number " + number + " is not in range 1..9");
         }
 
