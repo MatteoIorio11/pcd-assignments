@@ -29,8 +29,8 @@ public class Logic {
     }
 
     private static boolean checkSubGrid(final Board board, final Cell cell, final int number) {
-        final int startRow = (cell.i() / 3) * 3;
-        final int startCol = (cell.j() / 3) * 3;
+        final int startRow = (cell.i() / 3) * 3; // NOTE: x/3 * 3 = x
+        final int startCol = (cell.j() / 3) * 3; // NOTE: y/3 * 3 = y
         final var grid  = board.getCells();
 
         return IntStream.range(0, 3)
