@@ -43,7 +43,8 @@ public class SudokuSolver {
             if (board.putValue(emptyCell, n)) {
                 if (solveHelper(board)) return true;
             }
-            board.getCells().put(emptyCell, Board.EMPTY_CELL); // restore cell if no solution can be found
+            board.removeValue(emptyCell);
+            //board.getCells().put(emptyCell, Board.EMPTY_CELL); // restore cell if no solution can be found
         }
         return false;
     }
@@ -57,7 +58,7 @@ public class SudokuSolver {
     public static void main(String[] args) {
         final Board board = new Board();
         final long startingTime = System.currentTimeMillis();
-        BoardGenerator.initializeBoard(board, Difficulty.EASY);
+        BoardGenerator.initializeBoard(board, Difficulty.DEBUG);
         printSudokuBoard(board.getCells());
         final var endTime = Math.abs(System.currentTimeMillis() - startingTime);
     }
