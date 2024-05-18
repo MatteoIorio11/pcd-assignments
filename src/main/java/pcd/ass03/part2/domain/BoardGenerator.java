@@ -10,13 +10,13 @@ public class BoardGenerator {
 
     private BoardGenerator() {}
 
-    public static void initializeBoard(final Board board, final int difficulty) {
+    public static void initializeBoard(final Board board, final Difficulty difficulty) {
         final Random random = new Random();
         int i = 0;
         final var solvedBoard = SudokuSolver.solve(board);
         if (solvedBoard.isPresent()){
             int removedN = 0;
-            final int totalNumbers = difficulty * TOTAL_NUMBERS;
+            final int totalNumbers = difficulty.getDifficulty() * TOTAL_NUMBERS;
             while (removedN <= totalNumbers){
                 final int row = random.nextInt(0, 9);
                 final int col = random.nextInt(0, 9);
