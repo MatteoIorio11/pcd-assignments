@@ -10,20 +10,20 @@ public class BoardGenerator {
 
     private BoardGenerator() {}
 
-    public static void initializeBoard(final Board board) {
+    public static void initializeBoard(final Board board, final int difficulty) {
         final Random random = new Random();
-        int positionedNumbers = 1;
-        // add 9 numbers in random positions
-        /*
-        while (positionedNumbers <= TOTAL_NUMBERS) {
-            final int x = random.nextInt(RND_LOWER_BOUND, RND_UPPER_BOUND);
-            final int y = random.nextInt(RND_LOWER_BOUND, RND_UPPER_BOUND);
-            final Cell boardCell = new Cell(x, y);
-            if (board.putInitialValue(boardCell, positionedNumbers)) {
-                positionedNumbers = positionedNumbers + 1;
+        int i = 0;
+        final var solvedBoard = SudokuSolver.solve(board);
+        if (solvedBoard.isPresent()){
+            int removedN = 0;
+            final int totalNumbers = difficulty * TOTAL_NUMBERS;
+            while (removedN <= totalNumbers){
+                final int row = random.nextInt(0, 9);
+                final int col = random.nextInt(0, 9);
+                if (board.removeValue(new Cell(row, col))){
+                    removedN += 1;
+                }
             }
         }
-
-         */
     }
 }
