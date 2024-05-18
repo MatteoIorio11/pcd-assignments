@@ -24,7 +24,6 @@ public class Board {
                 .forEach(i -> IntStream.range(0, 9)
                         .forEach(j -> this.cells.put(new Cell(i, j), -1))
                 );
-        //BoardGenerator.initializeBoard(this);
     }
 
     public boolean putValue(final Cell cell, final int number) {
@@ -37,6 +36,14 @@ public class Board {
             return true;
         }
 
+        return false;
+    }
+
+    public boolean removeValue(final Cell cell){
+        if (this.cells.containsKey(cell) && this.cells.get(cell) != Board.EMPTY_CELL){
+            this.cells.put(cell, Board.EMPTY_CELL);
+            return true;
+        }
         return false;
     }
 
