@@ -15,13 +15,12 @@ public class BoardGenerator {
         int i = 0;
         final var solvedBoard = SudokuSolver.solve(board);
         if (solvedBoard.isPresent()){
-            int removedN = 0;
-            final int totalNumbers = difficulty.getDifficulty() * TOTAL_NUMBERS;
-            while (removedN <= totalNumbers){
+            int totalNumbers = difficulty.getDifficulty() * TOTAL_NUMBERS;
+            while (totalNumbers > 0){
                 final int row = random.nextInt(0, 9);
                 final int col = random.nextInt(0, 9);
                 if (board.removeValue(new Cell(row, col))){
-                    removedN += 1;
+                    totalNumbers -= 1;
                 }
             }
         }
