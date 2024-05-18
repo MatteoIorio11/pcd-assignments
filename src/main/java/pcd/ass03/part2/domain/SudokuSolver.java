@@ -2,6 +2,7 @@ package pcd.ass03.part2.domain;
 
 import scala.Int;
 
+import java.awt.*;
 import java.sql.Time;
 import java.util.Map;
 import java.util.Optional;
@@ -39,18 +40,16 @@ public class SudokuSolver {
 
         final var emptyCell = optCell.get();
         for (var n = 1; n <= 9; n++) {
-            if (Logic.isMoveAllowed(board, emptyCell, n)) {
-                System.out.println("Testing: " + emptyCell + " with: " + n);
-                board.putValue(emptyCell, n);
+            if (board.putValue(emptyCell, n)) {
                 if (solveHelper(board)) return true;
             }
-            board.putValue(emptyCell, Board.EMPTY_CELL); // restore cell if no solution can be found
+            board.getCells().put(emptyCell, Board.EMPTY_CELL); // restore cell if no solution can be found
         }
         return false;
     }
 
     private static Optional<Cell> findEmptyCell(final Board board) {
-        return board.getCells().entrySet().parallelStream()
+        return board.getCells().entrySet().stream()
                 .filter(e -> e.getValue() == Board.EMPTY_CELL)
                 .map(Map.Entry::getKey)
                 .findFirst();
@@ -58,10 +57,9 @@ public class SudokuSolver {
     public static void main(String[] args) {
         final Board board = new Board();
         final long startingTime = System.currentTimeMillis();
-//        System.exit(0);
-        SudokuSolver.solve(board);
-        final var endTime = Math.abs(System.currentTimeMillis() - startingTime);
+        BoardGenerator.initializeBoard(board, 4);
         printSudokuBoard(board.getCells());
+        final var endTime = Math.abs(System.currentTimeMillis() - startingTime);
     }
 
     public static void printSudokuBoard(Map<Cell, Integer> sudokuMap) {
