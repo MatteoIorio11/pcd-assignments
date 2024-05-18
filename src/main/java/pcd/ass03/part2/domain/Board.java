@@ -24,27 +24,12 @@ public class Board {
                 .forEach(i -> IntStream.range(0, 9)
                         .forEach(j -> this.cells.put(new Cell(i, j), -1))
                 );
-        BoardGenerator.initializeBoard(this);
-    }
-
-    public boolean putInitialValue(final Cell cell, final int number){
-        if (number < Board.EMPTY_CELL || number > 9) {
-            throw new IllegalStateException("Number " + number + " is not in range 1..9");
-        }
-        if (this.cells.get(cell) == Board.EMPTY_CELL) {
-            this.cells.put(cell, number);
-            return true;
-        }
-        else return false;
+        //BoardGenerator.initializeBoard(this);
     }
 
     public boolean putValue(final Cell cell, final int number) {
-        if (number < Board.EMPTY_CELL || number > 9) {
+        if ((number < 1 && number != Board.EMPTY_CELL) || number > 9) {
             throw new IllegalStateException("Number " + number + " is not in range 1..9");
-        }
-
-        if (!this.isCellEmpty(cell)) {
-            return false;
         }
 
         if (Logic.isMoveAllowed(this, cell, number)) {
