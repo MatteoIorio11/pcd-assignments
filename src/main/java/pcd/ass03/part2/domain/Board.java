@@ -40,10 +40,7 @@ public class Board {
     }
 
     public boolean removeValue(final Cell cell){
-        if (this.cells.containsKey(cell) && this.cells.get(cell) != Board.EMPTY_CELL){
-            this.cells.put(cell, Board.EMPTY_CELL);
-            return true;
-        }
+        this.cells.computeIfPresent(cell, (c, v) -> EMPTY_CELL);
         return false;
     }
 
