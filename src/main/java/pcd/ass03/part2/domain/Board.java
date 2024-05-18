@@ -51,10 +51,6 @@ public class Board {
         return this.cells;
     }
 
-    public boolean isCellEmpty(final Cell cell) {
-        return !this.cells.containsKey(cell) || this.cells.get(cell) == -1;
-    }
-
     public static Board fromCells(final Map<Cell, Integer> cells) {
         return new Board(cells);
     }
