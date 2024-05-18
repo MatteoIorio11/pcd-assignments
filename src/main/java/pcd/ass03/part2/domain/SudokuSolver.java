@@ -57,7 +57,7 @@ public class SudokuSolver {
     public static void main(String[] args) {
         final Board board = new Board();
         final long startingTime = System.currentTimeMillis();
-        BoardGenerator.initializeBoard(board, 4);
+        BoardGenerator.initializeBoard(board, Difficulty.EASY);
         printSudokuBoard(board.getCells());
         final var endTime = Math.abs(System.currentTimeMillis() - startingTime);
     }
