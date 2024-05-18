@@ -1,6 +1,7 @@
 package pcd.ass03.part2.domain;
 
 public enum Difficulty {
+    DEBUG(0),
     EASY(2),
     NORMAL(4),
     HARD(6);
