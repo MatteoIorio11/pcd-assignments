@@ -1,9 +1,7 @@
 package pcd.ass03.part2.domain;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class Board {
@@ -31,7 +29,7 @@ public class Board {
             throw new IllegalStateException("Number " + number + " is not in range 1..9");
         }
 
-        if (Logic.isMoveAllowed(this, cell, number)) {
+        if (SudokuLogic.isMoveAllowed(this, cell, number)) {
             this.cells.put(Cell.copyOf(cell), number);
             return true;
         }

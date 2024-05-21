@@ -6,8 +6,8 @@ import java.util.stream.IntStream;
 /**
  * Implements Sudoku's logic (i.e. if moves is legit)
  */
-public class Logic {
-    private Logic() {}
+public class SudokuLogic {
+    private SudokuLogic() {}
 
     public static boolean isMoveAllowed(final Board board, final Cell cell, final int number) {
         return checkCol(board, cell, number)
