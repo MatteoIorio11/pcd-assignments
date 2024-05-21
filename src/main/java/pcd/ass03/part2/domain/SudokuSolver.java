@@ -55,13 +55,6 @@ public class SudokuSolver {
                 .map(Map.Entry::getKey)
                 .findFirst();
     }
-    public static void main(String[] args) {
-        final Board board = new Board();
-        final long startingTime = System.currentTimeMillis();
-        BoardGenerator.initializeBoard(board, Difficulty.DEBUG);
-        printSudokuBoard(board.getCells());
-        final var endTime = Math.abs(System.currentTimeMillis() - startingTime);
-    }
 
     public static void printSudokuBoard(Map<Cell, Integer> sudokuMap) {
         for (int i = 0; i < 9; i++) {
