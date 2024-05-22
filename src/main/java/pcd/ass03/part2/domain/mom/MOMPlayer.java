@@ -1,6 +1,7 @@
 package pcd.ass03.part2.domain.mom;
 
 import pcd.ass03.part2.domain.Board;
+import pcd.ass03.part2.domain.Cell;
 
 import java.util.Objects;
 
@@ -9,5 +10,9 @@ public class MOMPlayer {
 
     public MOMPlayer(final Board board){
         this.board = Objects.requireNonNull(board);
+    }
+
+    public void makeMove(final Cell cell, final int value){
+        this.board.putValue(cell, value);
     }
 }
