@@ -20,7 +20,7 @@ public class SudokuGUI extends JFrame {
     private final Controller logic;
 
     public SudokuGUI() {
-        this.logic = new Controller(Difficulty.DEBUG);
+        this.logic = new Controller(Difficulty.EASY);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         this.add(new SudokuBoard());
@@ -111,7 +111,13 @@ public class SudokuGUI extends JFrame {
             textField.addActionListener(e -> {
                 final JTextField field = (JTextField) e.getSource();
                 final Cell cell = this.textFieldToCells.get(field);
-                logic.putValue(cell, Integer.parseInt(field.getText()));
+
+                if (field.getText().isEmpty()) {
+                    logic.removeValue(cell);
+                } else  {
+                    logic.putValue(cell, Integer.parseInt(field.getText()));
+                }
+                System.out.println("Value " + field.getText() + " inserted!");
                 if (logic.isGameOver()) {
                     JOptionPane.showMessageDialog(this, "You won");
                 }
