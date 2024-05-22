@@ -9,6 +9,13 @@ import java.util.Objects;
 
 public record Message() {
     public record Move(Cell cell, int value){
+
+        /**
+         * Create the move
+         * @param cell: input cell of the move
+         * @param value: input value of the move
+         * @return the move to apply
+         */
         public static Move createMove(final Cell cell, final int value){
             return new Move(Objects.requireNonNull(cell), value);
         }
