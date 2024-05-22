@@ -7,7 +7,8 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
 public class RemoteBroker {
-    final ConnectionFactory factory;
+    private final ConnectionFactory factory;
+    private static final String QUEUE_NAME= "game";
     public RemoteBroker() throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
         this.factory = new ConnectionFactory();
         this.factory.setHost("rogmlmgd");
@@ -17,4 +18,5 @@ public class RemoteBroker {
         this.factory.setUri("amqp://rogmlmgd:sjdLZ_RORmQtT6VhpjzhiYa3pVIcOgqq@rat.rmq2.cloudamqp.com:5672/rogmlmgd");
         this.factory.setConnectionTimeout(30000);
     }
+
 }
