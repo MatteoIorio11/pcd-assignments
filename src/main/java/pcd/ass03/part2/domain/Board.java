@@ -50,6 +50,6 @@ public class Board {
     }
 
     public static Board fromCells(final Map<Cell, Integer> cells) {
-        return new Board(cells);
+        return new Board(new HashMap<>(cells));
     }
 }
