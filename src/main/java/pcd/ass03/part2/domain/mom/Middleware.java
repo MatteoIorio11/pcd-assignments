@@ -36,17 +36,12 @@ public class Middleware {
             this.channel.exchangeDeclare(EXHANGE_NAME, TYPE);
             String queueName = channel.queueDeclare().getQueue();
             this.channel.queueBind(queueName, EXHANGE_NAME, TYPE);
-        }catch (Exception ex){
-            //
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void sendMessage(final String message) throws IOException, TimeoutException {
-        try {
-            this.channel.basicPublish(EXHANGE_NAME, TYPE, null, message.getBytes());
-        }catch (Exception ex){
-            //
-        }
-
+    public void sendMessage(final String message) throws IOException {
+        this.channel.basicPublish(EXHANGE_NAME, TYPE, null, message.getBytes());
     }
 }
