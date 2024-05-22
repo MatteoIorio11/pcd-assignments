@@ -1,4 +1,6 @@
 package pcd.ass03.part2.domain.mom;
-public record Message() {
-    
+
+import pcd.ass03.part2.domain.Cell;
+
+public record Message(Cell cell, int value) {
 }
