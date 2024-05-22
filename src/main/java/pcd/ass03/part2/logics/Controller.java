@@ -1,9 +1,6 @@
 package pcd.ass03.part2.logics;
 
-import pcd.ass03.part2.domain.Board;
-import pcd.ass03.part2.domain.BoardGenerator;
-import pcd.ass03.part2.domain.Cell;
-import pcd.ass03.part2.domain.Difficulty;
+import pcd.ass03.part2.domain.*;
 
 import java.util.Map;
 
@@ -13,7 +10,9 @@ public class Controller {
 
     public Controller(final Difficulty difficulty) {
         this.sudokuBoard = new Board();
-        BoardGenerator.initializeBoard(this.sudokuBoard, difficulty);
+        SudokuSolver.solve(this.sudokuBoard);
+        //BoardGenerator.initializeBoard(this.sudokuBoard, Difficulty.DEBUG);
+        SudokuSolver.printSudokuBoard(this.sudokuBoard.getCells());
         this.initialBoard = this.sudokuBoard.getCells();
     }
 
