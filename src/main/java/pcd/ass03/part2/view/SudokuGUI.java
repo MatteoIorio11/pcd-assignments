@@ -2,6 +2,8 @@ package pcd.ass03.part2.view;
 
 import pcd.ass03.part2.domain.Cell;
 import pcd.ass03.part2.domain.Difficulty;
+import pcd.ass03.part2.domain.SudokuLogic;
+import pcd.ass03.part2.domain.SudokuSolver;
 import pcd.ass03.part2.logics.Controller;
 
 import javax.swing.*;
@@ -49,6 +51,7 @@ public class SudokuGUI extends JFrame {
                     this.add(board);
                 }
             }
+            SudokuSolver.printSudokuBoard(logic.getInitialBoard());
             // By default disable all cells. Cells are activate once:
             // - RMI or RabbitMQ are chosen.
             // - Connection parameters are specified.
@@ -57,15 +60,16 @@ public class SudokuGUI extends JFrame {
 
         private void setSubBoardInitialSolution(final int xOffset, final int yOffset) {
             final var initialSolution = logic.getInitialBoard();
+            final int xx = xOffset * 3;
+            final int yy = yOffset * 3;
             final var subBoard = this.subBoards[xOffset][yOffset];
-            for (int i = xOffset; i < xOffset + 3; i++) {
-                for (int j = yOffset; j < yOffset + 3; j++) {
+            for (int i = xx; i < xx + 3; i++) {
+                for (int j = yy; j < yy+ 3; j++) {
                     final var value = initialSolution.get(new Cell(i, j));
                     if (value == -1) continue;
-                    subBoard.setCellValue(i - xOffset, j - yOffset, value, true);
+                    subBoard.setCellValue(i - xx, j - yy, value, true);
                 }
             }
-            System.out.println("Finished setting up subgrid: (" + xOffset + ", " + yOffset + ")");
         }
 
         public void disableAllCells() {
