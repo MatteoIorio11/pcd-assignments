@@ -19,22 +19,6 @@ public record Message() {
         public static Move createMove(final Cell cell, final int value){
             return new Move(Objects.requireNonNull(cell), value);
         }
-
-        /**
-         * Get the cell
-         * @return cell value of the move
-         */
-        public Cell getCell(){
-            return this.cell;
-        }
-
-        /**
-         * Get value
-         * @return input value of the move
-         */
-        public int getValue(){
-            return this.value;
-        }
     }
 
     /**
