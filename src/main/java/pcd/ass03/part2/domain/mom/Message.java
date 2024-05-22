@@ -4,15 +4,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import pcd.ass03.part2.domain.Cell;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.Objects;
 
-record Pair(Cell x, int y){
+
+record Pair(Cell cell, int value){
+    public static Pair createPair(final Cell cell, final int value){
+        return new Pair(Objects.requireNonNull(cell), value);
+    }
 }
 
 public record Message() {
     public static String putValue(final Cell cell, final int value) throws JsonProcessingException {
         final ObjectMapper objectMapper = new ObjectMapper();
-        final String jsonString = objectMapper.writeValueAsString(pair);
-        System.out.println(jsonString);
-        return "";
+        return objectMapper.writeValueAsString(Pair.createPair(cell, value));
     }
 }
