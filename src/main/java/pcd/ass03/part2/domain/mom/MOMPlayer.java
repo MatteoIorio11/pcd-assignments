@@ -7,12 +7,15 @@ import java.util.Objects;
 
 public class MOMPlayer {
     final Board board;
-
     public MOMPlayer(final Board board){
         this.board = Objects.requireNonNull(board);
     }
 
-    public void makeMove(final Cell cell, final int value){
+    public void putValue(final Cell cell, final int value){
         this.board.putValue(cell, value);
+    }
+
+    public void removeValue(final Cell cell){
+        this.removeValue(cell);
     }
 }
