@@ -10,19 +10,18 @@ public class BoardGenerator {
 
     private BoardGenerator() {}
 
-    public static void initializeBoard(final Board board, final Difficulty difficulty) {
+    public static Board initializeBoard(final Board board, final Difficulty difficulty) {
         final Random random = new Random();
         int i = 0;
-        final var solvedBoard = SudokuSolver.solve(board);
-        if (solvedBoard.isPresent()){
-            int totalNumbers = difficulty.getDifficulty() * TOTAL_NUMBERS;
-            while (totalNumbers > 0){
-                final int row = random.nextInt(RND_LOWER_BOUND, RND_UPPER_BOUND);
-                final int col = random.nextInt(RND_LOWER_BOUND, RND_UPPER_BOUND);
-                if (board.removeValue(new Cell(row, col))){
-                    totalNumbers -= 1;
-                }
+        final var solvedBoard = SudokuSolver.solve(board).orElseThrow();
+        int totalNumbers = difficulty.getDifficulty() * TOTAL_NUMBERS;
+        while (totalNumbers > 0){
+            final int row = random.nextInt(RND_LOWER_BOUND, RND_UPPER_BOUND);
+            final int col = random.nextInt(RND_LOWER_BOUND, RND_UPPER_BOUND);
+            if (solvedBoard.removeValue(new Cell(row, col))){
+                totalNumbers -= 1;
             }
         }
+        return solvedBoard;
     }
 }

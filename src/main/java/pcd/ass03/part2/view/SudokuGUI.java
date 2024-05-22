@@ -2,7 +2,6 @@ package pcd.ass03.part2.view;
 
 import pcd.ass03.part2.domain.Cell;
 import pcd.ass03.part2.domain.Difficulty;
-import pcd.ass03.part2.domain.SudokuLogic;
 import pcd.ass03.part2.domain.SudokuSolver;
 import pcd.ass03.part2.logics.Controller;
 
@@ -21,7 +20,7 @@ public class SudokuGUI extends JFrame {
     private final Controller logic;
 
     public SudokuGUI() {
-        this.logic = new Controller(Difficulty.EASY);
+        this.logic = new Controller(Difficulty.DEBUG);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         this.add(new SudokuBoard());
@@ -113,6 +112,9 @@ public class SudokuGUI extends JFrame {
                 final JTextField field = (JTextField) e.getSource();
                 final Cell cell = this.textFieldToCells.get(field);
                 logic.putValue(cell, Integer.parseInt(field.getText()));
+                if (logic.isGameOver()) {
+                    JOptionPane.showMessageDialog(this, "You won");
+                }
             });
             return textField;
         }
