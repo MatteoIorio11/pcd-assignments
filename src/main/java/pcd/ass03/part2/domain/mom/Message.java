@@ -9,16 +9,45 @@ import java.util.Objects;
 
 public record Message() {
     public record Move(Cell cell, int value){
-        public static Move createPair(final Cell cell, final int value){
+        public static Move createMove(final Cell cell, final int value){
             return new Move(Objects.requireNonNull(cell), value);
+        }
+
+        /**
+         * Get the cell
+         * @return cell value of the move
+         */
+        public Cell getCell(){
+            return this.cell;
+        }
+
+        /**
+         * Get value
+         * @return input value of the move
+         */
+        public int getValue(){
+            return this.value;
         }
     }
 
+    /**
+     * Send the current message in JSON format
+     * @param cell: the sudoku cell where to apply the move
+     * @param value: value to put inside the input cell
+     * @return JSON format string
+     * @throws JsonProcessingException if the serialization does not go as planned
+     */
     public static String sendMove(final Cell cell, final int value) throws JsonProcessingException {
         final ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(Move.createPair(cell, value));
+        return objectMapper.writeValueAsString(Move.createMove(cell, value));
     }
 
+    /**
+     * Get the current message
+     * @param message: input message to de-serialize
+     * @return the Move to apply in the sudoku board
+     * @throws JsonProcessingException if the de-serialization does not go as planned
+     */
     public static Move getMove(final String message) throws JsonProcessingException {
         final ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(message, Move.class);
