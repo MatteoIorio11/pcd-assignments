@@ -25,4 +25,8 @@ public class RemoteBroker {
         this.factory.setConnectionTimeout(30000);
     }
 
+    private void configureQueue(){
+        
+    }
+
 }
