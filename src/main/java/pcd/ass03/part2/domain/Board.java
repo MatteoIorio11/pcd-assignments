@@ -2,18 +2,19 @@ package pcd.ass03.part2.domain;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.IntStream;
 
 public class Board {
     public static final int EMPTY_CELL = -1;
-    private final Map<Cell, Integer> cells;
+    private final ConcurrentHashMap<Cell, Integer> cells;
 
     public Board() {
-        this.cells = new HashMap<>();
+        this.cells = new ConcurrentHashMap<>();
         this.initializeGrid();
     }
 
-    private Board(final Map<Cell, Integer> cells) {
+    private Board(final ConcurrentHashMap<Cell, Integer> cells) {
         this.cells = cells;
     }
 
@@ -50,6 +51,6 @@ public class Board {
     }
 
     public static Board fromCells(final Map<Cell, Integer> cells) {
-        return new Board(new HashMap<>(cells));
+        return new Board(new ConcurrentHashMap<>(cells));
     }
 }
