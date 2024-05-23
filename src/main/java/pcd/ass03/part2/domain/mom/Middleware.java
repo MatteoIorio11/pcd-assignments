@@ -3,7 +3,6 @@ package pcd.ass03.part2.domain.mom;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.DeliverCallback;
-import pcd.ass03.part2.domain.Board;
 import pcd.ass03.part2.domain.Difficulty;
 import pcd.ass03.part2.logics.Controller;
 
@@ -11,11 +10,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.TimeoutException;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class Middleware extends Controller {
     private final Connection connection;
@@ -31,12 +26,11 @@ public class Middleware extends Controller {
         this.channel = this.connection.createChannel();
         this.setChannel();
         this.deliverCallback = (consumerTag, delivery) -> {
-            String message = new String(delivery.getBody(), "UTF-8");
+            final String message = new String(delivery.getBody(), "UTF-8");
             final Move move = Message.unmarshall(message);
             super.getCurrentBoard().putValue(move.cell(), move.value());
-            System.out.println(" [x] Received '" + delivery.getEnvelope().getRoutingKey() + "':'" + message + "'");
         };
-        String queueName = channel.queueDeclare().getQueue();
+        final String queueName = channel.queueDeclare().getQueue();
         this.channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
     }
 
@@ -50,7 +44,7 @@ public class Middleware extends Controller {
         }
     }
 
-    public void sendMessage(final String message) throws IOException {
+    public void marshall(final String message) throws IOException {
         this.channel.basicPublish(EXHANGE_NAME, ROUTING_KEY, null, message.getBytes());
     }
 }
