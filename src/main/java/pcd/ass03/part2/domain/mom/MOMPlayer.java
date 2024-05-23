@@ -15,7 +15,7 @@ import java.util.concurrent.TimeoutException;
 public class MOMPlayer {
     private final Board board;
     private final Middleware middleware;
-    public MOMPlayer(final Board board, final Difficulty difficulty) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
+    public MOMPlayer(final Board board, final Difficulty difficulty) {
         this.board = Objects.requireNonNull(board);
         this.middleware = new Middleware(difficulty);
     }
