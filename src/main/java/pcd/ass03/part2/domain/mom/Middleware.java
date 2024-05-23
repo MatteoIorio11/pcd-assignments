@@ -4,6 +4,8 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.DeliverCallback;
 import pcd.ass03.part2.domain.Board;
+import pcd.ass03.part2.domain.Difficulty;
+import pcd.ass03.part2.logics.Controller;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -15,7 +17,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class Middleware {
+public class Middleware extends Controller {
     private final Connection connection;
     private final Channel channel;
     private final DeliverCallback deliverCallback;
@@ -23,12 +25,15 @@ public class Middleware {
     private static final String ROUTING_KEY = "move";
     private static final String TYPE = "direct";
 
-    public Middleware() throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+    public Middleware(final Difficulty difficulty) throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+        super(difficulty);
         this.connection = RemoteBroker.createConnection();
         this.channel = this.connection.createChannel();
         this.setChannel();
         this.deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");
+            final Move move = Message.unmarshall(message);
+            super.getCurrentBoard().putValue(move.cell(), move.value());
             System.out.println(" [x] Received '" + delivery.getEnvelope().getRoutingKey() + "':'" + message + "'");
         };
         String queueName = channel.queueDeclare().getQueue();
