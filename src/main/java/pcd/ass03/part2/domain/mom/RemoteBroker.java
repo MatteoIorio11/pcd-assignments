@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 import java.util.concurrent.TimeoutException;
 
 public class RemoteBroker {
@@ -20,17 +21,26 @@ public class RemoteBroker {
 
 
     private RemoteBroker(){}
-    private static void setConnectionInformation() throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
-        CONNECTION_FACTORY.setHost(RemoteBroker.HOST);
-        CONNECTION_FACTORY.setVirtualHost(RemoteBroker.VHOST);
-        CONNECTION_FACTORY.setPassword(RemoteBroker.PASSWORD);
-        CONNECTION_FACTORY.setPort(RemoteBroker.PORT);
-        CONNECTION_FACTORY.setUri(RemoteBroker.URI);
-        CONNECTION_FACTORY.setConnectionTimeout(30000);
+    private static void setConnectionInformation() {
+        try {
+            CONNECTION_FACTORY.setHost(RemoteBroker.HOST);
+            CONNECTION_FACTORY.setVirtualHost(RemoteBroker.VHOST);
+            CONNECTION_FACTORY.setPassword(RemoteBroker.PASSWORD);
+            CONNECTION_FACTORY.setPort(RemoteBroker.PORT);
+            CONNECTION_FACTORY.setUri(RemoteBroker.URI);
+            CONNECTION_FACTORY.setConnectionTimeout(30000);
+        }catch (Exception e){
+            //
+        }
     }
 
-    public static Connection createConnection() throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, TimeoutException {
-        setConnectionInformation();
-        return CONNECTION_FACTORY.newConnection();
+    public static Optional<Connection> createConnection() {
+        try {
+            setConnectionInformation();
+            return Optional.of(CONNECTION_FACTORY.newConnection());
+        }catch (Exception e){
+            //
+        }
+        return Optional.empty();
     }
 }
