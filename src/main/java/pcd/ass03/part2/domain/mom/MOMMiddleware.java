@@ -31,7 +31,7 @@ public class MOMMiddleware extends Controller {
         this.setChannel();
         this.setCallback();
         try {
-            this.marshall(Message.marshall(super.sudokuBoard.getCells()));
+            this.marshall(Message.marshall(super.getCurrentBoard().getCells()));
         }catch (Exception e){
             //
         }
@@ -41,8 +41,8 @@ public class MOMMiddleware extends Controller {
         try {
             final DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                 final String message = new String(delivery.getBody(), "UTF-8");
-                this.unmarshall(message);
                 System.out.println("Incoming message" + message);
+                this.unmarshall(message);
             };
             this.channel.ifPresent(ch -> {
                 try {
@@ -82,6 +82,7 @@ public class MOMMiddleware extends Controller {
     public boolean putValue(Cell cell, int value) {
         try {
             final boolean result = super.putValue(cell, value);
+            System.out.println("Sending message");
             this.marshall(Message.marshall(super.getCurrentBoard().getCells()));
             return result;
         }catch (Exception e){
