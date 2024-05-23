@@ -46,7 +46,7 @@ public class MOMMiddleware extends Controller {
             };
             this.channel.ifPresent(ch -> {
                 try {
-                    ch.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {
+                    ch.basicConsume(QUEUE_NAME, false, deliverCallback, consumerTag -> {
                     });
                 } catch (Exception e) {
                     //
@@ -79,13 +79,14 @@ public class MOMMiddleware extends Controller {
     }
 
     @Override
-    public boolean putValue(Cell cell, int value) {
+    public boolean putValue(final Cell cell, final int value) {
         try {
-            final boolean result = super.putValue(cell, value);
-            System.out.println("Sending message");
+            System.out.println("AOO");
+            this.sudokuBoard.putValue(cell, value);
             this.marshall(Message.marshall(super.getCurrentBoard().getCells()));
-            return result;
+            return true;
         }catch (Exception e){
+            e.printStackTrace();
             return false;
         }
     }
