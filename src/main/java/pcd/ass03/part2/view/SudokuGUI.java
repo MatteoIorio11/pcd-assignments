@@ -27,7 +27,8 @@ public class SudokuGUI extends JFrame {
             this.add(board);
             new Thread(() -> {
                 while (true) {
-                    SwingUtilities.invokeLater(() -> board.updateBoard(logic.getCurrentBoard()));
+//                    SwingUtilities.invokeLater(() -> board.updateBoard(logic.getCurrentBoard()));
+                    board.updateBoard(logic.getCurrentBoard());
                     try {
                         Thread.sleep(500);
                     } catch (final InterruptedException e) {
@@ -81,7 +82,6 @@ public class SudokuGUI extends JFrame {
                         System.out.println(solution.get(new Cell(i, j)));
                         System.out.println(new Cell(i, j));
                     }
-                    if (value == -1) continue;
                     subBoard.setCellValue(i, j, value, isInitial);
                 }
             }
@@ -167,8 +167,12 @@ public class SudokuGUI extends JFrame {
 
         public void setCellValue(final int i, final int j, final int value, final boolean isInitial) {
             final var cell = this.cells.get(new Cell(i, j));
-            cell.setText(String.valueOf(value));
-            cell.setEnabled(!isInitial);
+            if (value == -1) {
+                cell.setText("");
+            } else {
+                cell.setText(String.valueOf(value));
+                cell.setEnabled(!isInitial);
+            }
         }
 
         public void disableAllCells() {
