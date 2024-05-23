@@ -22,17 +22,14 @@ public class Middleware {
     private static final String EXHANGE_NAME = "game";
     private static final String ROUTING_KEY = "move";
     private static final String TYPE = "direct";
-    private final Queue<Move> incomingMoves;
 
     public Middleware() throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
         this.connection = RemoteBroker.createConnection();
         this.channel = this.connection.createChannel();
-        this.incomingMoves = new LinkedList<>();
         this.setChannel();
         this.deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");
             System.out.println(" [x] Received '" + delivery.getEnvelope().getRoutingKey() + "':'" + message + "'");
-
         };
         String queueName = channel.queueDeclare().getQueue();
         this.channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
