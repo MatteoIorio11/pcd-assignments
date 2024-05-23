@@ -16,8 +16,10 @@ public class Middleware extends Controller {
     private final Connection connection;
     private final Channel channel;
     private final DeliverCallback deliverCallback;
-    private static final String EXHANGE_NAME = "game";
+    private static final String EXCHANGE_NAME = "game";
+    private static final String QUEUE_NAME = "game"
     private static final String ROUTING_KEY = "move";
+
     private static final String TYPE = "direct";
 
     public Middleware(final Difficulty difficulty) throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
@@ -27,24 +29,32 @@ public class Middleware extends Controller {
         this.setChannel();
         this.deliverCallback = (consumerTag, delivery) -> {
             final String message = new String(delivery.getBody(), "UTF-8");
-            final Move move = Message.unmarshall(message);
-            super.getCurrentBoard().putValue(move.cell(), move.value());
+            System.out.println("Incoming message" + message);
         };
-        final String queueName = channel.queueDeclare().getQueue();
-        this.channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
+        this.channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
     }
 
     private void setChannel(){
         try {
-            this.channel.exchangeDeclare(EXHANGE_NAME, TYPE);
-            String queueName = channel.queueDeclare().getQueue();
-            this.channel.queueBind(queueName, EXHANGE_NAME, TYPE);
+            this.channel.exchangeDeclare(EXCHANGE_NAME, TYPE);
+            this.channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, ROUTING_KEY);
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void marshall(final String message) throws IOException {
-        this.channel.basicPublish(EXHANGE_NAME, ROUTING_KEY, null, message.getBytes());
+        this.channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY, null, message.getBytes());
+    }
+
+    public static void main(String[] args) {
+        try {
+            final var m = new Middleware(Difficulty.DEBUG);
+            final var z = new Middleware(Difficulty.DEBUG);
+            m.marshall("ciao");
+
+        }catch (Exception e){
+            //
+        }
     }
 }
