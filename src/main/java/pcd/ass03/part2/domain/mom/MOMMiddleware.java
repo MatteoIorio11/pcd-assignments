@@ -87,7 +87,7 @@ public class MOMMiddleware extends Controller {
     private void unmarshall(final String message){
         try{
             final Map<Cell, Integer> board = Message.unmarshallBoard(message);
-            board.forEach(this::putValue);
+            super.sudokuBoard = Board.fromCells(board);
         }catch (Exception e){
             //
         }
