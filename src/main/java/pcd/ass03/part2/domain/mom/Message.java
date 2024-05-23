@@ -24,9 +24,20 @@ public record Message() {
         return objectMapper.writeValueAsString(Move.createMove(cell, value));
     }
 
+    /**
+     * Marshall the input board.
+     * @param board: input board to serialize
+     * @return  JSON format string
+     * @throws JsonProcessingException if the serialization does not go as planned
+     */
     public static String marshall(final Map<Cell, Integer> board) throws JsonProcessingException {
         final ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(Objects.requireNonNull(board));
+    }
+
+    public static Map<Cell, Integer> unmarshallBoard(final String message) throws JsonProcessingException {
+        final ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(message, HashMap.class);
     }
 
     /**
