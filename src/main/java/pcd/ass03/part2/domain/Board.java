@@ -7,14 +7,14 @@ import java.util.stream.IntStream;
 
 public class Board {
     public static final int EMPTY_CELL = -1;
-    private final ConcurrentHashMap<Cell, Integer> cells;
+    private final HashMap<Cell, Integer> cells;
 
     public Board() {
-        this.cells = new ConcurrentHashMap<>();
+        this.cells = new HashMap<>();
         this.initializeGrid();
     }
 
-    private Board(final ConcurrentHashMap<Cell, Integer> cells) {
+    private Board(final HashMap<Cell, Integer> cells) {
         this.cells = cells;
     }
 
@@ -51,6 +51,6 @@ public class Board {
     }
 
     public static Board fromCells(final Map<Cell, Integer> cells) {
-        return new Board(new ConcurrentHashMap<>(cells));
+        return new Board(new HashMap<>(cells));
     }
 }
