@@ -20,16 +20,21 @@ public class MOMMiddleware extends Controller {
 
     public MOMMiddleware(final Difficulty difficulty) {
         super(difficulty);
-        Optional<Connection> connection = Objects.requireNonNull(RemoteBroker.createConnection());
-            connection.ifPresent(conn -> {
-                try {
-                    this.channel = Optional.of(conn.createChannel());
-                }catch (Exception e){
-                    //
-                }
-            });
-            this.setChannel();
-            this.setCallback();
+        ptional<Connection> connection = Objects.requireNonNull(RemoteBroker.createConnection());
+        connection.ifPresent(conn -> {
+            try {
+                this.channel = Optional.of(conn.createChannel());
+            }catch (Exception e){
+                //
+            }
+        });
+        this.setChannel();
+        this.setCallback();
+        try {
+            this.marshall(Message.marshall(super.sudokuBoard.getCells()));
+        }catch (Exception e){
+            //
+        }
     }
 
     private void setCallback(){
