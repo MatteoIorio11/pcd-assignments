@@ -8,35 +8,6 @@ import java.util.Objects;
 
 
 public record Message() {
-    public record Move(Cell cell, int value){
-
-        /**
-         * Create the move
-         * @param cell: input cell of the move
-         * @param value: input value of the move
-         * @return the move to apply
-         */
-        public static Move createMove(final Cell cell, final int value){
-            return new Move(Objects.requireNonNull(cell), value);
-        }
-
-        /**
-         * Get the cell
-         * @return cell value of the move
-         */
-        public Cell getCell(){
-            return this.cell;
-        }
-
-        /**
-         * Get value
-         * @return input value of the move
-         */
-        public int getValue(){
-            return this.value;
-        }
-    }
-
     /**
      * Send the current message in JSON format
      * @param cell: the sudoku cell where to apply the move
