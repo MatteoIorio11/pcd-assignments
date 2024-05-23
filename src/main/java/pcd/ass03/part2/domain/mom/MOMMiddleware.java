@@ -76,8 +76,9 @@ public class MOMMiddleware extends Controller {
     @Override
     public boolean putValue(Cell cell, int value) {
         try {
-            this.marshall(Message.marshall(cell, value));
-            return super.putValue(cell, value);
+            final boolean result = super.putValue(cell, value);
+            this.marshall(Message.marshall(super.getCurrentBoard().getCells()));
+            return result;
         }catch (Exception e){
             return false;
         }
