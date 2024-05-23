@@ -20,7 +20,7 @@ public class SudokuGUI extends JFrame {
     private final Controller logic;
 
     public SudokuGUI() {
-        this.logic = new Controller(Difficulty.DEBUG);
+        this.logic = new Controller(Difficulty.EASY);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         this.add(new SudokuBoard());
@@ -43,7 +43,7 @@ public class SudokuGUI extends JFrame {
 
             for (int i = 0; i < ROWS; i++) {
                 for (int j = 0; j < COLS; j++) {
-                    final SubBoard board = new SubBoard();
+                    final SubBoard board = new SubBoard(i, j);
                     board.setBorder(new CompoundBorder(new LineBorder(Color.GRAY, 3), new EmptyBorder(4, 4, 4, 4)));
                     this.subBoards[i][j] = board;
                     this.setSubBoardInitialSolution(i, j);
@@ -66,7 +66,7 @@ public class SudokuGUI extends JFrame {
                 for (int j = yy; j < yy+ 3; j++) {
                     final var value = initialSolution.get(new Cell(i, j));
                     if (value == -1) continue;
-                    subBoard.setCellValue(i - xx, j - yy, value, true);
+                    subBoard.setCellValue(i, j, value, true);
                 }
             }
         }
@@ -87,14 +87,17 @@ public class SudokuGUI extends JFrame {
         private final Map<Cell, JTextField> cells;
         private final Map<JTextField, Cell> textFieldToCells;
 
-        public SubBoard() {
+        public SubBoard(final int xOffset, final int yOffset) {
             this.setBorder(new LineBorder(Color.LIGHT_GRAY));
             this.setLayout(new GridLayout(ROWS, COLS, 2, 2));
             this.cells = new HashMap<>();
             this.textFieldToCells = new HashMap<>();
 
-            for (int i = 0; i < ROWS; i++) {
-                for (int j = 0; j < COLS; j++) {
+            final int xx = xOffset * 3;
+            final int yy = yOffset * 3;
+
+            for (int i = xx; i < xx + 3; i++) {
+                for (int j = yy; j < yy + 3; j++) {
                     final JTextField textField = this.craftTextField();
                     final Cell pos = new Cell(i, j);
                     this.cells.put(pos, textField);
@@ -111,7 +114,13 @@ public class SudokuGUI extends JFrame {
             textField.addActionListener(e -> {
                 final JTextField field = (JTextField) e.getSource();
                 final Cell cell = this.textFieldToCells.get(field);
-                logic.putValue(cell, Integer.parseInt(field.getText()));
+
+                if (field.getText().isEmpty()) {
+                    logic.removeValue(cell);
+                } else  {
+                    logic.putValue(cell, Integer.parseInt(field.getText()));
+                }
+                System.out.println("Value " + field.getText() + " inserted!");
                 if (logic.isGameOver()) {
                     JOptionPane.showMessageDialog(this, "You won");
                 }

@@ -16,7 +16,6 @@ public class Controller {
     }
 
     public boolean putValue(final Cell cell, final int value) {
-        SudokuSolver.printSudokuBoard(this.sudokuBoard.getCells());
         return this.sudokuBoard.putValue(cell, value);
     }
 
@@ -27,5 +26,9 @@ public class Controller {
 
     public Map<Cell, Integer> getInitialBoard() {
         return this.initialBoard;
+    }
+
+    public void removeValue(final Cell cell) {
+        this.sudokuBoard.removeValue(cell);
     }
 }
