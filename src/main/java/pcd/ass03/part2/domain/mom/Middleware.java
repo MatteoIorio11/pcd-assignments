@@ -24,14 +24,13 @@ public class Middleware {
     private static final String TYPE = "direct";
     private final Queue<Move> incomingMoves;
 
-    public Middleware(final BiConsumer<Board, Move> onReceive) throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+    public Middleware() throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
         this.connection = RemoteBroker.createConnection();
         this.channel = this.connection.createChannel();
         this.incomingMoves = new LinkedList<>();
         this.setChannel();
         this.deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");
-            incomingMoves.add(Message.getMove(message));
             System.out.println(" [x] Received '" + delivery.getEnvelope().getRoutingKey() + "':'" + message + "'");
 
         };
@@ -50,6 +49,6 @@ public class Middleware {
     }
 
     public void sendMessage(final String message) throws IOException {
-        this.channel.basicPublish(EXHANGE_NAME, TYPE, null, message.getBytes());
+        this.channel.basicPublish(EXHANGE_NAME, ROUTING_KEY, null, message.getBytes());
     }
 }
