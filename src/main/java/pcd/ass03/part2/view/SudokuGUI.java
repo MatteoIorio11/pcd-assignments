@@ -3,6 +3,7 @@ package pcd.ass03.part2.view;
 import pcd.ass03.part2.domain.Cell;
 import pcd.ass03.part2.domain.Difficulty;
 import pcd.ass03.part2.domain.SudokuSolver;
+import pcd.ass03.part2.domain.mom.Middleware;
 import pcd.ass03.part2.logics.Controller;
 
 import javax.swing.*;
@@ -11,16 +12,22 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Stream;
 
 public class SudokuGUI extends JFrame {
     private final Controller logic;
 
-    public SudokuGUI() {
-        this.logic = new Controller(Difficulty.EASY);
+    public SudokuGUI() throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
+        this.logic = new Middleware(Difficulty.EASY);
+        System.out.println("Middleware instanciated!");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         this.add(new SudokuBoard());
@@ -193,7 +200,7 @@ public class SudokuGUI extends JFrame {
         return Arrays.stream(elems).flatMap(Arrays::stream);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
         new SudokuGUI();
     }
 }
