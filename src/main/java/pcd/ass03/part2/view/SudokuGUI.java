@@ -22,10 +22,24 @@ public class SudokuGUI extends JFrame {
     public SudokuGUI() {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
-        this.add(new MenuPane(() -> this.add(new SudokuBoard())), BorderLayout.AFTER_LINE_ENDS);
+        this.add(new MenuPane(() -> {
+            final var board = new SudokuBoard();
+            this.add(board);
+            new Thread(() -> {
+                while (true) {
+                    board.updateBoard(logic.getCurrentBoard());
+                    try {
+                        Thread.sleep(500);
+                    } catch (final InterruptedException e) {
+                        //
+                    }
+                }
+            }).start();
+        }), BorderLayout.AFTER_LINE_ENDS);
         this.setSize(500, 500);
         this.pack();
         this.setVisible(true);
+
     }
 
     public class SudokuBoard extends JPanel {
