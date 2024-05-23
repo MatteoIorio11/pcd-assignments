@@ -1,9 +1,9 @@
 package pcd.ass03.part2.view;
 
+import pcd.ass03.part2.domain.Board;
 import pcd.ass03.part2.domain.Cell;
 import pcd.ass03.part2.domain.Difficulty;
 import pcd.ass03.part2.domain.SudokuSolver;
-import pcd.ass03.part2.domain.mom.Middleware;
 import pcd.ass03.part2.logics.Controller;
 import pcd.ass03.part2.logics.LogicFactory;
 
@@ -13,14 +13,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeoutException;
 import java.util.stream.Stream;
 
 public class SudokuGUI extends JFrame {
@@ -53,7 +48,7 @@ public class SudokuGUI extends JFrame {
                     final SubBoard board = new SubBoard(i, j);
                     board.setBorder(new CompoundBorder(new LineBorder(Color.GRAY, 3), new EmptyBorder(4, 4, 4, 4)));
                     this.subBoards[i][j] = board;
-                    this.setSubBoardInitialSolution(i, j);
+                    this.setSubBoardInitialSolution(i, j, logic.getInitialBoard());
                     this.add(board);
                 }
             }
@@ -64,16 +59,32 @@ public class SudokuGUI extends JFrame {
 //            this.disableAllCells();
         }
 
-        private void setSubBoardInitialSolution(final int xOffset, final int yOffset) {
-            final var initialSolution = logic.getInitialBoard();
+        private void setSubBoardInitialSolution(final int xOffset, final int yOffset, final Map<Cell, Integer> solution) {
             final int xx = xOffset * 3;
             final int yy = yOffset * 3;
             final var subBoard = this.subBoards[xOffset][yOffset];
             for (int i = xx; i < xx + 3; i++) {
                 for (int j = yy; j < yy+ 3; j++) {
-                    final var value = initialSolution.get(new Cell(i, j));
+                    final var value = solution.get(new Cell(i, j));
                     if (value == -1) continue;
                     subBoard.setCellValue(i, j, value, true);
+                }
+            }
+        }
+
+        private void updateBoard(final Board board) {
+            final var cells = board.getCells();
+            for (int i = 0; i < ROWS; i++) {
+                for (int j = 0; j < COLS; j++) {
+                    this.setSubBoardInitialSolution(i, j, cells);
+                }
+            }
+        }
+
+        private void resetBoard() {
+            for (int i = 0; i < ROWS; i++) {
+                for (int j = 0; j < COLS; j++) {
+                    this.setSubBoardInitialSolution(i, j, logic.getInitialBoard());
                 }
             }
         }
