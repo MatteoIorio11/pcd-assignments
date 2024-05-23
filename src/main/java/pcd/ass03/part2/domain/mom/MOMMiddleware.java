@@ -75,6 +75,7 @@ public class MOMMiddleware extends Controller {
 
     @Override
     public boolean putValue(Cell cell, int value) {
+        this.marshall(Message.marshall(cell, value));
         return super.putValue(cell, value);
     }
 
@@ -94,6 +95,7 @@ public class MOMMiddleware extends Controller {
                         try {
                             final var m = new MOMMiddleware(Difficulty.DEBUG);
                             final var z = new MOMMiddleware(Difficulty.DEBUG);
+                            System.out.println("Sending: " + b.getCells());
                             m.marshall(Message.marshall(b.getCells()));
                         } catch (Exception e) {
                             throw new RuntimeException(e);
