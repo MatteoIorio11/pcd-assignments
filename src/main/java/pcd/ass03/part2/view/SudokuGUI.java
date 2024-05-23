@@ -5,7 +5,7 @@ import pcd.ass03.part2.domain.Cell;
 import pcd.ass03.part2.domain.Difficulty;
 import pcd.ass03.part2.domain.SudokuSolver;
 import pcd.ass03.part2.logics.Controller;
-import pcd.ass03.part2.logics.LogicFactory;
+import pcd.ass03.part2.logics.factory.LogicFactory;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -15,14 +15,16 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SudokuGUI extends JFrame {
     private final Controller logic;
 
     public SudokuGUI() {
-        this.logic = LogicFactory.getMomLogic(Difficulty.EASY).orElseThrow();
+        this.logic = LogicFactory.createMomLogic(Difficulty.EASY).orElseThrow();
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         this.add(new SudokuBoard());
@@ -182,6 +184,9 @@ public class SudokuGUI extends JFrame {
 
             this.addButton("New", (e) -> {}, gbc);
             this.addButton("Reset", (e) -> {}, gbc);
+            final var comboBox = new JComboBox<>(LogicFactory.getLogicClasses().stream().map(Class::getName).toArray());
+            this.add(comboBox, gbc);
+            gbc.gridx++;
         }
 
         private void addButton(String text, ActionListener listener, GridBagConstraints gbc) {
