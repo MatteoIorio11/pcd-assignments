@@ -1,6 +1,7 @@
 package pcd.ass03.part2.domain.mom;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import pcd.ass03.part2.domain.Board;
 import pcd.ass03.part2.domain.Cell;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +38,7 @@ public record Message() {
 
     public static Map<Cell, Integer> unmarshallBoard(final String message) throws JsonProcessingException {
         final ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(message, HashMap.class);
+        return mapper.readValue(message, new TypeReference<Map<Cell, Integer>>() {});
     }
 
     /**
