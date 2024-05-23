@@ -4,7 +4,7 @@ import pcd.ass03.part2.domain.*;
 
 import java.util.Map;
 
-public class Controller {
+public abstract class Controller {
     private final Board sudokuBoard;
     private final Map<Cell, Integer> initialBoard;
     private final Map<Cell, Integer> solvedBoard;
@@ -26,6 +26,10 @@ public class Controller {
 
     public Map<Cell, Integer> getInitialBoard() {
         return this.initialBoard;
+    }
+
+    public Board getCurrentBoard() {
+        return this.sudokuBoard;
     }
 
     public void removeValue(final Cell cell) {
