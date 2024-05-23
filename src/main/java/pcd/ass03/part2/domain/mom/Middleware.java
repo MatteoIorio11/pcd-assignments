@@ -1,16 +1,18 @@
 package pcd.ass03.part2.domain.mom;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.DeliverCallback;
-import pcd.ass03.part2.domain.Cell;
-import pcd.ass03.part2.domain.Difficulty;
+import pcd.ass03.part2.domain.*;
 import pcd.ass03.part2.logics.Controller;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 public class Middleware extends Controller {
@@ -65,8 +67,8 @@ public class Middleware extends Controller {
 
     private void unmarshall(final String message){
         try{
-            final Move move = Message.unmarshall(message);
-            this.putValue(move.cell(), move.value());
+            final Map<Cell, Integer> board = Message.unmarshallBoard(message);
+            board.forEach(this::putValue);
         }catch (Exception e){
             //
         }
@@ -74,9 +76,20 @@ public class Middleware extends Controller {
 
     public static void main(String[] args) {
         try {
+            SudokuSolver.solve(new Board())
+                    .ifPresent(b -> {
+                        try {
+                            final String m = Message.marshall(b.getCells());
+                            final var z = Message.unmarshallBoard(m);
+                            System.out.println(z);
+                        } catch (JsonProcessingException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
             final var m = new Middleware(Difficulty.DEBUG);
             final var z = new Middleware(Difficulty.DEBUG);
             m.marshall(Message.marshall(new Cell(0,0), 1));
+
 
         }catch (Exception e){
             //
