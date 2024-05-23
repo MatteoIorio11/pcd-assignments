@@ -75,7 +75,12 @@ public class SudokuGUI extends JFrame {
             final var subBoard = this.subBoards[xOffset][yOffset];
             for (int i = xx; i < xx + 3; i++) {
                 for (int j = yy; j < yy+ 3; j++) {
-                    final var value = solution.get(new Cell(i, j));
+                    final var value = solution.getOrDefault(new Cell(i, j), -1);
+                    if(value == null){
+                        System.out.println(solution);
+                        System.out.println(solution.get(new Cell(i, j)));
+                        System.out.println(new Cell(i, j));
+                    }
                     if (value == -1) continue;
                     subBoard.setCellValue(i, j, value, isInitial);
                 }
