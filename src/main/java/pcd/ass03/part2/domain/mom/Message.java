@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import pcd.ass03.part2.domain.Cell;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Objects;
-
 
 public record Message() {
     /**
@@ -15,7 +13,7 @@ public record Message() {
      * @return JSON format string
      * @throws JsonProcessingException if the serialization does not go as planned
      */
-    public static String sendMove(final Cell cell, final int value) throws JsonProcessingException {
+    public static String marshall(final Cell cell, final int value) throws JsonProcessingException {
         final ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(Move.createMove(cell, value));
     }
@@ -26,7 +24,7 @@ public record Message() {
      * @return the Move to apply in the sudoku board
      * @throws JsonProcessingException if the de-serialization does not go as planned
      */
-    public static Move getMove(final String message) throws JsonProcessingException {
+    public static Move unmarshall(final String message) throws JsonProcessingException {
         final ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(message, Move.class);
     }
