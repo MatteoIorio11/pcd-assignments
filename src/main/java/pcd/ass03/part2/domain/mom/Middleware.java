@@ -17,7 +17,7 @@ public class Middleware extends Controller {
     private final Connection connection;
     private final Channel channel;
     private static final String EXCHANGE_NAME = "game";
-    private static final String QUEUE_NAME = "game"
+    private static final String QUEUE_NAME = "game";
     private static final String ROUTING_KEY = "move";
 
     private static final String TYPE = "direct";
@@ -35,6 +35,7 @@ public class Middleware extends Controller {
         try {
             final DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                 final String message = new String(delivery.getBody(), "UTF-8");
+                this.unmarshall(message);
                 System.out.println("Incoming message" + message);
             };
             this.channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {
@@ -61,13 +62,21 @@ public class Middleware extends Controller {
     public boolean putValue(Cell cell, int value) {
         return super.putValue(cell, value);
     }
-    
+
+    private void unmarshall(final String message){
+        try{
+            final Move move = Message.unmarshall(message);
+            this.putValue(move.cell(), move.value());
+        }catch (Exception e){
+            //
+        }
+    }
 
     public static void main(String[] args) {
         try {
             final var m = new Middleware(Difficulty.DEBUG);
             final var z = new Middleware(Difficulty.DEBUG);
-            m.marshall("ciao");
+            m.marshall(Message.marshall(new Cell(0,0), 1));
 
         }catch (Exception e){
             //
