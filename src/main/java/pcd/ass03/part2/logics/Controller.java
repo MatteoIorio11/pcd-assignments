@@ -21,7 +21,7 @@ public abstract class Controller {
 
     public boolean isGameOver() {
         return this.solvedBoard.entrySet().stream()
-                .allMatch(e -> this.sudokuBoard.getCells().get(e.getKey()).equals(e.getValue()));
+                .allMatch(e -> this.sudokuBoard.getCells().getOrDefault(e.getKey(), -1).equals(e.getValue()));
     }
 
     public Map<Cell, Integer> getInitialBoard() {
