@@ -5,6 +5,7 @@ import pcd.ass03.part2.domain.Difficulty;
 import pcd.ass03.part2.domain.SudokuSolver;
 import pcd.ass03.part2.domain.mom.Middleware;
 import pcd.ass03.part2.logics.Controller;
+import pcd.ass03.part2.logics.LogicFactory;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -25,9 +26,8 @@ import java.util.stream.Stream;
 public class SudokuGUI extends JFrame {
     private final Controller logic;
 
-    public SudokuGUI() throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
-        this.logic = new Middleware(Difficulty.EASY);
-        System.out.println("Middleware instanciated!");
+    public SudokuGUI() {
+        this.logic = LogicFactory.getMomLogic(Difficulty.EASY).orElseThrow();
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         this.add(new SudokuBoard());
@@ -200,7 +200,7 @@ public class SudokuGUI extends JFrame {
         return Arrays.stream(elems).flatMap(Arrays::stream);
     }
 
-    public static void main(String[] args) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
+    public static void main(final String[] args) {
         new SudokuGUI();
     }
 }
