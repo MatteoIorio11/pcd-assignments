@@ -24,12 +24,16 @@ public class Middleware extends Controller {
 
     private static final String TYPE = "direct";
 
-    public Middleware(final Difficulty difficulty) throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+    public Middleware(final Difficulty difficulty) {
         super(difficulty);
-        this.connection = RemoteBroker.createConnection();
-        this.channel = this.connection.createChannel();
-        this.setChannel();
-        this.setCallback();
+        try {
+            this.connection = RemoteBroker.createConnection();
+            this.channel = this.connection.createChannel();
+            this.setChannel();
+            this.setCallback();
+        }catch (Exception e){
+            //
+        }
 
     }
 
@@ -79,18 +83,13 @@ public class Middleware extends Controller {
             SudokuSolver.solve(new Board())
                     .ifPresent(b -> {
                         try {
-                            final String m = Message.marshall(b.getCells());
-                            final var z = Message.unmarshallBoard(m);
-                            System.out.println(z);
-                        } catch (JsonProcessingException e) {
+                            final var m = new Middleware(Difficulty.DEBUG);
+                            final var z = new Middleware(Difficulty.DEBUG);
+                            m.marshall(Message.marshall(b.getCells()));
+                        } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
                     });
-            final var m = new Middleware(Difficulty.DEBUG);
-            final var z = new Middleware(Difficulty.DEBUG);
-            m.marshall(Message.marshall(new Cell(0,0), 1));
-
-
         }catch (Exception e){
             //
         }
