@@ -20,7 +20,7 @@ public class MOMMiddleware extends Controller {
 
     public MOMMiddleware(final Difficulty difficulty) {
         super(difficulty);
-        ptional<Connection> connection = Objects.requireNonNull(RemoteBroker.createConnection());
+        Optional<Connection> connection = Objects.requireNonNull(RemoteBroker.createConnection());
         connection.ifPresent(conn -> {
             try {
                 this.channel = Optional.of(conn.createChannel());
@@ -92,7 +92,7 @@ public class MOMMiddleware extends Controller {
     private void unmarshall(final String message){
         try{
             final Map<Cell, Integer> board = Message.unmarshallBoard(message);
-            super.sudokuBoard = Board.fromCells(board);
+            super.sudokuBoard = Objects.requireNonNull(Board.fromCells(board));
         }catch (Exception e){
             //
         }
