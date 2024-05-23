@@ -3,6 +3,7 @@ package pcd.ass03.part2.domain.mom;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.DeliverCallback;
+import pcd.ass03.part2.domain.Cell;
 import pcd.ass03.part2.domain.Difficulty;
 import pcd.ass03.part2.logics.Controller;
 
@@ -55,6 +56,12 @@ public class Middleware extends Controller {
     public void marshall(final String message) throws IOException {
         this.channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY, null, message.getBytes());
     }
+
+    @Override
+    public boolean putValue(Cell cell, int value) {
+        return super.putValue(cell, value);
+    }
+    
 
     public static void main(String[] args) {
         try {
