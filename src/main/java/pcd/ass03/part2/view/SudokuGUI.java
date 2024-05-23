@@ -27,7 +27,7 @@ public class SudokuGUI extends JFrame {
             this.add(board);
             new Thread(() -> {
                 while (true) {
-                    board.updateBoard(logic.getCurrentBoard());
+                    SwingUtilities.invokeLater(() -> board.updateBoard(logic.getCurrentBoard()));
                     try {
                         Thread.sleep(500);
                     } catch (final InterruptedException e) {
@@ -58,7 +58,7 @@ public class SudokuGUI extends JFrame {
                     final SubBoard board = new SubBoard(i, j);
                     board.setBorder(new CompoundBorder(new LineBorder(Color.GRAY, 3), new EmptyBorder(4, 4, 4, 4)));
                     this.subBoards[i][j] = board;
-                    this.setSubBoardInitialSolution(i, j, logic.getInitialBoard());
+                    this.setSubBoardInitialSolution(i, j, logic.getInitialBoard(), true);
                     this.add(board);
                 }
             }
@@ -69,7 +69,7 @@ public class SudokuGUI extends JFrame {
 //            this.disableAllCells();
         }
 
-        private void setSubBoardInitialSolution(final int xOffset, final int yOffset, final Map<Cell, Integer> solution) {
+        private void setSubBoardInitialSolution(final int xOffset, final int yOffset, final Map<Cell, Integer> solution, final boolean isInitial) {
             final int xx = xOffset * 3;
             final int yy = yOffset * 3;
             final var subBoard = this.subBoards[xOffset][yOffset];
@@ -77,7 +77,7 @@ public class SudokuGUI extends JFrame {
                 for (int j = yy; j < yy+ 3; j++) {
                     final var value = solution.get(new Cell(i, j));
                     if (value == -1) continue;
-                    subBoard.setCellValue(i, j, value, true);
+                    subBoard.setCellValue(i, j, value, isInitial);
                 }
             }
         }
@@ -86,7 +86,7 @@ public class SudokuGUI extends JFrame {
             final var cells = board.getCells();
             for (int i = 0; i < ROWS; i++) {
                 for (int j = 0; j < COLS; j++) {
-                    this.setSubBoardInitialSolution(i, j, cells);
+                    this.setSubBoardInitialSolution(i, j, cells, false);
                 }
             }
         }
@@ -94,7 +94,7 @@ public class SudokuGUI extends JFrame {
         private void resetBoard() {
             for (int i = 0; i < ROWS; i++) {
                 for (int j = 0; j < COLS; j++) {
-                    this.setSubBoardInitialSolution(i, j, logic.getInitialBoard());
+                    this.setSubBoardInitialSolution(i, j, logic.getInitialBoard(), true);
                 }
             }
         }
