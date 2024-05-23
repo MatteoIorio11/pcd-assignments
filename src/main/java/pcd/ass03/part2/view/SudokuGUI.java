@@ -13,22 +13,16 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class SudokuGUI extends JFrame {
-    private final Controller logic;
+    private Controller logic;
 
     public SudokuGUI() {
-        this.logic = LogicFactory.createMomLogic(Difficulty.EASY).orElseThrow();
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
-        this.add(new SudokuBoard());
-        this.add(new MenuPane(), BorderLayout.AFTER_LINE_ENDS);
+        this.add(new MenuPane(() -> this.add(new SudokuBoard())), BorderLayout.AFTER_LINE_ENDS);
         this.setSize(500, 500);
         this.pack();
         this.setVisible(true);
@@ -171,9 +165,10 @@ public class SudokuGUI extends JFrame {
         }
     }
 
-    public static class MenuPane extends JPanel {
+    public class MenuPane extends JPanel {
+        private final JComboBox comboBox;
 
-        public MenuPane() {
+        public MenuPane(final Runnable onLogicSet) {
             this.setBorder(new EmptyBorder(4, 4, 4, 4));
             this.setLayout(new GridBagLayout());
             final GridBagConstraints gbc = new GridBagConstraints();
@@ -182,11 +177,16 @@ public class SudokuGUI extends JFrame {
             gbc.weightx = 1;
             gbc.fill = GridBagConstraints.HORIZONTAL;
 
-            this.addButton("New", (e) -> {}, gbc);
-            this.addButton("Reset", (e) -> {}, gbc);
-            final var comboBox = new JComboBox<>(LogicFactory.getLogicClasses().stream().map(Class::getName).toArray());
-            this.add(comboBox, gbc);
+
+            this.comboBox = new JComboBox<>(LogicFactory.getLogicClasses().stream().map(Class::getName).toArray());
+            this.add(this.comboBox, gbc);
             gbc.gridx++;
+            this.addButton("Create", (e) -> {
+                final var className = (String) comboBox.getSelectedItem();
+                logic = LogicFactory.getLogicInstance(LogicFactory.Logics.fromClassName(Objects.requireNonNull(className)), Difficulty.EASY).orElseThrow();
+                onLogicSet.run();
+            }, gbc);
+
         }
 
         private void addButton(String text, ActionListener listener, GridBagConstraints gbc) {

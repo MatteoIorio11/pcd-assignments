@@ -22,13 +22,13 @@ public class LogicFactory {
 
         public String getName() { return this.name; }
 
-        public Logics fromClass(final Class<? extends Controller> c) {
-            if (c.getName().contains("RMI")) {
+        public static Logics fromClassName(final String c) {
+            if (c.contains("RMI")) {
                 return RMI;
-            } else if (c.getName().contains("MOM")) {
+            } else if (c.contains("MOM")) {
                 return MOM;
             } else {
-                throw new IllegalStateException("Given class is not found: " + c.getName());
+                throw new IllegalStateException("Given class is not found: " + c);
             }
         }
     }
