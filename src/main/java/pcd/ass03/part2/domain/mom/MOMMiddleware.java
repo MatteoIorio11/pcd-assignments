@@ -6,12 +6,11 @@ import com.rabbitmq.client.DeliverCallback;
 import pcd.ass03.part2.domain.*;
 import pcd.ass03.part2.logics.Controller;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public class Middleware extends Controller {
+public class MOMMiddleware extends Controller {
     private Optional<Channel> channel = Optional.empty();
     private static final String EXCHANGE_NAME = "game";
     private static final String QUEUE_NAME = "game";
@@ -19,7 +18,7 @@ public class Middleware extends Controller {
 
     private static final String TYPE = "direct";
 
-    public Middleware(final Difficulty difficulty) {
+    public MOMMiddleware(final Difficulty difficulty) {
         super(difficulty);
         Optional<Connection> connection = Objects.requireNonNull(RemoteBroker.createConnection());
             connection.ifPresent(conn -> {
@@ -93,8 +92,8 @@ public class Middleware extends Controller {
             SudokuSolver.solve(new Board())
                     .ifPresent(b -> {
                         try {
-                            final var m = new Middleware(Difficulty.DEBUG);
-                            final var z = new Middleware(Difficulty.DEBUG);
+                            final var m = new MOMMiddleware(Difficulty.DEBUG);
+                            final var z = new MOMMiddleware(Difficulty.DEBUG);
                             m.marshall(Message.marshall(b.getCells()));
                         } catch (Exception e) {
                             throw new RuntimeException(e);
