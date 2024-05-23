@@ -1,6 +1,5 @@
 package pcd.ass03.part2.domain.mom;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.DeliverCallback;
@@ -8,16 +7,12 @@ import pcd.ass03.part2.domain.*;
 import pcd.ass03.part2.logics.Controller;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeoutException;
+import java.util.Objects;
+import java.util.Optional;
 
 public class Middleware extends Controller {
-    private final Connection connection;
-    private final Channel channel;
+    private Optional<Channel> channel = Optional.empty();
     private static final String EXCHANGE_NAME = "game";
     private static final String QUEUE_NAME = "game";
     private static final String ROUTING_KEY = "move";
@@ -26,15 +21,16 @@ public class Middleware extends Controller {
 
     public Middleware(final Difficulty difficulty) {
         super(difficulty);
-        try {
-            this.connection = RemoteBroker.createConnection();
-            this.channel = this.connection.createChannel();
+        Optional<Connection> connection = Objects.requireNonNull(RemoteBroker.createConnection());
+            connection.ifPresent(conn -> {
+                try {
+                    this.channel = Optional.of(conn.createChannel());
+                }catch (Exception e){
+                    //
+                }
+            });
             this.setChannel();
             this.setCallback();
-        }catch (Exception e){
-            //
-        }
-
     }
 
     private void setCallback(){
@@ -44,7 +40,13 @@ public class Middleware extends Controller {
                 this.unmarshall(message);
                 System.out.println("Incoming message" + message);
             };
-            this.channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {
+            this.channel.ifPresent(ch -> {
+                try {
+                    ch.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {
+                    });
+                } catch (Exception e) {
+                    //
+                }
             });
         }catch (Exception e){
             //
@@ -52,16 +54,24 @@ public class Middleware extends Controller {
     }
 
     private void setChannel(){
-        try {
-            this.channel.exchangeDeclare(EXCHANGE_NAME, TYPE);
-            this.channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, ROUTING_KEY);
-        } catch (final IOException e) {
-            throw new RuntimeException(e);
-        }
+        this.channel.ifPresent(ch -> {
+            try {
+                ch.exchangeDeclare(EXCHANGE_NAME, TYPE);
+                ch.queueBind(QUEUE_NAME, EXCHANGE_NAME, ROUTING_KEY);
+            }catch (Exception e){
+                //
+            }
+        });
     }
 
-    public void marshall(final String message) throws IOException {
-        this.channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY, null, message.getBytes());
+    public void marshall(final String message) {
+        this.channel.ifPresent(ch -> {
+            try {
+                ch.basicPublish(EXCHANGE_NAME, ROUTING_KEY, null, message.getBytes());
+            }catch (Exception e){
+                //
+            }
+        });
     }
 
     @Override
