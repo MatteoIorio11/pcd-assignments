@@ -5,7 +5,7 @@ import pcd.ass03.part2.domain.*;
 import java.util.Map;
 
 public abstract class Controller {
-    private final Board sudokuBoard;
+    protected Board sudokuBoard;
     private final Map<Cell, Integer> initialBoard;
     private final Map<Cell, Integer> solvedBoard;
 
