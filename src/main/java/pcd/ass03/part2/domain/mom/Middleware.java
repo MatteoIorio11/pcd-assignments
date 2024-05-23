@@ -15,7 +15,6 @@ import java.util.concurrent.TimeoutException;
 public class Middleware extends Controller {
     private final Connection connection;
     private final Channel channel;
-    private final DeliverCallback deliverCallback;
     private static final String EXCHANGE_NAME = "game";
     private static final String QUEUE_NAME = "game"
     private static final String ROUTING_KEY = "move";
@@ -27,11 +26,21 @@ public class Middleware extends Controller {
         this.connection = RemoteBroker.createConnection();
         this.channel = this.connection.createChannel();
         this.setChannel();
-        this.deliverCallback = (consumerTag, delivery) -> {
-            final String message = new String(delivery.getBody(), "UTF-8");
-            System.out.println("Incoming message" + message);
-        };
-        this.channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
+        this.setCallback();
+
+    }
+
+    private void setCallback(){
+        try {
+            final DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+                final String message = new String(delivery.getBody(), "UTF-8");
+                System.out.println("Incoming message" + message);
+            };
+            this.channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {
+            });
+        }catch (Exception e){
+            //
+        }
     }
 
     private void setChannel(){
