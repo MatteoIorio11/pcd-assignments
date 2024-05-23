@@ -75,8 +75,12 @@ public class MOMMiddleware extends Controller {
 
     @Override
     public boolean putValue(Cell cell, int value) {
-        this.marshall(Message.marshall(cell, value));
-        return super.putValue(cell, value);
+        try {
+            this.marshall(Message.marshall(cell, value));
+            return super.putValue(cell, value);
+        }catch (Exception e){
+            return false;
+        }
     }
 
     private void unmarshall(final String message){
