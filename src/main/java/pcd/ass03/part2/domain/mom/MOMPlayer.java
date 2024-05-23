@@ -15,9 +15,7 @@ public class MOMPlayer {
     private final Middleware middleware;
     public MOMPlayer(final Board board) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
         this.board = Objects.requireNonNull(board);
-        this.middleware = new Middleware((b,m) -> {
-            b.putValue(m.cell(), m.getValue());
-        });
+        this.middleware = new Middleware();
     }
 
     public void putValue(final Cell cell, final int value){
