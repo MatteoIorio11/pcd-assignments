@@ -1,8 +1,5 @@
 package pcd.ass03.part2.domain;
 
-import java.util.Objects;
-import java.util.stream.IntStream;
-
 /**
  * Implements Sudoku's logic (i.e. if moves is legit)
  */

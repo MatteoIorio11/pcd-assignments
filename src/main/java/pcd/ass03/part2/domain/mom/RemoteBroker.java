@@ -3,12 +3,7 @@ package pcd.ass03.part2.domain.mom;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
-import java.util.concurrent.TimeoutException;
 
 public class RemoteBroker {
     private static final ConnectionFactory CONNECTION_FACTORY = new ConnectionFactory();

@@ -189,7 +189,7 @@ public class SudokuGUI extends JFrame {
     }
 
     public class MenuPane extends JPanel {
-        private final JComboBox comboBox;
+        private final JComboBox<Object> comboBox;
 
         public MenuPane(final Runnable onLogicSet) {
             this.setBorder(new EmptyBorder(4, 4, 4, 4));
