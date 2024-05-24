@@ -31,7 +31,7 @@ public class MOMMiddleware extends Controller {
         this.setChannel();
         this.setCallback();
         try {
-            this.marshall(Message.marshall(super.getCurrentBoard().getCells()));
+            this.marshall(Message.marshallBoard(super.getCurrentBoard()));
         }catch (Exception e){
             //
         }
@@ -83,7 +83,7 @@ public class MOMMiddleware extends Controller {
         try {
             System.out.println("AOO");
             this.sudokuBoard.putValue(cell, value);
-            this.marshall(Message.marshall(super.getCurrentBoard().getCells()));
+            this.marshall(Message.marshallBoard(super.getCurrentBoard()));
             return true;
         }catch (Exception e){
             e.printStackTrace();
@@ -93,8 +93,8 @@ public class MOMMiddleware extends Controller {
 
     private void unmarshall(final String message){
         try{
-            final Map<Cell, Integer> board = Message.unmarshallBoard(message);
-            super.sudokuBoard = Objects.requireNonNull(Board.fromCells(board));
+            final Board board = Message.unmarshallBoard(message);
+            super.sudokuBoard = Objects.requireNonNull(board);
         }catch (Exception e){
             //
         }
@@ -108,7 +108,7 @@ public class MOMMiddleware extends Controller {
                             final var m = new MOMMiddleware(Difficulty.DEBUG);
                             final var z = new MOMMiddleware(Difficulty.DEBUG);
                             System.out.println("Sending: " + b.getCells());
-                            m.marshall(Message.marshall(b.getCells()));
+                            m.marshall(Message.marshallBoard(b));
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
