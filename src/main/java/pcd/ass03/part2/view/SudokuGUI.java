@@ -27,10 +27,9 @@ public class SudokuGUI extends JFrame {
             this.add(board);
             new Thread(() -> {
                 while (true) {
-//                    SwingUtilities.invokeLater(() -> board.updateBoard(logic.getCurrentBoard()));
-                    board.updateBoard(logic.getCurrentBoard());
+                    SwingUtilities.invokeLater(() -> board.updateBoard(logic.getCurrentBoard()));
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(2000);
                     } catch (final InterruptedException e) {
                         //
                     }
