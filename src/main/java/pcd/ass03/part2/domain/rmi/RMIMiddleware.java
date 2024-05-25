@@ -44,4 +44,12 @@ public class RMIMiddleware extends Controller {
             throw new RuntimeException(e);
         }
     }
+
+    public static void main(String[] args) {
+        try{
+            new RMIMiddleware(Difficulty.DEBUG);
+        }catch (Exception e){
+            //
+        }
+    }
 }

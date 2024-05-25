@@ -1,8 +1,9 @@
 package pcd.ass03.part2.domain;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public record Cell(int i, int j) {
+public record Cell(int i, int j) implements Serializable {
     public static Cell copyOf(final Cell cell) {
         return new Cell(cell.i, cell.j);
     }
