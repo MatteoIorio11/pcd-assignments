@@ -18,8 +18,8 @@ public class MOMMiddleware extends Controller {
 
     private static final String TYPE = "direct";
 
-    public MOMMiddleware(final Difficulty difficulty) {
-        super(difficulty);
+    public MOMMiddleware(final Difficulty difficulty, final Optional<String> host) {
+        super(difficulty, Optional.empty());
         Optional<Connection> connection = Objects.requireNonNull(RemoteBroker.createConnection());
         connection.ifPresent(conn -> {
             try {
