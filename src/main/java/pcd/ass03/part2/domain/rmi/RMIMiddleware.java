@@ -9,6 +9,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Arrays;
 
 /**
  * Client
@@ -26,11 +27,13 @@ public class RMIMiddleware extends Controller {
         try {
             this.registry = LocateRegistry.getRegistry(HOST);
             this.remoteBoardStub = (RemoteBoard) this.registry.lookup(REMOTE_BOARD_NAME);
+            System.out.println(Arrays.toString(this.registry.list()));
+            super.sudokuBoard = this.remoteBoardStub.getBoard();
         } catch (final NotBoundException e) {
-            this.registry = LocateRegistry.getRegistry();
+            this.registry = LocateRegistry.getRegistry(HOST, 0);
             final RemoteBoard remoteBoard = RemoteBoardImpl.fromBoard(super.sudokuBoard);
-//            registry.rebind(REMOTE_BOARD_NAME, remoteBoardStub);
             this.remoteBoardStub = (RemoteBoard) UnicastRemoteObject.exportObject(remoteBoard, 0);
+            registry.rebind(REMOTE_BOARD_NAME, remoteBoardStub);
         }
     }
 
@@ -40,14 +43,21 @@ public class RMIMiddleware extends Controller {
             final boolean res = remoteBoardStub.putValue(cell, value);
             super.sudokuBoard = remoteBoardStub.getBoard();
             return res;
-        } catch (final RemoteException e) {
+        } catch (final Exception e) {
+            try {
+                this.registry.unbind(REMOTE_BOARD_NAME);
+            }catch (Exception z){
+                //
+            }
+            e.printStackTrace(System.err);
             throw new RuntimeException(e);
         }
     }
 
     public static void main(String[] args) {
         try{
-            new RMIMiddleware(Difficulty.DEBUG);
+            final var x = new RMIMiddleware(Difficulty.DEBUG);
+            x.putValue(new Cell(0, 0), 1);
         }catch (Exception e){
             //
         }
