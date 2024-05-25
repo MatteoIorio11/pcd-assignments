@@ -195,7 +195,7 @@ public class SudokuGUI extends JFrame {
         public MenuPane(final Runnable onLogicSet) {
             this.setBorder(new EmptyBorder(4, 4, 4, 4));
             this.setLayout(new GridBagLayout());
-            this.hostField = new JTextField("Host: ");
+            this.hostField = new JTextField("localhost");
             this.hostField.setVisible(false);
             this.hostField.setSize(200, 300);
             final GridBagConstraints gbc = new GridBagConstraints();
@@ -228,11 +228,10 @@ public class SudokuGUI extends JFrame {
                 final var className = (String) comboBox.getSelectedItem();
                 ((JButton) e.getSource()).setEnabled(false);
                 new Thread(() -> {
-                    logic = LogicFactory.getLogicInstance(LogicFactory.Logics.fromClassName(Objects.requireNonNull(className)), Difficulty.EASY).orElseThrow();
+                    logic = LogicFactory.getLogicInstance(LogicFactory.Logics.fromClassName(Objects.requireNonNull(className)), Difficulty.EASY, Optional.of(this.hostField.getText().trim())).orElseThrow();
                     onLogicSet.run();
                 }).start();
             }, gbc);
-
         }
 
         private void addButton(String text, ActionListener listener, GridBagConstraints gbc) {
