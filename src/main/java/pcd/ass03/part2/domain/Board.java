@@ -1,10 +1,11 @@
 package pcd.ass03.part2.domain;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
 
-public class Board {
+public class Board implements Serializable {
     public static final int EMPTY_CELL = -1;
     private final HashMap<Cell, Integer> cells;
 
