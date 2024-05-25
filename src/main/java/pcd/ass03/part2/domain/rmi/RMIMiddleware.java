@@ -11,7 +11,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * Client
@@ -59,7 +58,6 @@ public class RMIMiddleware extends Controller {
     @Override
     public Board getCurrentBoard() {
         try {
-            System.out.println("AOO");
             super.sudokuBoard = this.remoteBoardStub.getBoard();
             return super.sudokuBoard;
         }catch (RemoteException e){
