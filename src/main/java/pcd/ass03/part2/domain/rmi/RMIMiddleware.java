@@ -1,6 +1,5 @@
 package pcd.ass03.part2.domain.rmi;
 
-import pcd.ass03.part2.domain.Board;
 import pcd.ass03.part2.domain.Cell;
 import pcd.ass03.part2.domain.Difficulty;
 import pcd.ass03.part2.logics.Controller;
@@ -29,7 +28,7 @@ public class RMIMiddleware extends Controller {
             this.remoteBoardStub = (RemoteBoard) this.registry.lookup(REMOTE_BOARD_NAME);
         } catch (final NotBoundException e) {
             this.registry = LocateRegistry.getRegistry();
-            final RemoteBoard remoteBoard = RemoteBoard.fromBoard(super.sudokuBoard);
+            final RemoteBoard remoteBoard = RemoteBoardImpl.fromBoard(super.sudokuBoard);
 //            registry.rebind(REMOTE_BOARD_NAME, remoteBoardStub);
             this.remoteBoardStub = (RemoteBoard) UnicastRemoteObject.exportObject(remoteBoard, 0);
         }

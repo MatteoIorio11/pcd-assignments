@@ -68,7 +68,7 @@ public class LogicFactory {
         }).findFirst();
     }
 
-    public static void main(String[] args) {
-        createRmiLogic(Difficulty.EASY);
+    public static void main(String[] args) throws RemoteException {
+        new RMIMiddleware(Difficulty.EASY);
     }
 }
