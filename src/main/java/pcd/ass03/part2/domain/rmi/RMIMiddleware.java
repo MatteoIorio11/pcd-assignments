@@ -11,6 +11,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * Client
@@ -18,20 +19,21 @@ import java.util.Arrays;
 public class RMIMiddleware extends Controller {
     private Registry registry;
 
-    private static final String HOST = "localhost";
     private static final String REMOTE_BOARD_NAME = "remoteBoard";
 
     private RemoteBoard remoteBoardStub;
 
-    public RMIMiddleware(final Difficulty difficulty) throws RemoteException {
-        super(difficulty);
+    public RMIMiddleware(final Difficulty difficulty, final Optional<String> inputHost) throws RemoteException {
+        super(difficulty, inputHost);
+        final var host = inputHost.orElseGet(() -> "localhost");
         try {
-            this.registry = LocateRegistry.getRegistry(HOST);
+            System.out.println(host);
+            this.registry = LocateRegistry.getRegistry("localhost");
             this.remoteBoardStub = (RemoteBoard) this.registry.lookup(REMOTE_BOARD_NAME);
             System.out.println(Arrays.toString(this.registry.list()));
             super.sudokuBoard = this.remoteBoardStub.getBoard();
         } catch (final NotBoundException e) {
-            this.registry = LocateRegistry.getRegistry(HOST, 0);
+            this.registry = LocateRegistry.getRegistry("localhost", 0);
             final RemoteBoard remoteBoard = RemoteBoardImpl.fromBoard(super.sudokuBoard);
             this.remoteBoardStub = (RemoteBoard) UnicastRemoteObject.exportObject(remoteBoard, 0);
             registry.rebind(REMOTE_BOARD_NAME, remoteBoardStub);
@@ -67,7 +69,7 @@ public class RMIMiddleware extends Controller {
 
     public static void main(String[] args) {
         try{
-            final var x = new RMIMiddleware(Difficulty.DEBUG);
+            final var x = new RMIMiddleware(Difficulty.DEBUG, Optional.of("localhost"));
             x.putValue(new Cell(0, 0), 1);
         }catch (Exception e){
             //
