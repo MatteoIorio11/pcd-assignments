@@ -35,18 +35,18 @@ public class LogicFactory {
         }
     }
 
-    public static Optional<Controller> createMomLogic(final Difficulty difficulty) {
+    public static Optional<Controller> createMomLogic(final Difficulty difficulty, final Optional<String> host) {
         try {
-            return Optional.of(new MOMMiddleware(difficulty));
+            return Optional.of(new MOMMiddleware(difficulty, host));
         } catch (final Exception e) {
             e.printStackTrace();
             return Optional.empty();
         }
     }
 
-    public static Optional<Controller> createRmiLogic(final Difficulty difficulty) {
+    public static Optional<Controller> createRmiLogic(final Difficulty difficulty, final Optional<String> host) {
         try {
-            return Optional.of(new RMIMiddleware(difficulty));
+            return Optional.of(new RMIMiddleware(difficulty, host));
         } catch (final RemoteException e) {
             e.printStackTrace();
             return Optional.empty();
@@ -58,10 +58,11 @@ public class LogicFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public static Optional<Controller> getLogicInstance(final Logics logics, final Difficulty difficulty) {
+    public static Optional<Controller> getLogicInstance(final Logics logics, final Difficulty difficulty, final Optional<String> host) {
         return (Optional<Controller>) LogicFactory.getLogicClasses().stream().filter(c -> c.getName().contains(logics.getName())).map(c -> {
             try {
-                return c.getConstructors()[0].newInstance(difficulty);
+                System.out.println(host);
+                return c.getConstructors()[0].newInstance(difficulty, host);
             } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
@@ -69,6 +70,6 @@ public class LogicFactory {
     }
 
     public static void main(String[] args) throws RemoteException {
-        new RMIMiddleware(Difficulty.EASY);
+        new RMIMiddleware(Difficulty.EASY, Optional.of("localhost"));
     }
 }
