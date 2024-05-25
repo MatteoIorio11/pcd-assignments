@@ -205,8 +205,11 @@ public class SudokuGUI extends JFrame {
             gbc.gridx++;
             this.addButton("Create", (e) -> {
                 final var className = (String) comboBox.getSelectedItem();
-                logic = LogicFactory.getLogicInstance(LogicFactory.Logics.fromClassName(Objects.requireNonNull(className)), Difficulty.EASY).orElseThrow();
-                onLogicSet.run();
+                ((JButton) e.getSource()).setEnabled(false);
+                new Thread(() -> {
+                    logic = LogicFactory.getLogicInstance(LogicFactory.Logics.fromClassName(Objects.requireNonNull(className)), Difficulty.EASY).orElseThrow();
+                    onLogicSet.run();
+                }).start();
             }, gbc);
 
         }
