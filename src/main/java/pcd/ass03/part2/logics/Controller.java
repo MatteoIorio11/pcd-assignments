@@ -3,13 +3,14 @@ package pcd.ass03.part2.logics;
 import pcd.ass03.part2.domain.*;
 
 import java.util.Map;
+import java.util.Optional;
 
 public abstract class Controller {
     protected Board sudokuBoard;
     private final Map<Cell, Integer> initialBoard;
     private final Map<Cell, Integer> solvedBoard;
 
-    public Controller(final Difficulty difficulty) {
+    public Controller(final Difficulty difficulty, final Optional<String> host) {
         this.sudokuBoard = BoardGenerator.initializeBoard(new Board(), difficulty);
         this.solvedBoard = SudokuSolver.solve(this.sudokuBoard).get().getCells();
         this.initialBoard = this.sudokuBoard.getCells();
