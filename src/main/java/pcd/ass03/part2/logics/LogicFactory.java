@@ -9,7 +9,7 @@ public class LogicFactory {
 
     public static Optional<Controller> getMomLogic(final Difficulty difficulty) {
         try {
-            return Optional.of(new MOMMiddleware(difficulty));
+            return Optional.of(new MOMMiddleware(difficulty, Optional.of("localhost")));
         } catch (final Exception e) {
             e.printStackTrace();
             return Optional.empty();
