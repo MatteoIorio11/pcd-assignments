@@ -99,22 +99,4 @@ public class MOMMiddleware extends Controller {
             //
         }
     }
-
-    public static void main(String[] args) {
-        try {
-            SudokuSolver.solve(new Board())
-                    .ifPresent(b -> {
-                        try {
-                            final var m = new MOMMiddleware(Difficulty.DEBUG);
-                            final var z = new MOMMiddleware(Difficulty.DEBUG);
-                            System.out.println("Sending: " + b.getCells());
-                            m.marshall(Message.marshallBoard(b));
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-        }catch (Exception e){
-            //
-        }
-    }
 }
