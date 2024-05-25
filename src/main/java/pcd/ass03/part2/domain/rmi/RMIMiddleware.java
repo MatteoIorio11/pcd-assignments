@@ -1,5 +1,6 @@
 package pcd.ass03.part2.domain.rmi;
 
+import pcd.ass03.part2.domain.Board;
 import pcd.ass03.part2.domain.Cell;
 import pcd.ass03.part2.domain.Difficulty;
 import pcd.ass03.part2.logics.Controller;
@@ -10,6 +11,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Client
@@ -50,6 +52,17 @@ public class RMIMiddleware extends Controller {
                 //
             }
             e.printStackTrace(System.err);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Board getCurrentBoard() {
+        try {
+            System.out.println("AOO");
+            super.sudokuBoard = this.remoteBoardStub.getBoard();
+            return super.sudokuBoard;
+        }catch (RemoteException e){
             throw new RuntimeException(e);
         }
     }
