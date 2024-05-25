@@ -13,6 +13,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -188,10 +190,14 @@ public class SudokuGUI extends JFrame {
 
     public class MenuPane extends JPanel {
         private final JComboBox<Object> comboBox;
+        private final JTextField hostField;
 
         public MenuPane(final Runnable onLogicSet) {
             this.setBorder(new EmptyBorder(4, 4, 4, 4));
             this.setLayout(new GridBagLayout());
+            this.hostField = new JTextField("Host: ");
+            this.hostField.setVisible(false);
+            this.hostField.setSize(200, 300);
             final GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = 0;
             gbc.gridy = 1;
@@ -200,8 +206,24 @@ public class SudokuGUI extends JFrame {
 
 
             this.comboBox = new JComboBox<>(LogicFactory.getLogicClasses().stream().map(Class::getName).toArray());
+            comboBox.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    if(e.getStateChange() == ItemEvent.SELECTED) {
+                        final String objName = comboBox.getSelectedItem().toString();
+                        if(objName.contains("RMI")){
+                            hostField.setVisible(true);
+                        }else{
+                            hostField.setVisible(false);
+                        }
+                    }
+                }
+            });
             this.add(this.comboBox, gbc);
             gbc.gridx++;
+            this.add(this.hostField, gbc);
+            gbc.gridx++;
+
             this.addButton("Create", (e) -> {
                 final var className = (String) comboBox.getSelectedItem();
                 ((JButton) e.getSource()).setEnabled(false);
