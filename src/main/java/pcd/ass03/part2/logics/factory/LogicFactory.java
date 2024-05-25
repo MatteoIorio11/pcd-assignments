@@ -2,9 +2,11 @@ package pcd.ass03.part2.logics.factory;
 
 import pcd.ass03.part2.domain.Difficulty;
 import pcd.ass03.part2.domain.mom.MOMMiddleware;
+import pcd.ass03.part2.domain.rmi.RMIMiddleware;
 import pcd.ass03.part2.logics.Controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,11 +45,16 @@ public class LogicFactory {
     }
 
     public static Optional<Controller> createRmiLogic(final Difficulty difficulty) {
-        return Optional.of(new pcd.ass03.part2.domain.rmi.RMIMiddleware(difficulty));
+        try {
+            return Optional.of(new RMIMiddleware(difficulty));
+        } catch (final RemoteException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
     }
 
     public static List<Class<? extends Controller>> getLogicClasses() {
-        return List.of(MOMMiddleware.class, pcd.ass03.part2.domain.rmi.RMIMiddleware.class);
+        return List.of(MOMMiddleware.class, RMIMiddleware.class);
     }
 
     @SuppressWarnings("unchecked")
@@ -59,5 +66,9 @@ public class LogicFactory {
                 throw new RuntimeException(e);
             }
         }).findFirst();
+    }
+
+    public static void main(String[] args) {
+        createRmiLogic(Difficulty.EASY);
     }
 }

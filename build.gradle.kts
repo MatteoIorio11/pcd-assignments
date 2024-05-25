@@ -18,7 +18,7 @@ repositories {
 }
 
 application {
-    mainClass.set("pcd.ass03.part1.simtrafficexamples.RunTrafficSimulationMassiveTest")
+    mainClass.set("pcd.ass03.part2.view.SudokuGUI")
 }
 
 val akkaVersion = "2.13"
