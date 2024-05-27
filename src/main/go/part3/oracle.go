@@ -14,6 +14,10 @@ func (oracle Oracle) getInputChannels() []chan Message {
 	return oracle.inputChannel
 }
 
+func (oracle Oracle) getOutputChannels() []chan Response {
+	return oracle.outputChannel
+}
+
 func (oracle Oracle) getMessageFromPlayer(playerID int) {
 	if playerID > 0 && playerID < len(oracle.inputChannel) {
 		select {
