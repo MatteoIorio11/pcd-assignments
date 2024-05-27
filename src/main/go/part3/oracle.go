@@ -33,6 +33,7 @@ func (oracle Oracle) getMessageFromPlayer(playerID int) {
 		case message, ok := <-oracle.getInputChannels()[playerID]:
 			if ok {
 				response := logic(message.playerID, message.guessedNumber, oracle.value)
+				oracle.getOutputChannels()[playerID] <- response
 			}
 		}
 	}
