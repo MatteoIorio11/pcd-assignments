@@ -1,12 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Hint int
 
 const (
 	GREATER Hint = iota
 	SMALLER Hint = iota
+	SAME    Hint = iota
 )
 
 type Message struct {
