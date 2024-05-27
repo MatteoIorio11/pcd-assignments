@@ -10,12 +10,16 @@ type Oracle struct {
 	outputChannel []chan Response
 }
 
+func (oracle Oracle) getInputChannels() []chan Message {
+	return oracle.inputChannel
+}
+
 func (oracle Oracle) getMessageFromPlayer(playerID int) {
 	if playerID > 0 && playerID < len(oracle.inputChannel) {
 		select {
-		case message, ok := <-oracle.inputChannel[playerID]:
+		case message, ok := <-oracle.getInputChannels()[playerID]:
 			if ok {
-				//
+
 			}
 		}
 	}
