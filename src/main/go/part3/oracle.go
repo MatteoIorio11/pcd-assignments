@@ -1,9 +1,17 @@
 package main
 
+import (
+	"math/rand/v2"
+)
+
 type Oracle struct {
 	value         int
 	inputChannel  []chan Message
 	outputChannel []chan Response
+}
+
+func generateRandom(maxValue int) int {
+	return rand.IntN(maxValue)
 }
 
 func createInputChannels(size int) []chan Message {
@@ -25,6 +33,6 @@ func createOutputChannels(size int) []chan Response {
 func spawnOracle(maxValue int, players int) Oracle {
 	inputC := createInputChannels(players)
 	outputC := createOutputChannels(players)
-	oracle := Oracle{value: 10, inputChannel: inputC, outputChannel: outputC}
+	oracle := Oracle{value: generateRandom(maxValue), inputChannel: inputC, outputChannel: outputC}
 	return oracle
 }
