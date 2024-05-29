@@ -20,11 +20,11 @@ func (oracle Oracle) getOutputChannels() []chan Response {
 
 func logic(playerID, playerGuess, numberToGuess int) Response {
 	if playerGuess < numberToGuess {
-		return Response{status: false, hintV: GREATER, playerID: playerID}
+		return Response{status: MISS, hintV: GREATER, playerID: playerID}
 	} else if playerGuess > numberToGuess {
-		return Response{status: false, hintV: SMALLER, playerID: playerID}
+		return Response{status: MISS, hintV: SMALLER, playerID: playerID}
 	}
-	return Response{status: true, hintV: SAME, playerID: playerID}
+	return Response{status: WON, hintV: SAME, playerID: playerID}
 }
 
 func (oracle Oracle) getMessageFromPlayer(playerID int) {
