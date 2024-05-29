@@ -4,6 +4,13 @@ import (
 	"fmt"
 )
 
+type Status int
+
+const (
+	WON  Status = iota
+	MISS Status = iota
+)
+
 type Hint int
 
 const (
@@ -19,7 +26,7 @@ type Message struct {
 
 // Message sent from the Oracle to the player
 type Response struct {
-	status   bool // true won, false lost
+	status   Status // true won, false lost
 	hintV    Hint
 	playerID int
 }
