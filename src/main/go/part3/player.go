@@ -20,7 +20,7 @@ func GuessNumber(upperBound int) int {
 	return rand.Intn(upperBound)
 }
 
-func (p Player) SendGuess() {
+func (p *Player) SendGuess() {
  
 	switch p.currentHint {
 		case GREATER:
@@ -37,14 +37,17 @@ func (p Player) SendGuess() {
 	p.sendingChannel <- Message { p.currentGuess, p.playerId }
 }
 
-func (p Player) ReceiveOutcome() {
+func (p *Player) ReceiveOutcome() {
 	res := <- p.receivingChannel
-	if res.status && res.playerID == p.playerId {
-		fmt.Printf("[player-%d]: I won with %d!\n", p.playerId, p.currentGuess)
-	} else if res.status {
-		fmt.Printf("[player-%d]: GG grande player-%d ci hai preso!\n", p.playerId, res.playerID)
-	} else {
-		p.currentHint = res.hintV
+	switch res.status {
+		case WON:
+			if res.playerID == p.playerId {
+				fmt.Printf("[player-%d]: I won with %d!\n", p.playerId, p.currentGuess)
+			} else {
+				fmt.Printf("[player-%d]: GG grande player-%d ci hai preso!\n", p.playerId, res.playerID)
+			}
+		case MISS:
+			p.currentHint = res.hintV
 	}
 }
 
