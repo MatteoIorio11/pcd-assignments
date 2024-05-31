@@ -8,15 +8,15 @@ type Status int
 
 const (
 	WON  Status = iota
-	MISS Status = iota
+	MISS
 )
 
 type Hint int
 
 const (
 	GREATER Hint = iota
-	SMALLER Hint = iota
-	SAME    Hint = iota
+	SMALLER
+	SAME
 )
 
 type Message struct {
