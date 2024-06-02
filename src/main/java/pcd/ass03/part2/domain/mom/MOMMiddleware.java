@@ -81,7 +81,6 @@ public class MOMMiddleware extends Controller {
     @Override
     public boolean putValue(final Cell cell, final int value) {
         try {
-            System.out.println("AOO");
             this.sudokuBoard.putValue(cell, value);
             this.marshall(Message.marshallBoard(super.getCurrentBoard()));
             return true;
